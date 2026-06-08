@@ -1,0 +1,21 @@
+.DS_Store
+Thumbs.db
+.vercel
+node_modules
+dist
+*.log
+
+# Video media should be hosted outside Git when possible.
+media/videos/
+*.mp4
+*.webm
+*.mov
+*.m4v
+*.avi
+*.mkv
+*.wmv
+*.flv
+*.mpeg
+*.mpg
+*.3gp
+*.ogv
