@@ -1,0 +1,37 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import resumeHtml from '../../migrated/resume.html?raw';
+---
+
+<Layout title="Resume — ZERB" description="Resume of ZERB.">
+  <Header />
+
+  <main class="pt-36 md:pt-44">
+    <section class="px-6 md:px-10">
+      <div class="mx-auto max-w-3xl">
+        <h1 class="font-display text-6xl font-black md:text-7xl">Resume</h1>
+        <article class="entry-content mt-12 pb-24" set:html={resumeHtml} />
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</Layout>
+
+<style is:global>
+  .entry-content { font-size: 1.05rem; line-height: 1.9; color: #d4d4d8; }
+  .entry-content > * { margin-block: 1.2rem; }
+  .entry-content h2, .entry-content h3 {
+    font-family: var(--font-display);
+    color: var(--color-paper);
+    margin-top: 2.4rem;
+  }
+  .entry-content h2 { font-size: 1.8rem; }
+  .entry-content h3 { font-size: 1.3rem; }
+  .entry-content a { color: var(--color-accent-soft); text-decoration: underline; text-underline-offset: 3px; }
+  .entry-content ul { padding-left: 1.2rem; list-style: disc; }
+  .entry-content li { margin-block: 0.4rem; }
+  .entry-content img, .entry-content video { width: 100%; height: auto; border-radius: 14px; }
+</style>

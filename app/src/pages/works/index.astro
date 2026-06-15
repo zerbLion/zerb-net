@@ -1,0 +1,77 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+
+const all = (await getCollection('projects'))
+  .filter((p) => !p.data.draft)
+  .sort((a, b) => a.data.order - b.data.order);
+
+const hrefFor = (p: (typeof all)[number]) =>
+  p.data.externalUrl ?? `/project/${p.id}/`;
+
+const filters = ['all', 'motion', 'visual', 'code'] as const;
+---
+
+<Layout title="Work — ZERB" description="Selected work by ZERB.">
+  <Header />
+
+  <main class="pt-36 md:pt-44">
+    <section class="px-6 md:px-10">
+      <div class="mx-auto max-w-[1400px]">
+        <h1 class="font-display text-6xl font-black md:text-8xl">Work</h1>
+
+        <div class="mt-10 flex flex-wrap gap-2">
+          {
+            filters.map((f) => (
+              <button
+                data-filter={f}
+                class="filter-btn rounded-full border border-line px-4 py-1.5 text-sm font-medium uppercase tracking-wide text-mist transition-colors hover:text-paper data-[active]:border-accent data-[active]:text-accent"
+                data-active={f === 'all' ? '' : undefined}
+              >
+                {f}
+              </button>
+            ))
+          }
+        </div>
+
+        <div id="works-grid" class="mt-12 grid grid-cols-1 gap-x-6 gap-y-12 pb-24 sm:grid-cols-2 lg:grid-cols-3">
+          {
+            all.map((p) => (
+              <div class="work-item" data-pillars={p.data.pillars.join(' ')}>
+                <ProjectCard
+                  href={hrefFor(p)}
+                  title={p.data.title}
+                  summary={p.data.summary}
+                  cover={p.data.cover}
+                  year={p.data.year}
+                  pillars={p.data.pillars}
+                />
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</Layout>
+
+<script>
+  const buttons = document.querySelectorAll<HTMLButtonElement>('.filter-btn');
+  const items = document.querySelectorAll<HTMLElement>('.work-item');
+  buttons.forEach((btn) =>
+    btn.addEventListener('click', () => {
+      const f = btn.dataset.filter!;
+      buttons.forEach((b) => b.removeAttribute('data-active'));
+      btn.setAttribute('data-active', '');
+      items.forEach((it) => {
+        const show = f === 'all' || (it.dataset.pillars || '').includes(f);
+        it.style.display = show ? '' : 'none';
+      });
+    })
+  );
+</script>

@@ -1,0 +1,124 @@
+---
+const links = [
+  { label: 'Motion', href: '/#motion' },
+  { label: 'Visual', href: '/#visual' },
+  { label: 'Code', href: '/#code' },
+  { label: 'About', href: '/#about' },
+];
+---
+
+<header
+  id="masthead"
+  class="fixed top-0 left-0 z-50 w-full transition-all duration-500"
+>
+  <div class="mx-auto flex max-w-[1400px] items-center justify-between px-6 py-4 md:px-10">
+    <a href="/" class="shrink-0" aria-label="ZERB home">
+      <img
+        src="/media/images/common/brand/cropped-logo_high2.png"
+        alt="ZERB"
+        width="253"
+        height="83"
+        class="h-10 w-auto md:h-12"
+      />
+    </a>
+
+    <!-- Desktop nav -->
+    <nav class="hidden items-center gap-8 md:flex font-display">
+      {
+        links.map((l) => (
+          <a
+            href={l.href}
+            class="text-sm font-normal uppercase tracking-wide text-mist transition-colors hover:text-paper"
+          >
+            {l.label}
+          </a>
+        ))
+      }
+      <button
+        data-ask-ai
+        class="rounded-full border border-line px-4 py-1.5 text-sm font-medium uppercase tracking-wide text-paper transition-colors hover:border-accent hover:text-accent"
+      >
+        Ask AI
+      </button>
+    </nav>
+
+    <!-- Mobile toggle -->
+    <button
+      id="nav-toggle"
+      class="font-display text-sm font-bold uppercase tracking-wide md:hidden"
+      aria-expanded="false"
+      aria-controls="mobile-menu"
+    >
+      Menu
+    </button>
+  </div>
+
+  <!-- Mobile menu panel -->
+  <nav
+    id="mobile-menu"
+    class="pointer-events-none fixed inset-0 z-40 flex translate-y-[-100%] flex-col justify-center gap-6 bg-ink px-8 font-display opacity-0 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] md:hidden"
+  >
+    {
+      links.map((l) => (
+        <a
+          href={l.href}
+          data-mobile-link
+          class="text-4xl font-black tracking-tight text-paper"
+        >
+          {l.label}
+        </a>
+      ))
+    }
+    <button
+      data-ask-ai
+      data-mobile-link
+      class="mt-4 w-fit rounded-full border border-line px-6 py-2 text-lg font-bold uppercase tracking-wide text-paper"
+    >
+      Ask AI
+    </button>
+  </nav>
+</header>
+
+<script>
+  // Headroom-style state: solidify the bar once the user scrolls past the hero.
+  const bar = document.getElementById('masthead');
+  if (bar) {
+    const onScroll = () => {
+      const scrolled = window.scrollY > 40;
+      bar.style.background = scrolled ? 'rgba(5,5,5,0.72)' : 'transparent';
+      bar.style.backdropFilter = scrolled ? 'blur(12px)' : 'none';
+      bar.style.borderBottom = scrolled
+        ? '1px solid var(--color-line)'
+        : '1px solid transparent';
+    };
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+  }
+
+  // Mobile menu open/close
+  const toggle = document.getElementById('nav-toggle');
+  const menu = document.getElementById('mobile-menu');
+  const setMenu = (open: boolean) => {
+    if (!menu || !toggle) return;
+    menu.classList.toggle('pointer-events-none', !open);
+    menu.classList.toggle('opacity-0', !open);
+    menu.classList.toggle('translate-y-[-100%]', !open);
+    toggle.textContent = open ? 'Close' : 'Menu';
+    toggle.setAttribute('aria-expanded', String(open));
+    document.body.style.overflow = open ? 'hidden' : '';
+  };
+  toggle?.addEventListener('click', () =>
+    setMenu(menu?.classList.contains('opacity-0') ?? true)
+  );
+  document
+    .querySelectorAll('[data-mobile-link]')
+    .forEach((el) => el.addEventListener('click', () => setMenu(false)));
+
+  // Ask AI — opens the chat panel (real provider wiring lands in Phase 4)
+  document.querySelectorAll('[data-ask-ai]').forEach((btn) =>
+    btn.addEventListener('click', () => {
+      setMenu(false);
+      window.dispatchEvent(new CustomEvent('open-ask-ai'));
+    })
+  );
+</script>

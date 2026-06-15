@@ -1,0 +1,86 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+
+const all = (await getCollection('projects'))
+  .filter((p) => !p.data.draft)
+  .sort((a, b) => a.data.order - b.data.order);
+
+const hrefFor = (p: (typeof all)[number]) =>
+  p.data.externalUrl ?? `/project/${p.id}/`;
+
+const pillars = [
+  { id: 'motion', label: 'Motion', tagline: 'Systems of movement — interfaces that breathe.' },
+  { id: 'visual', label: 'Visual', tagline: 'Worlds, surfaces and light.' },
+  { id: 'code', label: 'Code', tagline: 'Things built, not just designed.' },
+] as const;
+
+const byPillar = (id: string) => all.filter((p) => p.data.pillars.includes(id as any));
+---
+
+<Layout>
+  <Header />
+
+  <main>
+    <!-- HERO -->
+    <section class="relative flex min-h-screen flex-col justify-center px-6 md:px-10">
+      <div class="mx-auto w-full max-w-[1400px]">
+        <h1 class="reveal font-display text-[14vw] font-black leading-[0.85] md:text-[10vw]">
+          Motion<span class="text-accent">.</span><br />
+          Visual<span class="text-accent">.</span><br />
+          Code<span class="text-accent">.</span>
+        </h1>
+        <p class="reveal mt-8 max-w-xl text-lg text-mist">
+          A motion designer & visual artist crafting living, interactive interfaces.
+          Scroll, or just ask the AI anything about my work.
+        </p>
+      </div>
+      <div class="absolute bottom-8 left-6 flex items-center gap-3 text-xs uppercase tracking-[0.25em] text-mist md:left-10">
+        <span class="relative block h-10 w-px overflow-hidden bg-line">
+          <span class="absolute inset-x-0 top-0 h-4 animate-[scrollcue_1.8s_ease-in-out_infinite] bg-accent"></span>
+        </span>
+        Scroll
+      </div>
+    </section>
+
+    <!-- PILLAR SECTIONS -->
+    {
+      pillars.map((pillar) => {
+        const items = byPillar(pillar.id);
+        return (
+          <section id={pillar.id} class="border-t border-line px-6 py-28 md:px-10 md:py-36">
+            <div class="mx-auto max-w-[1400px]">
+              <div class="reveal mb-12 flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
+                <h2 class="font-display text-5xl font-black md:text-7xl">{pillar.label}</h2>
+                <p class="text-mist md:text-right">{pillar.tagline}</p>
+              </div>
+              {
+                items.length > 0 ? (
+                  <div class="grid grid-cols-1 gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
+                    {items.map((p) => (
+                      <ProjectCard
+                        href={hrefFor(p)}
+                        title={p.data.title}
+                        summary={p.data.summary}
+                        cover={p.data.cover}
+                        year={p.data.year}
+                        pillars={p.data.pillars}
+                      />
+                    ))}
+                  </div>
+                ) : (
+                  <p class="reveal text-mist">More coming soon.</p>
+                )
+              }
+            </div>
+          </section>
+        );
+      })
+    }
+  </main>
+
+  <Footer />
+</Layout>

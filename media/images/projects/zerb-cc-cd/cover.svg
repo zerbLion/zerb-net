@@ -1,0 +1,42 @@
+<svg width="950" height="320" viewBox="0 0 950 320" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="zerb.cc.cd tool">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="950" y2="320" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0d0d0f"/>
+      <stop offset="1" stop-color="#050505"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.78" cy="0.28" r="0.6">
+      <stop stop-color="#e7503a" stop-opacity="0.20"/>
+      <stop offset="1" stop-color="#e7503a" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse">
+      <path d="M32 0H0V32" fill="none" stroke="#ffffff" stroke-opacity="0.04" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <rect width="950" height="320" fill="url(#bg)"/>
+  <rect width="950" height="320" fill="url(#grid)"/>
+  <rect width="950" height="320" fill="url(#glow)"/>
+
+  <!-- faint code motif -->
+  <g font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="13" fill="#ffffff" fill-opacity="0.07">
+    <text x="56" y="74">const zerb = createTool({</text>
+    <text x="80" y="98">domain: "zerb.cc.cd",</text>
+    <text x="80" y="122">build: () =&gt; ship(),</text>
+    <text x="56" y="146">})</text>
+  </g>
+
+  <!-- terminal prompt -->
+  <g transform="translate(56,196)">
+    <text font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="20" fill="#e7503a" font-weight="700">&gt;_</text>
+  </g>
+
+  <!-- wordmark -->
+  <text x="92" y="214" font-family="Montserrat, Helvetica Neue, sans-serif" font-size="58" font-weight="800" letter-spacing="-1.5" fill="#f4f3ef">zerb<tspan fill="#e7503a">.</tspan>cc<tspan fill="#e7503a">.</tspan>cd</text>
+
+  <!-- tagline -->
+  <text x="94" y="252" font-family="Montserrat, Helvetica Neue, sans-serif" font-size="15" font-weight="700" letter-spacing="4" fill="#a1a1aa">A TOOL BY ZERB · CODE</text>
+
+  <!-- accent corner mark -->
+  <circle cx="872" cy="84" r="5" fill="#e7503a"/>
+  <circle cx="894" cy="84" r="5" fill="#ff6f59" fill-opacity="0.5"/>
+</svg>

@@ -10,9 +10,25 @@
 
 ## 正在处理
 
-当前没有正在进行的网站代码修改。
+2026-06-15 启动「重构为 Astro」方向。用户已确认三件事：
+1. 视频改用 Cloudflare R2 + 自定义域名托管（出站免费）。
+2. 加 frad.me 式 AI 问答，做多 provider（Claude/GPT/Gemini）API 抽象层，key 放 `.env`，按填写自动选。
+3. 站点直接重构为 Astro，三大板块 Motion · Visual · Code，首页改长滚动 + 锚点定位。
 
-最近一次处理是 2026-06-08 媒体目录拆分和自动优化。下一步应先做预览验证、Git/GitHub/Vercel 准备，以及确认视频是否继续保留在仓库或迁移到 R2/B 站等外部托管。
+老的静态站（根目录 `index.html`、`project/`、`works/` 等）全程保留、继续可部署，Astro 在子目录 `app/` 并行重建，全部验证通过后再切换上线。重构分 6 个 Phase：Phase 0 脚手架 / Phase 1 内容迁移 / Phase 2 视频迁 R2 / Phase 3 GSAP 动效 / Phase 4 AI 问答 / Phase 5 切换上线。
+
+Phase 0 已完成；Phase 0 后按用户反馈修了一轮 UI（logo/导航字体/移动菜单/Ask AI 面板/横幅尺寸等，见 DONE.md）。
+
+Phase 1 已完成：11 个项目详情（9 详情页 + 2 外链）、works 过滤列表页、blog（列表 + 2 篇）、resume、404 全部迁到 Astro，构建 16 页，浏览器验证全站坏图为 0。
+
+UI 优化第一轮已完成（板块重排、Code 工具 + 自制封面、页脚版权、滚动条/焦点态/锚点偏移、卡片 hover、首页间距与滚动提示）。当前下一步是 Phase 2（视频迁 Cloudflare R2）。待办：
+- 确认 `zerb-cc-cd` 外链真实 URL（当前暂用 `https://zerb.cc.cd`）。
+- Phase 2：写 `tools/upload-media.mjs` 上传视频到 R2，中文文件名规范化为 ASCII slug，生成 `media-manifest.json`，批量替换视频 src/poster。
+- 后续 UI：详情页正文目前直接 set:html 渲染 WordPress 导出 HTML，可逐页清理冗余 class/空块、精修图文间距。
+- 校准各项目 `summary`/`year` 与真实情况。
+- Phase 3（GSAP/Lenis 动效）、Phase 4（AI 问答）、Phase 5（切换上线）见上方 Astro 重构待办。
+
+更早一次处理是 2026-06-08 媒体目录拆分和自动优化。
 
 当前文档结构已经统一为：
 
@@ -53,8 +69,20 @@ git log --oneline -5
 - 准备 Vercel deployment。
 - 部署前检查 `redirects.json`、`vercel.json`、`robots.txt` 和 `sitemap.xml`。
 - 部署前再次用浏览器检查首页、`works/`、`blog/`、`resume/` 和关键 `project/` 页面，确认图片和视频仍能加载。
-- 决定继续静态清理，还是进入前端重建阶段。
-- 如果进入前端重建，确认使用 Vite/React、Astro 或其他方案。
+- 决定继续静态清理，还是进入前端重建阶段。（已决定：进入 Astro 重建。）
+- 如果进入前端重建，确认使用 Vite/React、Astro 或其他方案。（已定：Astro 6 + Tailwind v4 + @astrojs/vercel。）
+
+### Astro 重构待办（2026-06-15 起）
+
+- Phase 1：迁移 11 个项目详情页正文（标题/段落/图/视频）到 Astro 详情模板 `app/src/pages/project/[slug].astro`，对照原页面逐个核对。
+- Phase 1：迁移 works 列表页、blog、resume、404 到 Astro。
+- Phase 1：核对 `app/src/content/projects/*.md` 中我先填的 pillars/summary/year，按真实情况修正；Code 板块目前作品偏少，确认是否补内容。
+- Phase 2：写 `tools/upload-media.mjs` 上传视频到 R2，中文文件名规范化为 ASCII slug，生成 `media-manifest.json`，批量替换视频 src/poster。
+- Phase 3：接 Lenis + GSAP ScrollTrigger，把当前 `.reveal` IntersectionObserver 占位替换为正式滚动动效；加 Astro View Transitions。
+- Phase 4：`app/src/pages/api/chat.ts` 多 provider 抽象 + 流式 + 限流；生成 `.env` 模板；知识库从 content collections 编译。
+- Phase 5：把 `redirects.json`/`vercel.json` 跳转迁到 Astro，验证 sitemap/robots，全站浏览器复查后切换 Vercel 构建到 `app/`。
+- 待确认：切换上线时 Astro 放根目录还是保持 `app/` 子目录 + 调整 Vercel root directory。
+- 待确认：R2 自定义域名（如 `media.zerb.net`）和 Cloudflare 账号。
 
 ## 已知问题
 

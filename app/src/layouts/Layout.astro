@@ -1,0 +1,62 @@
+---
+import '../styles/global.css';
+import AskAI from '../components/AskAI.astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = 'ZERB — Motion · Visual · Code',
+  description = 'Portfolio of ZERB: motion design, visual work, and code.',
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="icon" href="/media/images/common/brand/cropped-%E5%A4%B4%E5%83%8F2-1-32x32.webp" sizes="32x32" />
+    <link rel="icon" href="/media/images/common/brand/cropped-%E5%A4%B4%E5%83%8F2-1-192x192.webp" sizes="192x192" />
+    <link rel="apple-touch-icon" href="/media/images/common/brand/cropped-%E5%A4%B4%E5%83%8F2-1-192x192.webp" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@700;800;900&display=swap"
+      rel="stylesheet"
+      media="print"
+      onload="this.media='all'"
+    />
+    <noscript>
+      <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@700;800;900&display=swap"
+        rel="stylesheet"
+      />
+    </noscript>
+  </head>
+  <body class="bg-ink text-paper">
+    <slot />
+    <AskAI />
+
+    <script>
+      // Scroll-reveal: progressive enhancement, swapped for GSAP in Phase 3.
+      const els = document.querySelectorAll<HTMLElement>('.reveal');
+      const io = new IntersectionObserver(
+        (entries) => {
+          for (const e of entries) {
+            if (e.isIntersecting) {
+              e.target.classList.add('is-in');
+              io.unobserve(e.target);
+            }
+          }
+        },
+        { threshold: 0.15 }
+      );
+      els.forEach((el) => io.observe(el));
+    </script>
+  </body>
+</html>

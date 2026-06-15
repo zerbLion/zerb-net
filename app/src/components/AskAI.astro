@@ -1,0 +1,124 @@
+---
+// Slide-in "Ask AI" panel. UI shell only for now — the streaming multi-provider
+// backend (/api/chat) is wired in Phase 4. Opens on the `open-ask-ai` event.
+const suggestions = [
+  'What does ZERB work on?',
+  'Show me the motion work',
+  'How can I get in touch?',
+];
+---
+
+<div id="askai-root" class="pointer-events-none fixed inset-0 z-[60]">
+  <!-- backdrop -->
+  <div
+    data-askai-close
+    class="absolute inset-0 bg-black/50 opacity-0 transition-opacity duration-300"
+  ></div>
+
+  <!-- panel -->
+  <aside
+    class="absolute right-0 top-0 flex h-full w-full max-w-md translate-x-full flex-col border-l border-line bg-ink-soft transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
+  >
+    <div class="flex items-center justify-between border-b border-line px-6 py-5">
+      <div>
+        <p class="font-display text-lg font-extrabold">Ask AI</p>
+        <p class="text-xs text-mist">Ask anything about ZERB & the work</p>
+      </div>
+      <button data-askai-close class="text-mist transition-colors hover:text-paper" aria-label="Close">
+        ✕
+      </button>
+    </div>
+
+    <div id="askai-messages" class="flex-1 space-y-4 overflow-y-auto px-6 py-6">
+      <div class="rounded-2xl rounded-tl-sm bg-surface px-4 py-3 text-sm leading-relaxed text-paper">
+        Hi — I'm ZERB's assistant. Ask me about the projects, the process, or how to
+        get in touch.
+      </div>
+      <div class="flex flex-wrap gap-2">
+        {
+          suggestions.map((s) => (
+            <button
+              data-suggestion
+              class="rounded-full border border-line px-3 py-1.5 text-xs text-mist transition-colors hover:border-accent hover:text-accent"
+            >
+              {s}
+            </button>
+          ))
+        }
+      </div>
+    </div>
+
+    <form id="askai-form" class="border-t border-line p-4">
+      <div class="flex items-center gap-2 rounded-full border border-line bg-ink px-4 py-2">
+        <input
+          id="askai-input"
+          type="text"
+          autocomplete="off"
+          placeholder="Ask a question…"
+          class="flex-1 bg-transparent text-sm text-paper placeholder:text-mist focus:outline-none"
+        />
+        <button type="submit" class="font-display text-sm font-bold text-accent">Send</button>
+      </div>
+      <p class="mt-2 px-2 text-[11px] text-mist/60">
+        Live AI answers connect in Phase 4 (multi-provider: Claude / GPT / Gemini).
+      </p>
+    </form>
+  </aside>
+</div>
+
+<script>
+  const root = document.getElementById('askai-root');
+  const backdrop = root?.querySelector('[data-askai-close]') as HTMLElement;
+  const panel = root?.querySelector('aside') as HTMLElement;
+  const messages = document.getElementById('askai-messages');
+  const form = document.getElementById('askai-form') as HTMLFormElement;
+  const input = document.getElementById('askai-input') as HTMLInputElement;
+
+  const setOpen = (open: boolean) => {
+    if (!root || !panel || !backdrop) return;
+    root.classList.toggle('pointer-events-none', !open);
+    panel.classList.toggle('translate-x-full', !open);
+    backdrop.classList.toggle('opacity-0', !open);
+    document.body.style.overflow = open ? 'hidden' : '';
+    if (open) setTimeout(() => input?.focus(), 300);
+  };
+
+  window.addEventListener('open-ask-ai', () => setOpen(true));
+  root?.querySelectorAll('[data-askai-close]').forEach((el) =>
+    el.addEventListener('click', () => setOpen(false))
+  );
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') setOpen(false);
+  });
+
+  const addBubble = (text: string, who: 'user' | 'bot') => {
+    if (!messages) return;
+    const b = document.createElement('div');
+    b.className =
+      who === 'user'
+        ? 'ml-auto max-w-[85%] rounded-2xl rounded-tr-sm bg-accent px-4 py-3 text-sm text-white'
+        : 'max-w-[85%] rounded-2xl rounded-tl-sm bg-surface px-4 py-3 text-sm leading-relaxed text-paper';
+    b.textContent = text;
+    messages.appendChild(b);
+    messages.scrollTop = messages.scrollHeight;
+  };
+
+  const ask = (q: string) => {
+    if (!q.trim()) return;
+    addBubble(q, 'user');
+    // Placeholder until Phase 4 connects /api/chat with streaming.
+    addBubble(
+      "I'm not connected to a live model yet — that lands in Phase 4. For now, browse the work above or email zcbgood@gmail.com.",
+      'bot'
+    );
+  };
+
+  form?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    ask(input.value);
+    input.value = '';
+  });
+  document.querySelectorAll('[data-suggestion]').forEach((el) =>
+    el.addEventListener('click', () => ask(el.textContent || ''))
+  );
+</script>

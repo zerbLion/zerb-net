@@ -75,6 +75,54 @@
 - 修复后已抽查媒体 HTTP 响应，确认 logo 图片和项目 MP4 能返回 `200`，视频响应类型为 `video/mp4`。
 - 修复后已扫描确认页面中不再存在 `/media/projects `、`/media/common `、`/media/blog ` 这类错误空格媒体路径。
 
+## Astro 重构
+
+- 2026-06-15 确定方向：把站点重构为 Astro，三大板块 Motion · Visual · Code，首页改长滚动 + 锚点；视频迁 Cloudflare R2；新增多 provider AI 问答。老静态站全程保留并行。
+- 2026-06-15 完成 Phase 0 脚手架：
+  - 在 `app/` 用 `create astro`（minimal 模板）建 Astro 6.4.6 项目，加 Tailwind v4（`@tailwindcss/vite`）和 `@astrojs/vercel` 适配器。
+  - 建 `app/public/media` 目录 junction 指向根 `media/`，让开发服务器直接读现有图片；已在 `app/.gitignore` 忽略该 junction。
+  - 设计系统：`app/src/styles/global.css` 定义暗色 token（ink/paper/accent 等）、Montserrat/Inter 字体、`.reveal` 滚动入场占位（带 prefers-reduced-motion 回退）。
+  - 内容模型：`app/src/content.config.ts` 定义 projects collection（title/summary/pillars[motion|visual|code]/cover/year/order/externalUrl/draft）。
+  - 用 `app/src/content/projects/*.md` 为 11 个项目建数据文件（先填标题/封面/pillars/简介占位，正文待 Phase 1 迁移）。
+  - 组件：`Layout.astro`（含非阻塞 Google Fonts + IntersectionObserver reveal 脚本）、`Header.astro`（Motion/Visual/Code/About 锚点导航 + Ask AI 按钮 + headroom 式滚动变背景）、`Footer.astro`、`ProjectCard.astro`。
+  - 首页 `app/src/pages/index.astro`：Hero（Motion. Visual. Code.）+ 三板块按 pillar tag 筛选渲染项目网格。
+  - `npm run build` 通过；`npm run dev`（端口 4321）经 preview 截图确认 Hero 渲染正常。
+  - 加 `.claude/launch.json`（astro / 4321）供本地预览。
+- 2026-06-15 Phase 0 后按用户反馈修 UI：
+  - `astro.config.mjs` 关闭 dev toolbar（`devToolbar.enabled=false`）；说明那是开发期调试条、非水印、不进生产构建；Astro 完全免费开源。
+  - Header 左上角改用原 logo 图 `cropped-logo_high2.png`（替换文字 ZERB）；导航字体统一为 Montserrat（对齐原 Inspiro 主题）。
+  - 实现移动端 Menu（全屏滑入面板，Menu/Close 切换）。
+  - Ask AI 按钮接通：点击打开右侧滑入聊天面板 `AskAI.astro`（UI 壳 + 建议问题 + 输入框；真实多 provider 流式后端留到 Phase 4）。
+  - 删除 Hero 顶部「ZERB — Portfolio」eyebrow 文案。
+  - 作品卡片封面比例改为原作品页一致的 950×320 横幅（`ProjectCard` aspect-[950/320]）；并把 11 个项目封面、顺序、外链对齐原 `works/index.html`（vivo-xr→vivo.com，luna-os-sinus→jmgo.com 走 externalUrl）。
+  - Code 板块暂空，渲染「More coming soon.」占位。
+  - 浏览器验证：logo 与全部封面加载正常（broken=0），导航字体为 Montserrat，Ask AI 面板与移动菜单交互正常。
+
+- 2026-06-15 Phase 1（项目详情迁移，进行中）：
+  - 新增 `tools/extract-project-content.mjs`：从每个 `project/<slug>/index.html` 抽取 `entry-content` 正文 HTML，写到 `app/src/project-bodies/<slug>.html`，供 Astro 详情模板 `set:html` 渲染。已抽取 11/11。
+  - 新增 Astro 详情模板 `app/src/pages/project/[slug].astro`：hero（标题/年份/pillars/封面）+ 迁移正文 + 上一个/下一个导航；外链项目（vivo-xr、luna-os-sinus）不生成详情页。生成 9 个详情页。
+  - 详情正文加 `.entry-content` 作用域样式（figure/img/video/figcaption/spacer/链接）。
+  - 浏览器验证：dynamic-weather-art 详情页 200、封面与 3 图 1 视频加载正常（视频 206 / video/mp4 / readyState 4）、prev/next 正确；nft-asset-design（17 媒体）与 luna-os-ar-theme（10 图）坏图/坏视频数为 0。
+- 2026-06-15 Phase 1 第二轮 UI 反馈修复：
+  - 重新启用 Astro dev toolbar（用户确认有用，仅开发期可见）。
+  - favicon（浏览器缩略图）改回原站 `cropped-头像2-1-32x32.webp` / `192x192`。
+  - 左上角 logo 放大（h-10 / md:h-12）。
+  - 导航字体改 regular（font-normal），Ask AI 按钮 medium。
+  - 修详情页 fixed header 与标题重叠：详情页 main 顶部留白加大（pt-36 / md:pt-44）。
+  - 详情页末尾 prev/next 间距加大（py-16、mt-16），小屏单列、sm 起两列。
+- 2026-06-15 Phase 1 完成（works / blog / resume / 404 迁移）：
+  - 新增 `tools/extract-pages.mjs`，抽取 resume 和 2 篇博客正文到 `app/src/migrated/`。
+  - 内容模型新增 blog collection（title/date/cover/excerpt）；`app/src/content/blog/*.md` 建 2 篇文章（和煦暴风、静默是永恒的主题）。
+  - 新增页面：`works/index.astro`（按 motion/visual/code 过滤的作品网格）、`resume/index.astro`、`blog/index.astro`、`blog/[slug].astro`、`404.astro`。
+  - 构建产出 16 页。浏览器验证：works/resume/blog/两篇博客全部 200、404 返回 404，全站坏图/坏视频数为 0；works 过滤交互正常（all 11 / motion 7 / code 0）。
+
+- 2026-06-15 内容调整 + UI 优化（UI pass 第一轮）：
+  - 板块重排：motion = VIVO XR、LUNA OS Sinus、China Mobile CAVE（按此顺序）；其余 8 个项目改为 visual；Code 板块新增项目。
+  - 新增 Code 项目 `zerb-cc-cd`（外链工具，externalUrl 暂用 `https://zerb.cc.cd`，待用户确认），并原创设计契合暗色风格的 950×320 横幅封面 `media/images/projects/zerb-cc-cd/cover.svg`（代码片段 + 终端提示符 + wordmark + 强调色圆点）。
+  - 页脚版权改为 `© 2026 ZERB LION. All rights reserved.`。
+  - UI 优化：全局 `scroll-padding-top:96px`（锚点定位避开 fixed header）、自定义滚动条、`:focus-visible` 焦点态；首页 section 间距加大（py-28/md:py-36）+ 动画滚动提示；ProjectCard 升级 hover（遮罩 + 箭头徽标，外链显示外链箭头、内链显示前进箭头，标题 hover 变强调色）。
+  - 浏览器验证：motion 3 / visual 8 / code 1（zerb.cc.cd 外链，封面 SVG 200/image+svg），版权文案正确，scroll-padding/箭头/滚动提示均生效。
+
 ## WordPress 静态导出清理
 
 - 根据当前文件状态推断，移除了部分 WordPress feed/API/archive 输出。
