@@ -1,0 +1,14 @@
+{
+  "name": "net-website-tools",
+  "private": true,
+  "type": "module",
+  "description": "Local build/migration tooling for the ZERB site (not the Astro app — that lives in app/).",
+  "scripts": {
+    "media:manifest": "node tools/build-media-manifest.mjs",
+    "media:apply": "node tools/apply-media-manifest.mjs",
+    "media:upload": "node --env-file=.env tools/upload-media.mjs"
+  },
+  "dependencies": {
+    "aws4fetch": "^1.0.20"
+  }
+}

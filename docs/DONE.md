@@ -123,6 +123,14 @@
   - UI 优化：全局 `scroll-padding-top:96px`（锚点定位避开 fixed header）、自定义滚动条、`:focus-visible` 焦点态；首页 section 间距加大（py-28/md:py-36）+ 动画滚动提示；ProjectCard 升级 hover（遮罩 + 箭头徽标，外链显示外链箭头、内链显示前进箭头，标题 hover 变强调色）。
   - 浏览器验证：motion 3 / visual 8 / code 1（zerb.cc.cd 外链，封面 SVG 200/image+svg），版权文案正确，scroll-padding/箭头/滚动提示均生效。
 
+- 2026-06-15 Phase 2（视频迁 Cloudflare R2，代码侧完成）：
+  - 用户已建 R2 bucket `zerbnet-media`（自动/APAC，标准存储类），启用公共开发 URL：`https://pub-a0c77317c3024e5db24448b1f68cdada.r2.dev`。
+  - 新增 root `package.json`（tools 用，装 `aws4fetch`）与脚本：`tools/lib/r2-media.mjs`（确定性 ASCII key 生成 + 视频枚举）、`tools/build-media-manifest.mjs`、`tools/apply-media-manifest.mjs`、`tools/upload-media.mjs`。
+  - 新增 `.env.example`（R2 凭证模板），`.env` 已加入 `.gitignore`。
+  - 生成 `media-manifest.json`：29 个本地视频 → R2 公共 URL 的确定性映射（中文文件名转 ASCII + 短 hash 防冲突）。
+  - 已把 `app/src/project-bodies/*.html` 中 10 处实际引用的 `/media/videos/...` 重写为 R2 URL（5 个项目），无残留本地视频路径；构建 16 页通过。
+  - 待用户执行：填 `.env` 后 `npm run media:upload` 把 29 个视频上传到桶；上传后线上视频即可播放。
+
 ## WordPress 静态导出清理
 
 - 根据当前文件状态推断，移除了部分 WordPress feed/API/archive 输出。
