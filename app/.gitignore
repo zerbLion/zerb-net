@@ -3,8 +3,8 @@ dist/
 # generated types
 .astro/
 
-# dev-only junction to ../../media (real media lives at repo root / R2)
-public/media
+# images are committed under public/media/images; videos are served from R2
+public/media/videos
 
 # dependencies
 node_modules/
