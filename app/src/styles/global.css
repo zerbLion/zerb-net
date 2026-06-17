@@ -1,5 +1,23 @@
 @import "tailwindcss";
 
+/* Self-hosted variable fonts. font-display: block = never show a fallback; the
+   text waits (briefly, since the files are preloaded + same-origin) and renders
+   straight in the real font — no flash, no weight jump. */
+@font-face {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: block;
+  src: url("/fonts/montserrat-latin.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: block;
+  src: url("/fonts/inter-latin.woff2") format("woff2");
+}
+
 /* ZERB design tokens — dark, cinematic, motion-ready */
 @theme {
   --color-ink: #050505;
@@ -11,8 +29,8 @@
   --color-accent: #e7503a;
   --color-accent-soft: #ff6f59;
 
-  --font-display: "Montserrat Variable", "Helvetica Neue", system-ui, sans-serif;
-  --font-body: "Inter Variable", system-ui, -apple-system, sans-serif;
+  --font-display: "Montserrat", "Helvetica Neue", system-ui, sans-serif;
+  --font-body: "Inter", system-ui, -apple-system, sans-serif;
 
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }
