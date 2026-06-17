@@ -47,25 +47,24 @@ const byPillar = (id: string) => all.filter((p) => p.data.pillars.includes(id as
     <!-- PILLAR SECTIONS -->
     {
       pillars.map((pillar) => {
-        const items = byPillar(pillar.id);
+        const all = byPillar(pillar.id);
+        const items = all.slice(0, 4); // curate the homepage; rest live on /works/
         return (
-          <section id={pillar.id} class="border-t border-line px-6 py-28 md:px-10 md:py-36">
+          <section id={pillar.id} class="border-t border-line px-6 py-28 md:px-10 md:py-40">
             <div class="mx-auto max-w-[1400px]">
-              <div class="reveal mb-12 flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
-                <h2 class="font-display text-5xl font-black md:text-7xl">{pillar.label}</h2>
+              <div class="reveal mb-16 flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
+                <h2 class="font-display text-6xl font-black md:text-8xl">{pillar.label}</h2>
                 <p class="text-mist md:text-right">{pillar.tagline}</p>
               </div>
               {
                 items.length > 0 ? (
-                  <div class="grid grid-cols-1 gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
+                  <div class="grid grid-cols-1 gap-x-10 gap-y-16 lg:grid-cols-2">
                     {items.map((p) => (
                       <ProjectCard
                         href={hrefFor(p)}
                         title={p.data.title}
-                        summary={p.data.summary}
                         cover={p.data.cover}
                         year={p.data.year}
-                        pillars={p.data.pillars}
                       />
                     ))}
                   </div>
@@ -73,6 +72,15 @@ const byPillar = (id: string) => all.filter((p) => p.data.pillars.includes(id as
                   <p class="reveal text-mist">More coming soon.</p>
                 )
               }
+              {all.length > items.length && (
+                <a
+                  href="/works/"
+                  class="reveal group mt-14 inline-flex items-center gap-3 font-display text-lg font-bold transition-colors hover:text-accent"
+                >
+                  View all work
+                  <span class="transition-transform duration-300 group-hover:translate-x-1">→</span>
+                </a>
+              )}
             </div>
           </section>
         );

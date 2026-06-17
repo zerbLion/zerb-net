@@ -35,17 +35,15 @@ const filters = ['all', 'motion', 'visual', 'code'] as const;
           }
         </div>
 
-        <div id="works-grid" class="mt-12 grid grid-cols-1 gap-x-6 gap-y-12 pb-24 sm:grid-cols-2 lg:grid-cols-3">
+        <div id="works-grid" class="mt-12 grid grid-cols-1 gap-x-10 gap-y-16 pb-24 lg:grid-cols-2">
           {
             all.map((p) => (
               <div class="work-item" data-pillars={p.data.pillars.join(' ')}>
                 <ProjectCard
                   href={hrefFor(p)}
                   title={p.data.title}
-                  summary={p.data.summary}
                   cover={p.data.cover}
                   year={p.data.year}
-                  pillars={p.data.pillars}
                 />
               </div>
             ))
