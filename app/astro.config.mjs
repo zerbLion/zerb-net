@@ -8,7 +8,9 @@ import vercel from '@astrojs/vercel';
 // https://astro.build/config
 export default defineConfig({
   vite: {
-    plugins: [tailwindcss()]
+    plugins: [tailwindcss()],
+    // Load the shared repo-root .env (R2 + AI keys) in local dev.
+    envDir: '..'
   },
 
   adapter: vercel()

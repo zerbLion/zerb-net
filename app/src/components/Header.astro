@@ -4,6 +4,7 @@ const links = [
   { label: 'Visual', href: '/#visual' },
   { label: 'Code', href: '/#code' },
   { label: 'About', href: '/#about' },
+  { label: 'Resume', href: '/resume/' },
 ];
 ---
 
@@ -80,20 +81,8 @@ const links = [
 </header>
 
 <script>
-  // Headroom-style state: solidify the bar once the user scrolls past the hero.
-  const bar = document.getElementById('masthead');
-  if (bar) {
-    const onScroll = () => {
-      const scrolled = window.scrollY > 40;
-      bar.style.background = scrolled ? 'rgba(5,5,5,0.72)' : 'transparent';
-      bar.style.backdropFilter = scrolled ? 'blur(12px)' : 'none';
-      bar.style.borderBottom = scrolled
-        ? '1px solid var(--color-line)'
-        : '1px solid transparent';
-    };
-    onScroll();
-    window.addEventListener('scroll', onScroll, { passive: true });
-  }
+  // Header glass background is a global, always-on CSS rule (#masthead in
+  // global.css) so it stays consistent on every page and never overlaps content.
 
   // Mobile menu open/close
   const toggle = document.getElementById('nav-toggle');

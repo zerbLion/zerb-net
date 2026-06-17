@@ -60,7 +60,7 @@ const suggestions = [
         <button type="submit" class="font-display text-sm font-bold text-accent">Send</button>
       </div>
       <p class="mt-2 px-2 text-[11px] text-mist/60">
-        Live AI answers connect in Phase 4 (multi-provider: Claude / GPT / Gemini).
+        AI can be imperfect — for anything important, email zcbgood@gmail.com.
       </p>
     </form>
   </aside>
@@ -91,32 +91,73 @@ const suggestions = [
     if (e.key === 'Escape') setOpen(false);
   });
 
+  type Msg = { role: 'user' | 'assistant'; content: string };
+  const history: Msg[] = [];
+  let busy = false;
+
   const addBubble = (text: string, who: 'user' | 'bot') => {
-    if (!messages) return;
     const b = document.createElement('div');
     b.className =
       who === 'user'
-        ? 'ml-auto max-w-[85%] rounded-2xl rounded-tr-sm bg-accent px-4 py-3 text-sm text-white'
-        : 'max-w-[85%] rounded-2xl rounded-tl-sm bg-surface px-4 py-3 text-sm leading-relaxed text-paper';
+        ? 'ml-auto max-w-[85%] whitespace-pre-wrap rounded-2xl rounded-tr-sm bg-accent px-4 py-3 text-sm text-white'
+        : 'max-w-[85%] whitespace-pre-wrap rounded-2xl rounded-tl-sm bg-surface px-4 py-3 text-sm leading-relaxed text-paper';
     b.textContent = text;
-    messages.appendChild(b);
-    messages.scrollTop = messages.scrollHeight;
+    messages?.appendChild(b);
+    messages && (messages.scrollTop = messages.scrollHeight);
+    return b;
   };
 
-  const ask = (q: string) => {
-    if (!q.trim()) return;
+  const suggestionsRow = () => document.querySelector<HTMLElement>('#askai-messages .flex-wrap');
+
+  const ask = async (q: string) => {
+    q = q.trim();
+    if (!q || busy) return;
+    busy = true;
+    suggestionsRow()?.remove();
     addBubble(q, 'user');
-    // Placeholder until Phase 4 connects /api/chat with streaming.
-    addBubble(
-      "I'm not connected to a live model yet — that lands in Phase 4. For now, browse the work above or email zcbgood@gmail.com.",
-      'bot'
-    );
+    history.push({ role: 'user', content: q });
+    input.value = '';
+
+    const bot = addBubble('', 'bot');
+    bot.classList.add('opacity-60');
+    bot.textContent = '…';
+
+    try {
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ messages: history }),
+      });
+      if (!res.body) {
+        bot.textContent = await res.text();
+      } else {
+        bot.textContent = '';
+        bot.classList.remove('opacity-60');
+        const reader = res.body.getReader();
+        const dec = new TextDecoder();
+        let full = '';
+        for (;;) {
+          const { value, done } = await reader.read();
+          if (done) break;
+          full += dec.decode(value, { stream: true });
+          bot.textContent = full;
+          messages && (messages.scrollTop = messages.scrollHeight);
+        }
+        history.push({ role: 'assistant', content: full });
+      }
+    } catch {
+      bot.classList.remove('opacity-60');
+      bot.textContent = 'Network hiccup — please try again.';
+    } finally {
+      bot.classList.remove('opacity-60');
+      busy = false;
+      input.focus();
+    }
   };
 
   form?.addEventListener('submit', (e) => {
     e.preventDefault();
     ask(input.value);
-    input.value = '';
   });
   document.querySelectorAll('[data-suggestion]').forEach((el) =>
     el.addEventListener('click', () => ask(el.textContent || ''))

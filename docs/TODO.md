@@ -27,7 +27,9 @@ UI 优化第一轮已完成（板块重排、Code 工具 + 自制封面、页脚
 - Phase 2 后续（可选）：把 r2.dev 换成自定义域名 `media.zerb.net`（绑 Cloudflare CDN 缓存），只需改 `.env` 的 `R2_PUBLIC_BASE` 后重跑 `npm run media:manifest && npm run media:apply`。
 - 后续 UI：详情页正文目前直接 set:html 渲染 WordPress 导出 HTML，可逐页清理冗余 class/空块、精修图文间距。
 - 校准各项目 `summary`/`year` 与真实情况。
-- Phase 3（GSAP/Lenis 动效）、Phase 4（AI 问答）、Phase 5（切换上线）见上方 Astro 重构待办。
+- Phase 3（Motion）、Phase 4（AI 问答）已完成（见 DONE.md）。
+- 待用户验证 AI：本地受 GFW 影响连不上 Gemini，需开 VPN 本地测，或等 Phase 5 部署到 Vercel 后线上验证（生产可用）。
+- 剩 Phase 5（切换上线）：把 `redirects.json`/`vercel.json` 跳转迁到 Astro、验证 sitemap/robots、把 Vercel 构建指向 `app/`（root directory）、在 Vercel 配 AI 环境变量（GEMINI_API_KEY 等）+ 限流存储（可选 KV/Upstash），全站浏览器复查后切换。
 
 更早一次处理是 2026-06-08 媒体目录拆分和自动优化。
 

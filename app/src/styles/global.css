@@ -70,11 +70,9 @@
 
 /* Reveal-on-scroll baseline (progressive enhancement; visible if JS fails) */
 @layer utilities {
+  /* Initial hidden state; GSAP (or the reduced-motion fallback) reveals these. */
   .reveal {
     opacity: 0;
-    transform: translateY(28px);
-    transition: opacity 0.9s var(--ease-out-expo), transform 0.9s var(--ease-out-expo);
-    will-change: opacity, transform;
   }
   .reveal.is-in {
     opacity: 1;
@@ -89,4 +87,180 @@
 @keyframes scrollcue {
   0% { transform: translateY(-100%); }
   100% { transform: translateY(250%); }
+}
+
+/* Subtext fades in after the headline intro (pure CSS, fill forwards). */
+@keyframes heroIn {
+  from { opacity: 0; transform: translateY(28px); }
+  to { opacity: 1; transform: none; }
+}
+[data-hero] > p {
+  opacity: 0;
+  animation: heroIn 0.9s var(--ease-out-expo) 1.7s forwards;
+}
+
+/* Per-line headline intro (GSAP in motion.ts). Hide the line text + dots only
+   while JS is present and the intro hasn't finished; .hero-fallback (a timeout
+   in the head) force-reveals them so the headline can never get stuck hidden. */
+html.js:not(.intro-ready):not(.hero-fallback) [data-hero] .hl-t,
+html.js:not(.intro-ready):not(.hero-fallback) [data-hero] .hero-dot-m {
+  opacity: 0;
+}
+/* Motion title — feathered-edge mask wipe, only active during the intro window. */
+html.js:not(.intro-ready):not(.hero-fallback) [data-mask] {
+  --mx: 100%;
+  -webkit-mask-image: linear-gradient(90deg, #000 40%, transparent 68%);
+  mask-image: linear-gradient(90deg, #000 40%, transparent 68%);
+  -webkit-mask-size: 300% 100%;
+  mask-size: 300% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: var(--mx) center;
+  mask-position: var(--mx) center;
+}
+/* Failsafe: force everything visible (overriding any stuck GSAP inline styles or
+   mask/blur) if the intro never finishes. Headline can never stay hidden. */
+html.hero-fallback [data-hero] .hl-t,
+html.hero-fallback [data-hero] .hl-t .ch,
+html.hero-fallback [data-hero] .hero-dot-m {
+  opacity: 1 !important;
+  filter: none !important;
+  transform: none !important;
+  -webkit-mask-image: none !important;
+  mask-image: none !important;
+}
+.hl { display: inline-block; }
+.hl-t .ch { display: inline-block; }
+@media (prefers-reduced-motion: reduce) {
+  [data-hero] > p { animation: none; opacity: 1; }
+  [data-hero] .hl-t, [data-hero] .hero-dot { opacity: 1 !important; }
+}
+
+/* ── Hero accent dots (the "balls" after Motion / Visual / Code) ───────────────
+   Two layers: .hero-dot (outer) takes the cursor-magnet transform from JS;
+   .hero-dot-i (inner) runs the per-pillar personality loop. Separating them
+   keeps the two transforms from fighting. */
+/* .hero-dot is a NEVER-transformed wrapper — the magnet measures its resting
+   position from it, so the maths can't drift or stall. z-index keeps the dots
+   above the difference-blend cursor so the cursor never inverts them. */
+.hero-dot {
+  display: inline-block;
+  position: relative;
+  width: 0.17em;
+  height: 0.17em;
+  margin-left: 0.04em;
+  vertical-align: baseline;
+  z-index: 300;
+}
+/* .hero-dot-m carries the intro roll + the magnet transform. */
+.hero-dot-m {
+  position: absolute;
+  inset: 0;
+}
+.hero-dot-i {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: var(--color-accent);
+  transform-origin: center;
+}
+
+/* All three stay round dots in one accent color. Each has a restrained,
+   distinct signature: Motion rolls, Visual glows, Code blinks. */
+
+/* Motion — subtle 3D ball, gentle roll */
+[data-dot="motion"] .hero-dot-i {
+  background: radial-gradient(circle at 33% 30%, #ffbcae 0%, #ef5a44 52%, #b5301f 100%);
+  box-shadow: inset -0.014em -0.018em 0.024em rgba(0, 0, 0, 0.4);
+  animation: dotRoll 2.8s ease-in-out infinite;
+}
+@keyframes dotRoll {
+  0%, 100% { transform: translateX(-16%) rotate(-80deg); }
+  50% { transform: translateX(16%) rotate(80deg); }
+}
+
+/* Visual — a glow breathe. Hover glow lives on an independent ::after so it can
+   transition gradually without fighting the breathing animation. */
+[data-dot="visual"] .hero-dot-i {
+  animation: dotGlow 2.8s ease-in-out infinite;
+}
+[data-dot="visual"] .hero-dot-i::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  box-shadow: 0 0 0 0 rgba(255, 111, 89, 0);
+  transition: box-shadow 0.7s var(--ease-out-expo);
+  pointer-events: none;
+}
+@keyframes dotGlow {
+  0%, 100% { box-shadow: 0 0 0.16em 0.01em rgba(231, 80, 58, 0.45); }
+  50% { box-shadow: 0 0 0.4em 0.06em rgba(255, 111, 89, 0.8); }
+}
+
+/* Code — round dot with a soft caret blink */
+[data-dot="code"] .hero-dot-i {
+  animation: dotBlink 1.4s ease-in-out infinite;
+}
+@keyframes dotBlink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.25; }
+}
+
+/* Desktop hover — each dot reacts in its own way.
+   Motion's hover reaction (being repelled, like a collision) is handled in JS. */
+@media (hover: hover) and (pointer: fine) {
+  /* Visual — glow eases up gradually (transition on the ::after) */
+  [data-dot="visual"]:hover .hero-dot-i::after {
+    box-shadow: 0 0 0.7em 0.14em rgba(255, 111, 89, 0.85);
+  }
+  /* Code — blinks rapidly, like an active typing cursor */
+  [data-dot="code"]:hover .hero-dot-i {
+    animation-duration: 0.45s;
+  }
+}
+
+/* Header glass — always on, every page, so content never shows through it. */
+#masthead {
+  background-color: rgba(5, 5, 5, 0.55);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+
+/* ── Custom ball cursor (desktop only; JS-driven in motion.ts) ─────────────── */
+#cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 26px;
+  height: 26px;
+  border: 1.5px solid var(--color-paper);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 200;
+  opacity: 0;
+  mix-blend-mode: difference; /* inverts over images/content (hero dots opt out via z-index) */
+  transition: width 0.25s var(--ease-out-expo), height 0.25s var(--ease-out-expo),
+    background-color 0.25s, opacity 0.3s;
+  will-change: transform;
+}
+html.cursor-on #cursor { opacity: 1; }
+#cursor.is-hover {
+  width: 46px;
+  height: 46px;
+  background: var(--color-paper);
+}
+/* Hide the native cursor when the custom one is active, but keep it on text fields */
+html.cursor-on,
+html.cursor-on a,
+html.cursor-on button { cursor: none; }
+html.cursor-on input,
+html.cursor-on textarea { cursor: auto; }
+@media (hover: none), (pointer: coarse) {
+  #cursor { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-dot-i { animation: none !important; }
+  .hero-dot { transition: none; }
 }

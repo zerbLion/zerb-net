@@ -129,7 +129,107 @@
   - 新增 `.env.example`（R2 凭证模板），`.env` 已加入 `.gitignore`。
   - 生成 `media-manifest.json`：29 个本地视频 → R2 公共 URL 的确定性映射（中文文件名转 ASCII + 短 hash 防冲突）。
   - 已把 `app/src/project-bodies/*.html` 中 10 处实际引用的 `/media/videos/...` 重写为 R2 URL（5 个项目），无残留本地视频路径；构建 16 页通过。
-  - 待用户执行：填 `.env` 后 `npm run media:upload` 把 29 个视频上传到桶；上传后线上视频即可播放。
+  - 2026-06-15 用户填 `.env` 后已执行 `npm run media:upload`：29 个视频全部上传成功（Uploaded 29 / skipped 0 / failed 0）。
+  - 浏览器验证：10 个被引用视频从 r2.dev 返回 206 / video/mp4；nft-asset-design 详情页 3 个视频 readyState 4、无错误。Phase 2 完成。
+  - 已 commit/push 到 `origin/dev`（c5910d9）；`.env` 未入库。
+
+- 2026-06-16 Phase 4（AI 问答，代码完成并验证到网络边界）：
+  - `app/src/lib/knowledge.ts`：从 projects/blog collections + resume 编译 system prompt，话题锁定只答 ZERB/作品集相关。
+  - `app/src/lib/providers.ts`：多 provider 流式抽象（Gemini/OpenAI/Anthropic），`AI_PROVIDER=auto` 按 gemini→openai→anthropic 选；统一 SSE 解析。
+  - `app/src/lib/ratelimit.ts`：内存版限流（按 IP 每分钟/每天 + 全站每日上限）；生产可换 Vercel KV/Upstash。
+  - `app/src/pages/api/chat.ts`：POST 接口，校验/限流/流式；`prerender=false`，走 Vercel 函数。
+  - `astro.config.mjs` 加 `vite.envDir:'..'`，本地开发读根 `.env`。
+  - `AskAI.astro` 前端接通流式：发问→流式渲染 bot 气泡，建议问题首问后消失，错误优雅降级。
+  - 验证：校验路径 400、限流 6/分钟后 429（即时）、provider 解析与 key 读取正常、前端流式渲染链路通。
+  - 已知网络限制：本机（中国 GFW）连不上 Google，Gemini 本地不可测；OpenAI/Anthropic 本机可达。生产 Vercel（海外区）调用 Gemini 不经 GFW，线上可用。本地测试需开 VPN 或临时用可达 provider。
+
+- 2026-06-16 Phase 3（Motion 动效）：
+  - 装 `lenis` + `gsap`；新增 `app/src/scripts/motion.ts`：Lenis 平滑滚动 + GSAP ScrollTrigger 滚动入场（`.reveal`）、Hero 进场 stagger（`[data-hero]`）、可选视差（`[data-parallax]`）；尊重 prefers-reduced-motion。
+  - Layout 接入 Astro View Transitions（`ClientRouter`）；motion 在 `astro:page-load` 重建、`astro:before-swap` 拆除，幂等防重复。
+  - 把 Header、AskAI 移到 Layout 统一渲染并加 `transition:persist`（site-header / askai），导航切换时持久不重建；移除各页面重复的 `<Header />`。
+  - `.reveal` 改为 GSAP 控制（移除 CSS transition），加 `<noscript>` 回退保证无 JS 也可见。
+  - 验证：Lenis 激活（html.lenis）、Hero 入场 opacity 1、16 个 reveal 均被 GSAP 接管（初始 opacity:0/translateY 30）、无 console error；View Transition 跳转到详情页后 Header 持久、Ask AI 按钮仍可用、Lenis/motion 正确重建。
+
+- 2026-06-16 修 Hero 大字消失 bug（缩放/手机端触发，刷新不恢复）：
+  - 根因：Hero 进场用 GSAP `from`/`fromTo`，而 `ScrollTrigger.refresh()` 在每次 resize 自动触发并会 revert from/fromTo 补间，把标题还原到 opacity:0 起始态并卡住（inline opacity:0）。
+  - 修法：Hero 进场改为纯 CSS（`@keyframes heroIn` + `animation-fill-mode: forwards`，`[data-hero] > *`），完全脱离 GSAP/ScrollTrigger，resize 免疫；motion.ts 移除 Hero 补间。reduced-motion 媒体查询直接显示。
+  - 验证：GSAP 不再给 Hero 设任何 inline 样式，连续 6 次 resize 后 Hero 仍无 inline opacity（bug 签名消失）；reveals/Lenis 不受影响，无 console error。（注：预览环境当前不产出动画帧，computed 动画进度无法可视化验证，但已确认无 JS 覆盖、CSS 规则正确。）
+
+- 2026-06-16 Hero 小球动效（方案 A+C 结合）：
+  - 三个强调点改为两层结构 `.hero-dot`（外层接鼠标磁吸）+ `.hero-dot-i`（内层性格动画），避免两个 transform 冲突。
+  - 默认循环（CSS，全平台）：Motion = 带高光的滚动球（radial-gradient + dotRoll 旋转位移）；Visual = 柔光呼吸 + 色相漂移（dotGlow）；Code = 终端光标闪烁（dotBlink，圆角方块）。
+  - 桌面交互：`pointermove` 磁吸（半径 170px，向光标位移），仅 `(hover:hover) and (pointer:fine)` 启用；hover 加速对应性格动画。
+  - 移动端阉割（仿 frad.me）：触屏（pointer:coarse）不绑鼠标磁吸，仅保留轻量 CSS 循环。
+  - reduced-motion：停止所有点动画。
+  - 验证：3 个点结构正确、per-pillar 动画名（dotRoll/dotGlow/dotBlink）与 motion 高光渐变均生效、无 console error。（预览视口宽 0 + 不产帧，视觉效果需真实浏览器查看。）
+
+- 2026-06-16 按反馈调性能与小球动效：
+  - 去掉 Lenis 平滑滚动，回到原生滚动（解决"变卡/不大气"）；motion.ts 不再依赖 Lenis，ScrollTrigger 走原生滚动；卸载 `lenis` 依赖。
+  - 移除 `.reveal` 的 `will-change`（减少常驻合成开销）；reveal 时长略缩短。
+  - 小球重做：Motion = 立体球面（top-left 高光 + inset 阴影的 radial-gradient）+ 左右滚动；Visual = 干净的双层光环涟漪（dotHalo，transform/opacity，去掉之前的 filter/box-shadow 常驻重绘）；Code = 竖条状闪烁文本光标（dotBlink，0.09em×0.26em）。主色仍为橙偏红 `#e7503a`。
+  - 桌面 hover 加速、移动端只保留 CSS 循环、reduced-motion 全停。
+  - 验证：原生滚动恢复（无 .lenis）、三球动画名（dotRoll/dotHalo/dotBlink）生效、无 console error。视觉需真实浏览器确认（预览视口 0、不产帧）。
+- 2026-06-16 按反馈回退/微调（上一条部分撤销）：
+  - 误删 Lenis 系用户本意只是询问动效是否影响流畅性，已把带阻尼平滑滚动（Lenis）加回（重新安装依赖、motion.ts 恢复 Lenis raf + teardown）。结论：三个小球动效是极轻量 transform/opacity，不影响滚动流畅性。
+  - 小球收敛 + 统一为圆点：Visual 由涟漪改为轻微 glow 呼吸（dotGlow）；Code 由竖条光标改回圆点 + 柔和闪烁（dotBlink，border-radius 50%）；Motion 立体球滚动幅度/转角收敛（translateX 16% / rotate 80°）。hover 磁吸保留并轻微减速放大。
+  - 验证：dampedScroll 恢复、code 圆点（radius 50%）、visual=dotGlow、motion=dotRoll，无 console error。
+- 2026-06-16 三球差异化 hover 性格：
+  - Motion = 碰撞：磁吸逻辑里 motion 改为「被斥力弹开」（其余两球吸附），鼠标靠近时 motion 球反向位移（factor 0.55）。
+  - Visual = 加强 glow：默认 glow 调强；hover 时停止呼吸、绽放成更亮更大的稳定光晕 + scale 1.12。
+  - Code = 激活态快闪：hover 时 blink 时长降到 0.45s，像正在输入的光标。
+  - 验证：构建产物含 visual:hover bloom、code:hover 0.45s、client JS 含 repel 逻辑，无 console error。视觉需真实浏览器确认。
+
+- 2026-06-16 Hero 三段式进场（按 pillar 定制）+ visual hover 渐变：
+  - 结构：每行拆为 `.hl > .hl-t + .hero-dot`；Code 文本运行时拆为 `.ch` 逐字。
+  - GSAP 时间线（set+to，非 from，避免 resize 还原）：Motion 小球滚入→文字上浮；Visual 光球绽放→文字 blur 晕染渐显；Code 光标闪现→逐字打字。完成后加 `intro-ready` 去隐藏门并 clearProps。
+  - 兜底（吸取大字消失教训）：head 内联脚本加 `js` 类（仅 JS 时隐藏进场元素），5s 后加 `hero-fallback` 用 `!important` 强制 opacity/filter/transform 复位——即使 GSAP 时间线卡死也绝不会卡成隐形。已验证：预览中 GSAP 时间线停滞时，5s 后文字+小球全部 opacity:1。
+  - 磁吸在 `introFinished` 前不生效，避免与进场打架。
+  - Visual hover glow 改为带 `transition` 的渐变增强（不再瞬间）。
+  - 真实浏览器需确认进场观感（预览环境视口 0 且 GSAP 帧停滞，无法呈现动画）。
+
+- 2026-06-16 进场重做 + 磁吸修复 + 自定义光标：
+  - 进场改为并行错峰：三行同时开始（每行 delay 0.13s），三个标题都逐字打字（全部 .hl-t 拆 .ch），三个球都从左侧 x:-100 滚入（roll + rotate -360）到位，总时长约 1.3s。
+  - 修 Motion 球磁吸"触发几次就卡死"：原因是用带自身 transform 的 getBoundingClientRect 算距离形成反馈累积；改为用静止基准中心（rect 中心减去已应用 transform）计算，WeakMap 记录 applied。
+  - Visual hover glow 改为独立 `::after` + `transition: box-shadow 0.7s`，真正渐变（之前 animation:none 切换不触发 transition）。
+  - 新增 frad.me 式自定义球形光标：`#cursor`（Layout 内、transition:persist），JS lerp 跟随（0.2），hover 交互元素放大并填充，桌面隐藏原生光标（输入框保留），触屏隐藏。
+  - 失败兜底（5s→3.5s）：进场约 1.3s，正常远早于兜底；GSAP 卡死时 3.5s 强制可见，已验证。
+  - 验证：三标题均拆字 [6,6,4]、光标元素存在且桌面激活、兜底后全可见、无 console error。动画观感需真实浏览器确认。
+
+- 2026-06-16 进场改为三种不同方式 + 间隔拉大：
+  - Motion = 羽化边缘蒙版擦出（CSS `[data-mask]` 渐变 mask，GSAP 动 `--mx` 100%→0%，仅在 intro 窗口生效）；Visual = 高斯模糊渐显（blur(18px)→0 + opacity）；Code = 逐字打字（仅 Code 拆 .ch，已确认 [0,0,4]）。
+  - 三行间隔 gap 0.42（依次出现，比之前 0.13 明显拉大），每行内出现速度不变。
+  - 失败兜底扩展：`hero-fallback` 同时强制 `mask-image:none`/`filter:none`/`opacity:1`/`transform:none`，已验证兜底后 motion mask 复位为 none、全部可见。
+  - 修复用户本地 dev 预览中断：重启 `npm run dev --prefix app` 即可（4321）。
+
+- 2026-06-16 进场节奏 + 磁吸根因修复 + 刷新头横线：
+  - 进场间隔 gap 0.42→0.35：下一行在上一行进行到约一半时入场（重叠更自然）。
+  - Motion 球磁吸"触发几次就不动"真正根因：`.hero-dot` 上有 `transition: transform 0.25s`，与每帧 JS 设 transform 打架——用带过渡中间值的 getBoundingClientRect 算静止中心 → 漂移累积卡死。修复：删掉该 CSS 过渡 + 磁吸改为持续 rAF lerp（每帧 owner transform，静止中心 = rect − 当前已应用 transform，精确无反馈）。
+  - 刷新时头部横线：是 header 滚动态边框（`var(--color-line)`，滚动时本应出现）；刷新时浏览器恢复滚动位置瞬间触发它显示在顶部。修复：head 内联脚本 `history.scrollRestoration='manual'`，每次加载从顶部开始，不再闪现。
+  - 验证：dot transition-duration 0s、scrollRestoration manual、滚动态边框逻辑正确、无 console error。磁吸/进场观感需真实浏览器（预览 rAF 停滞 + 视口 0）。
+
+- 2026-06-16 再修头横线/反色/磁吸：
+  - 头横线根因确认是 header 滚动态 border（`var(--color-line)`）；scrollRestoration 不足以根治，直接**移除 header 底部 border**，滚动态只用背景模糊区分，彻底无横线。
+  - "三个小球反色"实为自定义光标 `mix-blend-mode:difference`（反色）划过小球时反相；移除 mix-blend，光标改为半透明描边 + hover 强调色填充。
+  - Motion 磁吸"几次后卡死"在本轮才动到真根因（CSS `transition:transform` 冲突），改为持续 rAF lerp + 静止中心精确计算；用户上次测的是未含该修复的版本。
+  - 验证：cursor mixBlend normal、滚动态 header 无 border-bottom、无 console error。
+
+- 2026-06-16 磁吸真根因 + 光标反色范围 + 节奏：
+  - **磁吸卡死真根因**：head 兜底 `hero-fallback` 是无条件 3.5s 触发的，其 CSS `transform:none !important` 在 3.5s 后持续覆盖磁吸 transform → 前几秒能动、之后失效。改为**仅当 intro 未完成才加 hero-fallback**（正常完成不再触发，磁吸不被覆盖）。
+  - 磁吸再加固：新增永不被 transform 的测量层 `.hero-dot`（wrapper）→ `.hero-dot-m`（接 intro/磁吸 transform）→ `.hero-dot-i`（性格动画）。基准位置直接读 wrapper rect，零反算、零漂移。
+  - 光标反色：恢复 `mix-blend-mode:difference`（划过图像/文字反相，要保留），但 `.hero-dot` 设 `z-index:300` 高于光标 200 → 三个小球不被反相。
+  - 进场节奏 gap 0.35→0.45、dot 滚入 0.8→0.7，序列更分明、不那么平。
+  - 验证：wrapper/magnet 层各 3、cursor mixBlend difference、dot z 300>200、无 console error。
+
+- 2026-06-16 导航/页脚调整：
+  - 顶部导航在 Ask AI 之前新增 Resume 链接（→ `/resume/`，内容来自备份 `app/src/migrated/resume.html`，已验证 200 + 内容）。
+  - 页脚移除 Resume、Blog 文本链接；新增 X（x.com/lionzerb）、GitHub（github.com/ZerbLion）、Steam（steamcommunity.com/id/ZerbX）图标外链 + 保留 Email。
+  - 注：`/blog/` 路由仍存在但已无站内入口（未删除，待用户确认是否彻底移除）。
+
+- 2026-06-16 进场过冲 + header 玻璃统一 + 光标跨页持久：
+  - 小球到位加 `back.out(2)` 过冲回弹，落定更有物理感。
+  - Header 玻璃背景改为全局常驻 CSS（`#masthead` rgba(5,5,5,0.55)+blur(10px)），移除原"滚动才出现"的 JS（顶部透明导致子页内容透过 header 重叠）；已验证首页与子页 header 背景一致。
+  - 光标跨页失效修复：rAF 循环每帧重新 `getElementById('cursor')`（即使 View Transition 重建元素也能跟随），并在 `astro:page-load` 重申 `cursor-on` 类；已验证导航到 /works/ 后光标元素与 cursor-on 仍在。
+  - 本地预览服务器已重启（4321）。
 
 ## WordPress 静态导出清理
 

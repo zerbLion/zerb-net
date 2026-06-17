@@ -1,5 +1,7 @@
 ---
 import '../styles/global.css';
+import { ClientRouter } from 'astro:transitions';
+import Header from '../components/Header.astro';
 import AskAI from '../components/AskAI.astro';
 
 interface Props {
@@ -18,6 +20,23 @@ const {
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script is:inline>
+      // Gate the hero intro: hide intro elements only when JS is present, and
+      // force-reveal after a timeout as a failsafe so the headline can NEVER get
+      // stuck invisible if the intro script fails to run.
+      (function () {
+        var d = document.documentElement;
+        d.classList.add('js');
+        // Always start at the top on (re)load so the header's scrolled-state border
+        // never flashes on during scroll restoration.
+        try { history.scrollRestoration = 'manual'; } catch (e) {}
+        // Only force-reveal if the intro actually failed to finish — otherwise the
+        // failsafe's !important rules would keep overriding the live cursor-magnet.
+        setTimeout(function () {
+          if (!d.classList.contains('intro-ready')) d.classList.add('hero-fallback');
+        }, 3500);
+      })();
+    </script>
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="icon" href="/media/images/common/brand/cropped-%E5%A4%B4%E5%83%8F2-1-32x32.webp" sizes="32x32" />
@@ -36,27 +55,19 @@ const {
         href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@700;800;900&display=swap"
         rel="stylesheet"
       />
+      <style>.reveal { opacity: 1 !important; transform: none !important; }</style>
     </noscript>
+    <ClientRouter />
   </head>
   <body class="bg-ink text-paper">
+    <div id="cursor" transition:persist="cursor" aria-hidden="true"></div>
+    <Header transition:persist="site-header" />
     <slot />
-    <AskAI />
+    <AskAI transition:persist="askai" />
 
     <script>
-      // Scroll-reveal: progressive enhancement, swapped for GSAP in Phase 3.
-      const els = document.querySelectorAll<HTMLElement>('.reveal');
-      const io = new IntersectionObserver(
-        (entries) => {
-          for (const e of entries) {
-            if (e.isIntersecting) {
-              e.target.classList.add('is-in');
-              io.unobserve(e.target);
-            }
-          }
-        },
-        { threshold: 0.15 }
-      );
-      els.forEach((el) => io.observe(el));
+      import { setupMotion } from '../scripts/motion';
+      setupMotion();
     </script>
   </body>
 </html>

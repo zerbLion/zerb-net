@@ -1,7 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
-import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 
 const bodies = import.meta.glob('../../migrated/blog-*.html', {
@@ -29,7 +28,6 @@ const fmt = date.toLocaleDateString('en-US', {
 ---
 
 <Layout title={`${title} — ZERB`} description={excerpt}>
-  <Header />
 
   <main class="pt-36 md:pt-44">
     <section class="px-6 md:px-10">
