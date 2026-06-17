@@ -245,6 +245,11 @@ html.hero-fallback [data-hero] .hero-dot-m {
   backdrop-filter: blur(10px);
 }
 
+/* Article body copy uses the display face (Montserrat), matching zerb.net/resume-2. */
+.entry-content {
+  font-family: var(--font-display);
+}
+
 /* ── Custom ball cursor (desktop only; JS-driven in motion.ts) ─────────────── */
 #cursor {
   position: fixed;
