@@ -1,4 +1,8 @@
 ---
+// Self-hosted fonts (served from our own origin — no Google dependency, fast in
+// every region, and no flash-of-unstyled-text on first load).
+import '@fontsource-variable/montserrat';
+import '@fontsource-variable/inter';
 import '../styles/global.css';
 import { ClientRouter } from 'astro:transitions';
 import Header from '../components/Header.astro';
@@ -42,19 +46,7 @@ const {
     <link rel="icon" href="/media/images/common/brand/cropped-%E5%A4%B4%E5%83%8F2-1-32x32.webp" sizes="32x32" />
     <link rel="icon" href="/media/images/common/brand/cropped-%E5%A4%B4%E5%83%8F2-1-192x192.webp" sizes="192x192" />
     <link rel="apple-touch-icon" href="/media/images/common/brand/cropped-%E5%A4%B4%E5%83%8F2-1-192x192.webp" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@700;800;900&display=swap"
-      rel="stylesheet"
-      media="print"
-      onload="this.media='all'"
-    />
     <noscript>
-      <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@700;800;900&display=swap"
-        rel="stylesheet"
-      />
       <style>.reveal { opacity: 1 !important; transform: none !important; }</style>
     </noscript>
     <ClientRouter />

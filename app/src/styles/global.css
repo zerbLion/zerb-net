@@ -11,8 +11,8 @@
   --color-accent: #e7503a;
   --color-accent-soft: #ff6f59;
 
-  --font-display: "Montserrat", "Helvetica Neue", system-ui, sans-serif;
-  --font-body: "Inter", system-ui, -apple-system, sans-serif;
+  --font-display: "Montserrat Variable", "Helvetica Neue", system-ui, sans-serif;
+  --font-body: "Inter Variable", system-ui, -apple-system, sans-serif;
 
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }

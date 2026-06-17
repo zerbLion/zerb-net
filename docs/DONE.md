@@ -231,6 +231,11 @@
   - 光标跨页失效修复：rAF 循环每帧重新 `getElementById('cursor')`（即使 View Transition 重建元素也能跟随），并在 `astro:page-load` 重申 `cursor-on` 类；已验证导航到 /works/ 后光标元素与 cursor-on 仍在。
   - 本地预览服务器已重启（4321）。
 
+- 2026-06-16 上线 + 字体自托管：
+  - 已部署到 Vercel（Root Directory=app，GEMINI_API_KEY 配置）：https://net-website-mu.vercel.app/
+  - 修首屏字体闪烁(FOUT)+ 国内 Google Fonts 慢/被墙：改用 `@fontsource-variable/montserrat` + `@fontsource-variable/inter` 自托管（woff2 打包进 `_astro/`，同源加载），移除所有 fonts.googleapis/gstatic 引用；token 改为 "Montserrat Variable"/"Inter Variable"。
+  - 验证：无 Google 字体引用、12 个 @font-face 自托管、Montserrat 900 + Inter 400 均加载、hero/nav 字体解析正确、无 console error。
+
 ## WordPress 静态导出清理
 
 - 根据当前文件状态推断，移除了部分 WordPress feed/API/archive 输出。
