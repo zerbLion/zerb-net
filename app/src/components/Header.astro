@@ -3,15 +3,11 @@ const links = [
   { label: 'Motion', href: '/#motion' },
   { label: 'Visual', href: '/#visual' },
   { label: 'Code', href: '/#code' },
-  { label: 'About', href: '/#about' },
   { label: 'Resume', href: '/resume/' },
 ];
 ---
 
-<header
-  id="masthead"
-  class="fixed top-0 left-0 z-50 w-full transition-all duration-500"
->
+<header id="masthead" class="fixed top-0 left-0 z-50 w-full">
   <div class="mx-auto flex max-w-[1400px] items-center justify-between px-6 py-4 md:px-10">
     <a href="/" class="shrink-0" aria-label="ZERB home">
       <img
@@ -29,6 +25,7 @@ const links = [
         links.map((l) => (
           <a
             href={l.href}
+            data-cursor="Go"
             class="text-sm font-medium uppercase tracking-wide text-mist transition-colors hover:text-paper"
           >
             {l.label}
@@ -37,6 +34,7 @@ const links = [
       }
       <button
         data-ask-ai
+        data-cursor="Ask"
         class="rounded-full border border-line px-4 py-1.5 text-sm font-medium uppercase tracking-wide text-paper transition-colors hover:border-accent hover:text-accent"
       >
         Ask AI
@@ -54,18 +52,11 @@ const links = [
     </button>
   </div>
 
-  <!-- Mobile menu panel -->
-  <nav
-    id="mobile-menu"
-    class="pointer-events-none fixed inset-0 z-40 flex translate-y-[-100%] flex-col justify-center gap-6 bg-ink px-8 font-display opacity-0 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] md:hidden"
-  >
+  <!-- Mobile menu panel (visibility-driven; see #mobile-menu in global.css) -->
+  <nav id="mobile-menu" class="flex flex-col justify-center gap-6 px-8 font-display md:hidden">
     {
       links.map((l) => (
-        <a
-          href={l.href}
-          data-mobile-link
-          class="text-4xl font-black tracking-tight text-paper"
-        >
+        <a href={l.href} data-mobile-link class="text-4xl font-black tracking-tight text-paper">
           {l.label}
         </a>
       ))
@@ -81,33 +72,38 @@ const links = [
 </header>
 
 <script>
-  // Header glass background is a global, always-on CSS rule (#masthead in
-  // global.css) so it stays consistent on every page and never overlaps content.
-
-  // Mobile menu open/close
-  const toggle = document.getElementById('nav-toggle');
-  const menu = document.getElementById('mobile-menu');
+  // All handlers use document-level delegation so they keep working across Astro
+  // View Transitions (the header is persisted; its inline script runs only once).
+  const menu = () => document.getElementById('mobile-menu');
+  const toggle = () => document.getElementById('nav-toggle');
   const setMenu = (open: boolean) => {
-    if (!menu || !toggle) return;
-    menu.classList.toggle('pointer-events-none', !open);
-    menu.classList.toggle('opacity-0', !open);
-    menu.classList.toggle('translate-y-[-100%]', !open);
-    toggle.textContent = open ? 'Close' : 'Menu';
-    toggle.setAttribute('aria-expanded', String(open));
+    const m = menu();
+    const t = toggle();
+    if (!m) return;
+    m.classList.toggle('is-open', open);
+    if (t) {
+      t.textContent = open ? 'Close' : 'Menu';
+      t.setAttribute('aria-expanded', String(open));
+    }
     document.body.style.overflow = open ? 'hidden' : '';
   };
-  toggle?.addEventListener('click', () =>
-    setMenu(menu?.classList.contains('opacity-0') ?? true)
-  );
-  document
-    .querySelectorAll('[data-mobile-link]')
-    .forEach((el) => el.addEventListener('click', () => setMenu(false)));
 
-  // Ask AI — opens the chat panel (real provider wiring lands in Phase 4)
-  document.querySelectorAll('[data-ask-ai]').forEach((btn) =>
-    btn.addEventListener('click', () => {
+  document.addEventListener('click', (e) => {
+    const target = e.target as Element;
+    if (target.closest('#nav-toggle')) {
+      setMenu(!menu()?.classList.contains('is-open'));
+      return;
+    }
+    if (target.closest('[data-ask-ai]')) {
       setMenu(false);
       window.dispatchEvent(new CustomEvent('open-ask-ai'));
-    })
-  );
+      return;
+    }
+    if (target.closest('[data-mobile-link]')) {
+      setMenu(false);
+    }
+  });
+
+  // Always start closed on each page load (and never leave the body locked).
+  document.addEventListener('astro:page-load', () => setMenu(false));
 </script>

@@ -11,11 +11,11 @@
   src: url("/fonts/montserrat-latin.woff2") format("woff2");
 }
 @font-face {
-  font-family: "Inter";
+  font-family: "Mulish";
   font-style: normal;
   font-weight: 100 900;
   font-display: block;
-  src: url("/fonts/inter-latin.woff2") format("woff2");
+  src: url("/fonts/mulish-latin.woff2") format("woff2");
 }
 
 /* ZERB design tokens — dark, cinematic, motion-ready */
@@ -30,7 +30,7 @@
   --color-accent-soft: #ff6f59;
 
   --font-display: "Montserrat", "Helvetica Neue", system-ui, sans-serif;
-  --font-body: "Inter", system-ui, -apple-system, sans-serif;
+  --font-body: "Mulish", system-ui, -apple-system, sans-serif;
 
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -248,6 +248,27 @@ html.hero-fallback [data-hero] .hero-dot-m {
 /* Article body copy uses the display face (Montserrat), matching zerb.net/resume-2. */
 .entry-content {
   font-family: var(--font-display);
+  line-height: 1.8;
+  font-size: 1rem;
+}
+
+/* ── Mobile menu — visibility-driven so it can NEVER get stuck blocking the page */
+#mobile-menu {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  background: var(--color-ink);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-12px);
+  transition: opacity 0.3s ease, transform 0.4s var(--ease-out-expo),
+    visibility 0s linear 0.3s;
+}
+#mobile-menu.is-open {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  transition: opacity 0.3s ease, transform 0.4s var(--ease-out-expo);
 }
 
 /* ── Custom ball cursor (desktop only; JS-driven in motion.ts) ─────────────── */
@@ -255,6 +276,9 @@ html.hero-fallback [data-hero] .hero-dot-m {
   position: fixed;
   top: 0;
   left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 26px;
   height: 26px;
   border: 1.5px solid var(--color-paper);
@@ -263,16 +287,30 @@ html.hero-fallback [data-hero] .hero-dot-m {
   z-index: 200;
   opacity: 0;
   mix-blend-mode: difference; /* inverts over images/content (hero dots opt out via z-index) */
-  transition: width 0.25s var(--ease-out-expo), height 0.25s var(--ease-out-expo),
-    background-color 0.25s, opacity 0.3s;
+  transition: width 0.3s var(--ease-out-expo), height 0.3s var(--ease-out-expo),
+    background-color 0.3s, mix-blend-mode 0s, opacity 0.3s;
   will-change: transform;
+}
+.cursor-label {
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-ink);
+  opacity: 0;
+  white-space: nowrap;
+  transition: opacity 0.2s ease;
 }
 html.cursor-on #cursor { opacity: 1; }
 #cursor.is-hover {
-  width: 46px;
-  height: 46px;
+  width: 64px;
+  height: 64px;
   background: var(--color-paper);
+  border-color: transparent;
+  mix-blend-mode: normal; /* readable label on hover */
 }
+#cursor.is-hover .cursor-label { opacity: 1; }
 /* Hide the native cursor when the custom one is active, but keep it on text fields */
 html.cursor-on,
 html.cursor-on a,
@@ -281,6 +319,16 @@ html.cursor-on input,
 html.cursor-on textarea { cursor: auto; }
 @media (hover: none), (pointer: coarse) {
   #cursor { display: none; }
+}
+
+/* Works grid filter animation */
+.work-item {
+  transition: opacity 0.45s ease, transform 0.45s var(--ease-out-expo);
+}
+.work-item.is-filtered {
+  opacity: 0;
+  transform: scale(0.97) translateY(8px);
+  pointer-events: none;
 }
 
 @media (prefers-reduced-motion: reduce) {

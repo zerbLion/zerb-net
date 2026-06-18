@@ -48,7 +48,7 @@ const byPillar = (id: string) => all.filter((p) => p.data.pillars.includes(id as
     {
       pillars.map((pillar) => {
         const all = byPillar(pillar.id);
-        const items = all.slice(0, 4); // curate the homepage; rest live on /works/
+        const [featured, ...rest] = all.slice(0, 5); // featured + up to 4
         return (
           <section id={pillar.id} class="border-t border-line px-6 py-28 md:px-10 md:py-40">
             <div class="mx-auto max-w-[1400px]">
@@ -57,25 +57,37 @@ const byPillar = (id: string) => all.filter((p) => p.data.pillars.includes(id as
                 <p class="text-mist md:text-right">{pillar.tagline}</p>
               </div>
               {
-                items.length > 0 ? (
-                  <div class="grid grid-cols-1 gap-x-10 gap-y-16 lg:grid-cols-2">
-                    {items.map((p) => (
-                      <ProjectCard
-                        href={hrefFor(p)}
-                        title={p.data.title}
-                        cover={p.data.cover}
-                        year={p.data.year}
-                      />
-                    ))}
+                featured ? (
+                  <div class="space-y-16">
+                    <ProjectCard
+                      featured
+                      href={hrefFor(featured)}
+                      title={featured.data.title}
+                      cover={featured.data.cover}
+                      year={featured.data.year}
+                    />
+                    {rest.length > 0 && (
+                      <div class="grid grid-cols-1 gap-x-10 gap-y-16 lg:grid-cols-2">
+                        {rest.map((p) => (
+                          <ProjectCard
+                            href={hrefFor(p)}
+                            title={p.data.title}
+                            cover={p.data.cover}
+                            year={p.data.year}
+                          />
+                        ))}
+                      </div>
+                    )}
                   </div>
                 ) : (
                   <p class="reveal text-mist">More coming soon.</p>
                 )
               }
-              {all.length > items.length && (
+              {featured && (
                 <a
-                  href="/works/"
-                  class="reveal group mt-14 inline-flex items-center gap-3 font-display text-lg font-bold transition-colors hover:text-accent"
+                  href={`/works/?f=${pillar.id}`}
+                  data-cursor="View"
+                  class="reveal group mt-16 inline-flex items-center gap-3 font-display text-lg font-bold transition-colors hover:text-accent"
                 >
                   View all work
                   <span class="transition-transform duration-300 group-hover:translate-x-1">→</span>

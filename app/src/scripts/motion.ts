@@ -228,27 +228,49 @@ function setupCursor() {
 
   const hoverSel = 'a, button, input, textarea, [data-dot], .filter-btn, [data-suggestion]';
   const setHover = (e: Event, on: boolean) => {
-    if (!(e.target as Element).closest?.(hoverSel)) return;
-    document.getElementById('cursor')?.classList.toggle('is-hover', on);
+    const hit = (e.target as Element).closest?.(hoverSel);
+    if (!hit) return;
+    const c = document.getElementById('cursor');
+    if (!c) return;
+    if (on) {
+      const labelled = hit.closest('[data-cursor]') as HTMLElement | null;
+      const span = c.querySelector('.cursor-label');
+      if (span) span.textContent = labelled?.dataset.cursor || '';
+    }
+    c.classList.toggle('is-hover', on);
   };
   document.addEventListener('pointerover', (e) => setHover(e, true));
   document.addEventListener('pointerout', (e) => setHover(e, false));
 }
 
+// Never let a motion error bubble into Astro's View Transition lifecycle — a
+// throw there can leave the router wedged so clicks stop navigating.
+const safe = (fn: () => void) => {
+  try {
+    fn();
+  } catch (e) {
+    console.error('motion', e);
+  }
+};
+
 export function setupMotion() {
-  build();
-  heroIntro();
-  setupHeroDots();
-  setupCursor();
+  safe(build);
+  safe(heroIntro);
+  safe(setupHeroDots);
+  safe(setupCursor);
   if (bound) return;
   bound = true;
-  document.addEventListener('astro:before-swap', () => {
-    teardown();
-    built = false;
-  });
-  document.addEventListener('astro:after-swap', () => window.scrollTo(0, 0));
-  document.addEventListener('astro:page-load', () => {
-    build();
-    if (cursorBound) document.documentElement.classList.add('cursor-on');
-  });
+  document.addEventListener('astro:before-swap', () =>
+    safe(() => {
+      teardown();
+      built = false;
+    })
+  );
+  document.addEventListener('astro:after-swap', () => safe(() => window.scrollTo(0, 0)));
+  document.addEventListener('astro:page-load', () =>
+    safe(() => {
+      build();
+      if (cursorBound) document.documentElement.classList.add('cursor-on');
+    })
+  );
 }

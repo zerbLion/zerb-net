@@ -57,17 +57,36 @@ const filters = ['all', 'motion', 'visual', 'code'] as const;
 </Layout>
 
 <script>
-  const buttons = document.querySelectorAll<HTMLButtonElement>('.filter-btn');
-  const items = document.querySelectorAll<HTMLElement>('.work-item');
-  buttons.forEach((btn) =>
-    btn.addEventListener('click', () => {
-      const f = btn.dataset.filter!;
-      buttons.forEach((b) => b.removeAttribute('data-active'));
-      btn.setAttribute('data-active', '');
+  // Runs on every page-load so it works after View-Transition navigation too.
+  const setupWorksFilter = () => {
+    const grid = document.getElementById('works-grid');
+    if (!grid) return; // not on the works page
+    const buttons = document.querySelectorAll<HTMLButtonElement>('.filter-btn');
+    const items = document.querySelectorAll<HTMLElement>('.work-item');
+
+    const apply = (f: string) => {
+      buttons.forEach((b) => b.toggleAttribute('data-active', b.dataset.filter === f));
       items.forEach((it) => {
         const show = f === 'all' || (it.dataset.pillars || '').includes(f);
-        it.style.display = show ? '' : 'none';
+        if (show) {
+          it.style.display = '';
+          requestAnimationFrame(() => it.classList.remove('is-filtered'));
+        } else {
+          it.classList.add('is-filtered');
+          window.setTimeout(() => {
+            if (it.classList.contains('is-filtered')) it.style.display = 'none';
+          }, 450);
+        }
       });
-    })
-  );
+    };
+
+    buttons.forEach((btn) => btn.addEventListener('click', () => apply(btn.dataset.filter!)));
+
+    // Honor a ?f=<pillar> deep link from the homepage "View all work" CTA.
+    const f = new URLSearchParams(location.search).get('f');
+    apply(f && ['motion', 'visual', 'code'].includes(f) ? f : 'all');
+  };
+
+  setupWorksFilter();
+  document.addEventListener('astro:page-load', setupWorksFilter);
 </script>
