@@ -121,6 +121,41 @@ rg -n --hidden --glob '!node_modules' --glob '!.git' --glob '!reports/**' '/medi
 
 并在浏览器中检查首页或关键页面的图片加载状态，确认 broken image 数量为 `0`。视频改动时，至少抽查一个项目视频 URL 返回 `200` 和 `video/mp4`。
 
+## Astro 重建版工作规则（2026-06 起，必读）
+
+当前线上站点已经是 Astro 重建版，不再是根目录的 WordPress 静态导出。下面这些是本轮反复踩坑后总结的硬规则，改 `app/` 前必读，避免重复犯错。
+
+### 架构速览
+- Astro 项目在 `app/`，部署到 Vercel，**Vercel Root Directory = `app`**；`main` 分支是生产部署分支（dev 改完合并到 main）。
+- 视频托管在 Cloudflare R2（公共域名 `https://pub-...r2.dev`，引用见 `media-manifest.json`），不进 Git。
+- 图片是真实文件，提交在 `app/public/media/images/`（约 12MB）；`app/public/media/videos` 被忽略。
+- 字体**自托管**在 `app/public/fonts/`（`montserrat-latin.woff2` 显示字体、`mulish-latin.woff2` 正文字体），`@font-face` + `font-display:block` + `<link rel=preload>`。**不要用 Google Fonts**（国内慢/被墙、首屏字体跳变）。
+- AI 问答：`app/src/pages/api/chat.ts`（多 provider 流式，Gemini/OpenAI/Anthropic），key 在 Vercel 环境变量（`GEMINI_API_KEY` 等）；本机受 GFW 影响连不上 Gemini，需 VPN 或线上测。
+- 动效系统：`app/src/scripts/motion.ts`（Lenis 平滑滚动 + GSAP + 自定义光标 + Hero 进场 + 小球磁吸）。
+
+### View Transitions 大坑（本轮最多 bug 的来源）
+Layout 用了 `<ClientRouter>`（Astro View Transitions），Header / AskAI / 光标用 `transition:persist`。**组件 `<script>` 只在首次加载执行一次，不随导航重跑。** 因此：
+- **绝不要在模块顶层用 `getElementById` 捕获 DOM 引用后长期复用**——导航后这些引用会失效，导致"点了没反应"（Ask AI 打不开就是这个原因）。
+- **正确做法**：交互发生时**重新查询 DOM**（封装 `const $x = () => document.getElementById(...)`），或用 **document 级事件委托**（`document.addEventListener('click', e => e.target.closest(...))`）。
+- **每次导航重置临时 UI 状态**：在 `astro:page-load` 里复位光标 hover 态、关闭移动菜单、解锁 `body.overflow`（否则光标卡成大白球、菜单卡死、页面锁滚动）。
+- 动效生命周期处理器要 try/catch 包裹，throw 不能冒泡进 View Transition，否则路由会卡住、点击不跳转。
+
+### 预览环境的真实局限（别被它骗）
+本会话的 Claude Preview 预览器：**视口宽约等于 0、CSS 过渡与 rAF/GSAP 时间线会停滞、截图基本超时**。所以：
+- **看不到任何动画/视觉效果**，截图不可靠。验证只能靠 DOM/eval：`getComputedStyle`、类名检查、`fetch` 状态码、坏图计数。
+- 不要凭预览声称"视觉没问题"。视觉好坏交给用户判断，明确说"预览看不到，需你实测"。
+
+### 发布与"假 bug"
+- push 后 Vercel 要 1-2 分钟才生效。用户立刻测会看到**旧版本**，误报"还有 bug"。每次发完都要提示：**等部署完 + `Ctrl+Shift+R` 硬刷新**再测。本会话多个"bug"其实是旧部署。
+- 改完**先自测所有交互**再发：移动菜单开/关（toggle/Esc/背景/导航后）、Ask AI 导航后能否打开、导航点击是否跳转、works 筛选、光标各状态、全站页面 200 + 坏图 0，桌面端 + 移动端都要过。不要发完让用户当测试。
+
+### 国内访问
+- `*.vercel.app` 国内常被限速/墙；自定义域名能绕过（frad.me 即如此）。建议把 `zerb.net` 绑到 Vercel 项目。媒体走 Cloudflare、AI 在服务端调 Gemini，都不受影响。
+
+### 自定义光标
+- lerp 跟随过松会导致**可见球滞后于真实指针 → 误点**；保持紧跟（0.35）并给可点元素**加大热区**（导航链接 `px-3 py-3`）。
+- hover 态白球别太大（盖住按钮内容），约 50px；球内始终有标签文字（View/Open/Go/Home/Mail）。
+
 ## Git 规则
 
 如果 Git 可用，任务开始或结束时按需检查：

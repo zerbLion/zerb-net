@@ -236,6 +236,13 @@
   - 修首屏字体闪烁(FOUT)+ 国内 Google Fonts 慢/被墙：改用 `@fontsource-variable/montserrat` + `@fontsource-variable/inter` 自托管（woff2 打包进 `_astro/`，同源加载），移除所有 fonts.googleapis/gstatic 引用；token 改为 "Montserrat Variable"/"Inter Variable"。
   - 验证：无 Google 字体引用、12 个 @font-face 自托管、Montserrat 900 + Inter 400 均加载、hero/nav 字体解析正确、无 console error。
 
+- 2026-06-17 修 View-Transition 类 bug + 光标/导航:
+  - **Ask AI 导航后打不开**(去 resume 滑动再点无反应):根因是 AskAI `<script>` 顶层捕获 DOM 引用,View Transition 后失效。改为交互时重新查询 DOM + document 事件委托,已复现并验证 /resume/ 导航后能开能关。
+  - 光标进文章后卡在 hover 大白球:`astro:page-load` 复位 `is-hover` + 清标签,已验证导航后回到光圈态。
+  - 光标球 44→50px;跟随 lerp 0.2→0.35(减少滞后误点);外链标签 "Open"、内部 "Go/View"、logo "Home"。
+  - 导航链接热区加大(`px-3 py-3`),修"点在文字附近不触发"。
+  - 把本会话关键经验写入 `AGENTS.md`「Astro 重建版工作规则」:架构、View Transitions 大坑(脚本只跑一次/引用失效/`astro:page-load` 复位)、预览环境局限、部署延迟与硬刷新、国内访问与自定义域名、自定义光标注意点。
+
 ## WordPress 静态导出清理
 
 - 根据当前文件状态推断，移除了部分 WordPress feed/API/archive 输出。

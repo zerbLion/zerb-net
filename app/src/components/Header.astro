@@ -20,13 +20,13 @@ const links = [
     </a>
 
     <!-- Desktop nav -->
-    <nav class="hidden items-center gap-8 md:flex font-display">
+    <nav class="-my-3 hidden items-center gap-4 md:flex font-display">
       {
         links.map((l) => (
           <a
             href={l.href}
             data-cursor="Go"
-            class="text-sm font-medium uppercase tracking-wide text-mist transition-colors hover:text-paper"
+            class="px-3 py-3 text-sm font-medium uppercase tracking-wide text-mist transition-colors hover:text-paper"
           >
             {l.label}
           </a>

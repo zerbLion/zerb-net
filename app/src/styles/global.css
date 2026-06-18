@@ -306,8 +306,8 @@ html.hero-fallback [data-hero] .hero-dot-m {
 }
 html.cursor-on #cursor { opacity: 1; }
 #cursor.is-hover {
-  width: 44px;
-  height: 44px;
+  width: 50px;
+  height: 50px;
   background: var(--color-paper);
   border-color: transparent;
   mix-blend-mode: normal; /* readable label on hover */

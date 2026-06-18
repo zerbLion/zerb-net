@@ -67,35 +67,31 @@ const suggestions = [
 </div>
 
 <script>
-  const root = document.getElementById('askai-root');
-  const backdrop = root?.querySelector('[data-askai-close]') as HTMLElement;
-  const panel = root?.querySelector('aside') as HTMLElement;
-  const messages = document.getElementById('askai-messages');
-  const form = document.getElementById('askai-form') as HTMLFormElement;
-  const input = document.getElementById('askai-input') as HTMLInputElement;
-
-  const setOpen = (open: boolean) => {
-    if (!root || !panel || !backdrop) return;
-    root.classList.toggle('pointer-events-none', !open);
-    panel.classList.toggle('translate-x-full', !open);
-    backdrop.classList.toggle('opacity-0', !open);
-    document.body.style.overflow = open ? 'hidden' : '';
-    if (open) setTimeout(() => input?.focus(), 300);
-  };
-
-  window.addEventListener('open-ask-ai', () => setOpen(true));
-  root?.querySelectorAll('[data-askai-close]').forEach((el) =>
-    el.addEventListener('click', () => setOpen(false))
-  );
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') setOpen(false);
-  });
-
+  // Everything re-queries the DOM at call time and uses document-level
+  // delegation, so it survives Astro View Transitions (the panel is persisted;
+  // this script runs only once — captured element refs would otherwise go stale).
   type Msg = { role: 'user' | 'assistant'; content: string };
   const history: Msg[] = [];
   let busy = false;
 
+  const $root = () => document.getElementById('askai-root');
+  const $msgs = () => document.getElementById('askai-messages');
+  const $input = () => document.getElementById('askai-input') as HTMLInputElement | null;
+
+  const setOpen = (open: boolean) => {
+    const root = $root();
+    if (!root) return;
+    const panel = root.querySelector('aside');
+    const backdrop = root.querySelector('[data-askai-close]');
+    root.classList.toggle('pointer-events-none', !open);
+    panel?.classList.toggle('translate-x-full', !open);
+    backdrop?.classList.toggle('opacity-0', !open);
+    document.body.style.overflow = open ? 'hidden' : '';
+    if (open) setTimeout(() => $input()?.focus(), 300);
+  };
+
   const addBubble = (text: string, who: 'user' | 'bot') => {
+    const messages = $msgs();
     const b = document.createElement('div');
     b.className =
       who === 'user'
@@ -103,25 +99,23 @@ const suggestions = [
         : 'max-w-[85%] whitespace-pre-wrap rounded-2xl rounded-tl-sm bg-surface px-4 py-3 text-sm leading-relaxed text-paper';
     b.textContent = text;
     messages?.appendChild(b);
-    messages && (messages.scrollTop = messages.scrollHeight);
+    if (messages) messages.scrollTop = messages.scrollHeight;
     return b;
   };
-
-  const suggestionsRow = () => document.querySelector<HTMLElement>('#askai-messages .flex-wrap');
 
   const ask = async (q: string) => {
     q = q.trim();
     if (!q || busy) return;
     busy = true;
-    suggestionsRow()?.remove();
+    document.querySelector('#askai-messages .flex-wrap')?.remove();
     addBubble(q, 'user');
     history.push({ role: 'user', content: q });
-    input.value = '';
+    const input = $input();
+    if (input) input.value = '';
 
     const bot = addBubble('', 'bot');
     bot.classList.add('opacity-60');
     bot.textContent = '…';
-
     try {
       const res = await fetch('/api/chat', {
         method: 'POST',
@@ -141,25 +135,36 @@ const suggestions = [
           if (done) break;
           full += dec.decode(value, { stream: true });
           bot.textContent = full;
-          messages && (messages.scrollTop = messages.scrollHeight);
+          const m = $msgs();
+          if (m) m.scrollTop = m.scrollHeight;
         }
         history.push({ role: 'assistant', content: full });
       }
     } catch {
-      bot.classList.remove('opacity-60');
       bot.textContent = 'Network hiccup — please try again.';
     } finally {
       bot.classList.remove('opacity-60');
       busy = false;
-      input.focus();
+      $input()?.focus();
     }
   };
 
-  form?.addEventListener('submit', (e) => {
-    e.preventDefault();
-    ask(input.value);
+  window.addEventListener('open-ask-ai', () => setOpen(true));
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') setOpen(false);
   });
-  document.querySelectorAll('[data-suggestion]').forEach((el) =>
-    el.addEventListener('click', () => ask(el.textContent || ''))
-  );
+  document.addEventListener('click', (e) => {
+    const t = e.target as Element;
+    if (t.closest('[data-askai-close]')) {
+      setOpen(false);
+    } else if (t.closest('[data-suggestion]')) {
+      ask(t.closest('[data-suggestion]')!.textContent || '');
+    }
+  });
+  document.addEventListener('submit', (e) => {
+    if ((e.target as Element).id === 'askai-form') {
+      e.preventDefault();
+      ask($input()?.value || '');
+    }
+  });
 </script>

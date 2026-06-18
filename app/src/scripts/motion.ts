@@ -218,8 +218,10 @@ function setupCursor() {
   const loop = () => {
     const el = document.getElementById('cursor');
     if (el) {
-      cx += (tx - cx) * 0.2;
-      cy += (ty - cy) * 0.2;
+      // tight follow so the visible ball stays close to the true pointer (avoids
+      // mis-clicks where the ball lags behind where you actually click)
+      cx += (tx - cx) * 0.35;
+      cy += (ty - cy) * 0.35;
       el.style.transform = `translate(${cx}px, ${cy}px) translate(-50%, -50%)`;
     }
     requestAnimationFrame(loop);
@@ -273,7 +275,15 @@ export function setupMotion() {
   document.addEventListener('astro:page-load', () =>
     safe(() => {
       build();
-      if (cursorBound) document.documentElement.classList.add('cursor-on');
+      if (cursorBound) {
+        document.documentElement.classList.add('cursor-on');
+        // the element that triggered navigation never fired pointerout, so the
+        // cursor can be stuck in its hover (filled-ball) state — reset it.
+        const c = document.getElementById('cursor');
+        c?.classList.remove('is-hover');
+        const span = c?.querySelector('.cursor-label');
+        if (span) span.textContent = '';
+      }
     })
   );
 }
