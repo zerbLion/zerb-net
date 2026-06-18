@@ -98,6 +98,30 @@ const byPillar = (id: string) => all.filter((p) => p.data.pillars.includes(id as
         );
       })
     }
+
+    <!-- Inline Ask AI prompt — opens the same side panel via [data-ask-ai] -->
+    <section class="border-t border-line px-6 py-28 md:px-10 md:py-40">
+      <div class="mx-auto max-w-[1400px]">
+        <div class="reveal mb-10">
+          <h2 class="font-display text-5xl font-black md:text-7xl">Ask me anything</h2>
+          <p class="mt-4 max-w-xl text-mist">
+            Curious about a project, the process, or working together? Ask the AI — it knows the work.
+          </p>
+        </div>
+        <button
+          data-ask-ai
+          data-cursor="Ask"
+          class="reveal group flex w-full max-w-2xl items-center justify-between gap-4 rounded-full border border-line bg-surface px-6 py-4 text-left transition-colors hover:border-accent"
+        >
+          <span class="text-base text-mist md:text-lg">Ask me anything about my work…</span>
+          <span
+            class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-paper font-display text-lg text-ink transition-transform duration-300 group-hover:translate-x-0.5"
+          >
+            →
+          </span>
+        </button>
+      </div>
+    </section>
   </main>
 
   <Footer />

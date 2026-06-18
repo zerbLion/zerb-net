@@ -251,11 +251,15 @@ html.overlay-open .hero-dot {
   backdrop-filter: blur(10px);
 }
 
-/* Article body copy uses the display face (Montserrat), matching zerb.net/resume-2. */
+/* Article body copy uses the readable body face (Mulish); headings stay on the
+   Montserrat display face. */
 .entry-content {
-  font-family: var(--font-display);
+  font-family: var(--font-body);
   line-height: 1.8;
   font-size: 1rem;
+}
+.entry-content :is(h1, h2, h3, h4) {
+  font-family: var(--font-display);
 }
 
 /* ── Mobile menu — visibility-driven so it can NEVER get stuck blocking the page */
