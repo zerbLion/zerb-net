@@ -44,6 +44,9 @@
     scroll-behavior: smooth;
     /* offset anchor jumps so sections clear the fixed header */
     scroll-padding-top: 96px;
+    /* always reserve the scrollbar gutter so locking scroll (Ask AI / mobile menu)
+       doesn't shift the page sideways */
+    scrollbar-gutter: stable;
   }
 
   body {
