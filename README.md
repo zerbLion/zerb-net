@@ -8,6 +8,17 @@
 
 注意：`D:\net\net` 是本机路径，换电脑后可能不可用。换机器后需要重新确认原始备份位置。
 
+## 当前线上版本：Astro 重建（2026-06 起，重要）
+
+本仓库现在有两套站点：
+
+- **`app/`（线上版本）**：Astro 6 + Tailwind v4 重建版，三大板块 Motion · Visual · Code，长滚动 + 锚点首页、多 provider AI 问答（`/api/chat`）、Lenis/GSAP 动效、自定义光标、内联「AI Ask」+ 侧边栏问答。已部署到 Vercel：<https://net-website-mu.vercel.app>（Vercel Root Directory = `app`，生产分支 `main`，在 `dev` 改完合并到 `main`）。视频托管在 Cloudflare R2（`zerbnet-media`，r2.dev 公共域名），字体自托管（标题 Montserrat / 正文 Mulish）。
+- **根目录静态站**（`index.html`、`project/`、`works/`、`assets/`、`media/` 等）：原 WordPress 静态导出，保留作为历史/备份，未删除，但线上已不再使用。
+
+**改 `app/` 前必读 `AGENTS.md`「Astro 重建版工作规则」**——记录了 View Transitions 脚本只跑一次/引用失效、`backdrop-filter` 改变 `position:fixed` 定位基准、预览环境局限、部署延迟需硬刷新（Ctrl+Shift+R）、国内访问 / 自定义域名等关键踩坑。
+
+本文件以下章节描述的是根目录旧静态站的结构与运行方式，对 Astro 版不再适用，仅作历史参考。
+
 ## 项目说明
 
 这个项目来自 WordPress static export，但当前已经整理为更接近普通前端静态站点的结构。

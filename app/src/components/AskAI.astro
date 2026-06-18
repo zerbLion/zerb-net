@@ -19,8 +19,16 @@ const suggestions = [
   <aside
     class="absolute right-0 top-0 flex h-full w-full max-w-md translate-x-full flex-col border-l border-line bg-ink-soft transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
   >
-    <div class="flex items-center justify-between border-b border-line px-6 py-5">
-      <div>
+    <div class="flex items-center gap-3 border-b border-line px-5 py-5">
+      <button
+        data-askai-close
+        data-cursor="Back"
+        aria-label="Back"
+        class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-line text-lg text-paper transition-colors hover:border-accent hover:text-accent"
+      >
+        ←
+      </button>
+      <div class="flex-1">
         <p class="font-display text-lg font-extrabold">Ask AI</p>
         <p class="text-xs text-mist">Ask anything about ZERB & the work</p>
       </div>

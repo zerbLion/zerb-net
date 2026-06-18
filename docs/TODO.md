@@ -10,28 +10,25 @@
 
 ## 正在处理
 
-2026-06-15 启动「重构为 Astro」方向。用户已确认三件事：
-1. 视频改用 Cloudflare R2 + 自定义域名托管（出站免费）。
-2. 加 frad.me 式 AI 问答，做多 provider（Claude/GPT/Gemini）API 抽象层，key 放 `.env`，按填写自动选。
-3. 站点直接重构为 Astro，三大板块 Motion · Visual · Code，首页改长滚动 + 锚点定位。
+**Astro 重建版已上线。** 6 个 Phase 全部完成并部署到 Vercel：
+- 线上地址：`https://net-website-mu.vercel.app`（Vercel Root Directory = `app`，生产分支 `main`，dev 改完合并到 main）。
+- 改 `app/` 前**必读 `AGENTS.md`「Astro 重建版工作规则」**（架构 + View Transitions/遮罩/Lenis/光标/预览环境等踩坑总结）。
+- 视频已上传 Cloudflare R2（`zerbnet-media`，公共域名 r2.dev）；图片在 `app/public/media/images`；字体自托管（Montserrat 标题 + Mulish 正文）；AI 问答 `/api/chat` 多 provider（Gemini key 在 Vercel 环境变量）。
+- 站内中文已全部翻成英文（项目正文/博客/标题）。
+- 首页 = Hero 三段进场（蒙版/模糊/打字）+ 三板块 featured-first 网格 + 「AI Ask」内联引导块（复用侧边栏）。
 
-老的静态站（根目录 `index.html`、`project/`、`works/` 等）全程保留、继续可部署，Astro 在子目录 `app/` 并行重建，全部验证通过后再切换上线。重构分 6 个 Phase：Phase 0 脚手架 / Phase 1 内容迁移 / Phase 2 视频迁 R2 / Phase 3 GSAP 动效 / Phase 4 AI 问答 / Phase 5 切换上线。
+老的根目录静态站（`index.html`、`project/`、`works/` 等）仍保留未删，但线上已是 `app/` 的 Astro 版。
 
-Phase 0 已完成；Phase 0 后按用户反馈修了一轮 UI（logo/导航字体/移动菜单/Ask AI 面板/横幅尺寸等，见 DONE.md）。
+### 当前待办 / 待用户决定
+- **国内访问**：`*.vercel.app` 被限速/墙。建议把 `zerb.net`（或子域）绑到 Vercel 项目（Settings → Domains），像 frad.me 那样用自定义域名直连。
+- **AI 限流**：当前是内存版，多 serverless 实例间不共享计数。要严格防刷可接 Vercel KV / Upstash。
+- **媒体高清**：Motion 的 featured（VIVO XR / GLASS）只有 950px，无更大源，全宽横幅略糊；想清晰需用户给 ≥1600px 高清横图。其余 featured 已用高清源（dynamic-weather 用 1920px）。
+- **命名统一**：导航按钮/面板是「Ask AI」，首页内联板块标题是「AI Ask」，顺序不一致，待用户决定是否统一。
+- **Code 板块**：目前只有 MotionSheet 一个作品，是否补内容待定。
+- **可选打磨**：详情页正文仍是 set:html 渲染的 WordPress 导出 HTML，可逐页清冗余 class/空块；校准各项目 `summary`/`year`。
+- **R2 自定义域名（可选）**：r2.dev 有速率限制，可换 `media.zerb.net` + Cloudflare CDN，只需改 `.env` 的 `R2_PUBLIC_BASE` 重跑 `npm run media:manifest && npm run media:apply`。
 
-Phase 1 已完成：11 个项目详情（9 详情页 + 2 外链）、works 过滤列表页、blog（列表 + 2 篇）、resume、404 全部迁到 Astro，构建 16 页，浏览器验证全站坏图为 0。
-
-UI 优化第一轮已完成（板块重排、Code 工具 + 自制封面、页脚版权、滚动条/焦点态/锚点偏移、卡片 hover、首页间距与滚动提示）。当前下一步是 Phase 2（视频迁 Cloudflare R2）。待办：
-- 确认 `zerb-cc-cd` 外链真实 URL（当前暂用 `https://zerb.cc.cd`）。
-- Phase 2 待用户执行：`cp .env.example .env` 填 R2 凭证（Account ID / Access Key / Secret），然后 `npm run media:upload` 上传 29 个视频到 `zerbnet-media`。上传后浏览器验证详情页视频从 r2.dev 返回 200 / video/mp4。
-- Phase 2 后续（可选）：把 r2.dev 换成自定义域名 `media.zerb.net`（绑 Cloudflare CDN 缓存），只需改 `.env` 的 `R2_PUBLIC_BASE` 后重跑 `npm run media:manifest && npm run media:apply`。
-- 后续 UI：详情页正文目前直接 set:html 渲染 WordPress 导出 HTML，可逐页清理冗余 class/空块、精修图文间距。
-- 校准各项目 `summary`/`year` 与真实情况。
-- Phase 3（Motion）、Phase 4（AI 问答）已完成（见 DONE.md）。
-- 待用户验证 AI：本地受 GFW 影响连不上 Gemini，需开 VPN 本地测，或等 Phase 5 部署到 Vercel 后线上验证（生产可用）。
-- 剩 Phase 5（切换上线）：把 `redirects.json`/`vercel.json` 跳转迁到 Astro、验证 sitemap/robots、把 Vercel 构建指向 `app/`（root directory）、在 Vercel 配 AI 环境变量（GEMINI_API_KEY 等）+ 限流存储（可选 KV/Upstash），全站浏览器复查后切换。
-
-更早一次处理是 2026-06-08 媒体目录拆分和自动优化。
+更早的历史（2026-06-08 媒体目录拆分/优化、WordPress 静态导出清理）见 DONE.md。
 
 当前文档结构已经统一为：
 

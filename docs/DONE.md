@@ -243,6 +243,29 @@
   - 导航链接热区加大(`px-3 py-3`),修"点在文字附近不触发"。
   - 把本会话关键经验写入 `AGENTS.md`「Astro 重建版工作规则」:架构、View Transitions 大坑(脚本只跑一次/引用失效/`astro:page-load` 复位)、预览环境局限、部署延迟与硬刷新、国内访问与自定义域名、自定义光标注意点。
 
+- 2026-06-17 内容英文化:用 `tools/i18n-en.mjs` 把站内中文（项目正文 `set:html`、博客、标题/简介）整体翻成英文,统一全站语言。
+
+- 2026-06-17 R2 视频上传 + 上线验证:把 gitignore 的视频上传到 Cloudflare R2 `zerbnet-media`,跑 `media:manifest` + `media:apply` 把本地视频 src/poster 批量替换为 r2.dev 公共 URL;线上验证视频可播放、egress 免费。
+
+- 2026-06-17 三板块改版 featured-first(Plan B)+ 卡片精简(更大气):
+  - 每板块首个作品做整宽大横幅(featured,优先用 `coverLarge` 高清源),其余作品 2 列网格;dynamic-weather 配 1920×1080 大图。
+  - `ProjectCard` 去掉 summary/tags,只留标题 + 年份(image-forward),标题字号缩小(`text-lg md:text-2xl`),featured 同款。
+  - 「View all work」链到 `/works/?f=<pillar>` 深链;`works/` 页读 `?f=` 自动选中筛选 + 整网格柔和淡入切换(`opacity 0→1`);MotionSheet 作为 Code 外链卡(`externalUrl`)。
+
+- 2026-06-17 正文字体 Montserrat→Mulish:token `--font-body` 改 Mulish;`.entry-content` 正文用 Mulish、标题仍 Montserrat;自托管 `mulish-latin.woff2` + `<link rel=preload>`(沿用 `font-display:block`,无 FOUT)。
+
+- 2026-06-17 手机端目录真根因修复(反复反馈的老 bug):`#mobile-menu` 原在 `#masthead` 内,而 header 有 `backdrop-filter`——会成为其 `position:fixed` 子元素的 containing block,把本应全屏的菜单困在 header 高度(只露 72px 一条)。把菜单移出 `<header>` 到 body 级,`position:fixed; inset:0` 全视口;验证 parent=BODY、height=812。**经验**:`backdrop-filter`/`transform`/`filter` 祖先会改变 fixed 后代的定位基准,已写入 AGENTS.md。
+
+- 2026-06-17 遮罩层级 + 锚点导航修复:
+  - 开抽屉(mobile menu / Ask AI)时 `html.overlay-open` 隐藏高 z-index(300)的 hero 小球,避免穿透到遮罩上方。
+  - 从子页点 `/#motion` 不再回首页顶部:`location.hash` 存在时跳过 `astro:after-swap` 的 `scrollTo(0,0)`,改用 `lenis.scrollTo(el,{offset:-96,immediate:true})` 精确定位(native scrollIntoView 会被 Lenis 重置)。
+
+- 2026-06-17 内联 AI Ask 引导块(frad.me 式):首页 Code 板块下新增「AI Ask」整屏板块(大标题 + 输入框样式按钮 "Ask me anything…"),点击走 `[data-ask-ai]` 委托打开同一侧边栏。手机上可直接在首页流里唤起问答,不必先找右上角。
+
+- 2026-06-18 Ask AI 打开时主页面横向错位修复:`body { overflow:hidden }` 锁滚动会移除滚动条导致页面右移。`html` 加 `scrollbar-gutter: stable` 常驻滚动条槽,开/关抽屉不再位移。
+
+- 2026-06-18 Ask AI 面板加「← Back」回退按钮:面板左上角新增圆形 ← 按钮(原先只有右上角 ✕),手机上更易单手够到/回退;避免用户只能伸到右上角,或误用系统返回手势(会直接退出整页)。`data-askai-close` 复用现有关闭委托,验证点击即关。PC 体验不变。
+
 ## WordPress 静态导出清理
 
 - 根据当前文件状态推断，移除了部分 WordPress feed/API/archive 输出。
