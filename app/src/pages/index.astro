@@ -63,7 +63,7 @@ const byPillar = (id: string) => all.filter((p) => p.data.pillars.includes(id as
                       featured
                       href={hrefFor(featured)}
                       title={featured.data.title}
-                      cover={featured.data.cover}
+                      cover={featured.data.coverLarge ?? featured.data.cover}
                       year={featured.data.year}
                     />
                     {rest.length > 0 && (

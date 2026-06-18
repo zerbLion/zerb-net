@@ -64,27 +64,32 @@ const filters = ['all', 'motion', 'visual', 'code'] as const;
     const buttons = document.querySelectorAll<HTMLButtonElement>('.filter-btn');
     const items = document.querySelectorAll<HTMLElement>('.work-item');
 
-    const apply = (f: string) => {
-      buttons.forEach((b) => b.toggleAttribute('data-active', b.dataset.filter === f));
+    const setItems = (f: string) => {
       items.forEach((it) => {
         const show = f === 'all' || (it.dataset.pillars || '').includes(f);
-        if (show) {
-          it.style.display = '';
-          requestAnimationFrame(() => it.classList.remove('is-filtered'));
-        } else {
-          it.classList.add('is-filtered');
-          window.setTimeout(() => {
-            if (it.classList.contains('is-filtered')) it.style.display = 'none';
-          }, 450);
-        }
+        it.style.display = show ? '' : 'none';
       });
+    };
+    // Crossfade the whole grid so the layout reflow happens while it's invisible
+    // (no hard per-card cut).
+    const apply = (f: string, instant = false) => {
+      buttons.forEach((b) => b.toggleAttribute('data-active', b.dataset.filter === f));
+      if (instant) {
+        setItems(f);
+        return;
+      }
+      grid.style.opacity = '0';
+      window.setTimeout(() => {
+        setItems(f);
+        grid.style.opacity = '1';
+      }, 220);
     };
 
     buttons.forEach((btn) => btn.addEventListener('click', () => apply(btn.dataset.filter!)));
 
     // Honor a ?f=<pillar> deep link from the homepage "View all work" CTA.
     const f = new URLSearchParams(location.search).get('f');
-    apply(f && ['motion', 'visual', 'code'].includes(f) ? f : 'all');
+    apply(f && ['motion', 'visual', 'code'].includes(f) ? f : 'all', true);
   };
 
   setupWorksFilter();

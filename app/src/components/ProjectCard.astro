@@ -31,12 +31,7 @@ const isExternal = external ?? href.startsWith('http');
   </div>
 
   <div class="mt-5 flex items-baseline justify-between gap-4">
-    <h3
-      class:list={[
-        'font-display font-bold transition-colors duration-300 group-hover:text-accent',
-        featured ? 'text-2xl md:text-4xl' : 'text-lg md:text-2xl',
-      ]}
-    >
+    <h3 class="font-display text-lg font-bold transition-colors duration-300 group-hover:text-accent md:text-2xl">
       {title}
     </h3>
     {year && <span class="shrink-0 text-sm text-mist">{year}</span>}

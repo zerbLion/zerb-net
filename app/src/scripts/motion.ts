@@ -234,8 +234,11 @@ function setupCursor() {
     if (!c) return;
     if (on) {
       const labelled = hit.closest('[data-cursor]') as HTMLElement | null;
+      const link = hit.closest('a') as HTMLAnchorElement | null;
+      const label =
+        labelled?.dataset.cursor || (link && link.target === '_blank' ? 'Open' : 'Go');
       const span = c.querySelector('.cursor-label');
-      if (span) span.textContent = labelled?.dataset.cursor || '';
+      if (span) span.textContent = label;
     }
     c.classList.toggle('is-hover', on);
   };

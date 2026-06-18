@@ -9,7 +9,7 @@ const links = [
 
 <header id="masthead" class="fixed top-0 left-0 z-50 w-full">
   <div class="mx-auto flex max-w-[1400px] items-center justify-between px-6 py-4 md:px-10">
-    <a href="/" class="shrink-0" aria-label="ZERB home">
+    <a href="/" data-cursor="Home" class="shrink-0" aria-label="ZERB home">
       <img
         src="/media/images/common/brand/cropped-logo_high2.png"
         alt="ZERB"
@@ -101,7 +101,16 @@ const links = [
     }
     if (target.closest('[data-mobile-link]')) {
       setMenu(false);
+      return;
     }
+    // tap the empty backdrop of the open menu to close it
+    if (target.closest('#mobile-menu') && !target.closest('a, button')) {
+      setMenu(false);
+    }
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') setMenu(false);
   });
 
   // Always start closed on each page load (and never leave the body locked).

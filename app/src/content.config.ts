@@ -12,6 +12,7 @@ const projects = defineCollection({
     // One project can belong to several pillars.
     pillars: z.array(z.enum(PILLARS)).default(['visual']),
     cover: z.string(), // root-relative URL, e.g. /media/images/projects/<slug>/x.webp
+    coverLarge: z.string().optional(), // hi-res source for the full-width featured card
     year: z.union([z.string(), z.number()]).optional(),
     role: z.string().optional(),
     // Display ordering on listing pages; lower = earlier.
