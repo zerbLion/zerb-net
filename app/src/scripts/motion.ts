@@ -271,10 +271,27 @@ export function setupMotion() {
       built = false;
     })
   );
-  document.addEventListener('astro:after-swap', () => safe(() => window.scrollTo(0, 0)));
+  // Reset scroll on navigation — but NOT when the URL has a hash, so links like
+  // /#motion from a sub-page land on that section instead of the page top.
+  document.addEventListener('astro:after-swap', () =>
+    safe(() => {
+      if (!location.hash) window.scrollTo(0, 0);
+    })
+  );
   document.addEventListener('astro:page-load', () =>
     safe(() => {
       build();
+      // honor a #hash target after a cross-page navigation. Lenis owns scroll, so
+      // use lenis.scrollTo (native scrollIntoView gets reset by Lenis to 0). The
+      // short delay lets Lenis finish initialising after build().
+      if (location.hash) {
+        const el = document.querySelector<HTMLElement>(location.hash);
+        if (el)
+          setTimeout(() => {
+            if (lenis) lenis.scrollTo(el, { offset: -96, immediate: true });
+            else el.scrollIntoView();
+          }, 120);
+      }
       if (cursorBound) {
         document.documentElement.classList.add('cursor-on');
         // the element that triggered navigation never fired pointerout, so the

@@ -170,6 +170,12 @@ html.hero-fallback [data-hero] .hero-dot-m {
   vertical-align: baseline;
   z-index: 300;
 }
+/* When a drawer (mobile menu / Ask AI) is open, hide the high-z dots so they
+   can't poke through the overlay. */
+html.overlay-open .hero-dot {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
 /* .hero-dot-m carries the intro roll + the magnet transform. */
 .hero-dot-m {
   position: absolute;
