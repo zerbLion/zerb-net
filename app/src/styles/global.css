@@ -266,23 +266,17 @@ html.overlay-open .hero-dot {
 }
 
 /* ── Project cover treatment ───────────────────────────────────────────────────
-   A neutral black veil sits over every cover so the grid reads consistent despite
-   mixed source images — no hue, no desaturation. On fine-pointer devices the veil
-   lifts on hover (image brightens) with a slow zoom; on touch it stays as a calm
-   resting darken. The bottom scrim (featured only) keeps overlaid text legible. */
+   Mobile / touch: NO full veil — covers stay bright. (Single-column, and no hover
+   to "reveal", so a permanent darken would just mute the work for no payoff.) On
+   the featured card the bottom scrim is the only darkening, feathered behind the
+   title so it pops without masking the image.
+   Mouse / desktop: a neutral black veil rests over every cover so the multi-column
+   grid reads consistent, then lifts on hover (image brightens) with a slow zoom. */
 .proj-media {
   height: 100%;
   width: 100%;
   object-fit: cover;
   transition: transform 0.9s var(--ease-out-expo);
-}
-.proj-veil {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: #000;
-  opacity: 0.4;
-  transition: opacity 0.6s ease;
 }
 .proj-scrim {
   position: absolute;
@@ -296,6 +290,14 @@ html.overlay-open .hero-dot {
   );
 }
 @media (hover: hover) and (pointer: fine) {
+  .proj-veil {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: #000;
+    opacity: 0.4;
+    transition: opacity 0.6s ease;
+  }
   .group:hover .proj-veil { opacity: 0; }
   .group:hover .proj-media { transform: scale(1.05); }
 }
