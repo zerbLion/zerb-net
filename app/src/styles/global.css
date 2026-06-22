@@ -265,23 +265,6 @@ html.overlay-open .hero-dot {
   font-family: var(--font-display);
 }
 
-/* ── Ask AI dismiss arrow ──────────────────────────────────────────────────────
-   The panel is a right-edge drawer that exits to the right, so its control arrow
-   points right (→). When the panel opens (aside loses .translate-x-full) the whole
-   button settles in from the left, giving the close gesture a clear direction; the
-   arrow glyph itself nudges right on hover (group-hover, on the inner <svg> so the
-   two transforms never fight). */
-@keyframes askaiArrowIn {
-  from { opacity: 0; transform: translateX(-12px); }
-  to { opacity: 1; transform: translateX(0); }
-}
-#askai-root aside:not(.translate-x-full) #askai-back {
-  animation: askaiArrowIn 0.5s var(--ease-out-expo) both;
-}
-@media (prefers-reduced-motion: reduce) {
-  #askai-root aside:not(.translate-x-full) #askai-back { animation: none; }
-}
-
 /* ── Mobile menu — visibility-driven so it can NEVER get stuck blocking the page */
 #mobile-menu {
   position: fixed;
