@@ -21,7 +21,7 @@
 
 ### 当前待办 / 待用户决定
 - **国内访问**：`*.vercel.app` 被限速/墙。建议把 `zerb.net`（或子域）绑到 Vercel 项目（Settings → Domains），像 frad.me 那样用自定义域名直连。
-- **AI 限流**：限流器已支持 **Upstash Redis（REST）**做跨实例共享计数（`app/src/lib/ratelimit.ts`），未配置时自动回退内存版、Redis 出错时 fail-open 不影响问答。**激活只差一步**（用户操作）：在 https://upstash.com 建免费 Redis → 把 `UPSTASH_REDIS_REST_URL` / `UPSTASH_REDIS_REST_TOKEN`（或 Vercel KV 的 `KV_REST_API_URL` / `KV_REST_API_TOKEN`）加到 Vercel 环境变量并重新部署。未连前仍是内存版（每个 serverless 实例各自计数）。
+- **AI 限流**：限流器已支持 **Upstash Redis（REST）**做跨实例共享计数（`app/src/lib/ratelimit.ts`），未配置时自动回退内存版、Redis 出错时 fail-open 不影响问答。**激活只差一步**（用户操作）：在 https://upstash.com 建免费 Redis → 把 `UPSTASH_REDIS_REST_URL` / `UPSTASH_REDIS_REST_TOKEN`（或 Vercel KV 的 `KV_REST_API_URL` / `KV_REST_API_TOKEN`）加到 Vercel 环境变量并重新部署。未连前仍是内存版（每个 serverless 实例各自计数）。**2026-06-22 线上实测**：连发 8 次，第 6 次触发 429 → per-min=5 = 代码默认，确认 Vercel **未单独设**这些阈值 env，全站 cap=200 已在线生效、限流在生产确实拦截。阈值这块已 OK；Upstash 仅为跨实例共享，可选。
 - **媒体高清**：Motion 的 featured（VIVO XR / GLASS）只有 950px，无更大源，全宽横幅略糊；想清晰需用户给 ≥1600px 高清横图。其余 featured 已用高清源（dynamic-weather 用 1920px）。
 - **作品集卡片改版（2026-06-22 已完成，详见 DONE.md）**：featured 叠字 + 中性黑遮罩（桌面 hover 揭开 / 手机不加遮罩）+ 响应式高度（手机 3:2 / 桌面 1600/430）。**剩余可选微调**：桌面 featured 高度仍可调（现 ~3.7:1）；featured 三个项目 `.md` 未填 `year`，叠层不显示年份——要显示就补 `year`。
 - **命名统一**：导航按钮/面板是「Ask AI」，首页内联板块标题是「AI Ask」，顺序不一致，待用户决定是否统一。
