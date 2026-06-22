@@ -17,7 +17,15 @@ const isExternal = external ?? href.startsWith('http');
   class="reveal group block"
   {...isExternal ? { target: '_blank', rel: 'noopener noreferrer' } : {}}
 >
-  <div class="relative aspect-[950/320] overflow-hidden rounded-xl bg-surface">
+  <div
+    class:list={[
+      'relative overflow-hidden rounded-xl bg-surface',
+      // Featured banner is full-bleed, so on wide screens it gets tall (~470px).
+      // Use a wider ratio at lg+ so it's a sleeker ~375px banner (width stays
+      // full; object-cover just crops a touch more). Small cards keep 950/320.
+      featured ? 'aspect-[950/320] lg:aspect-[1600/430]' : 'aspect-[950/320]',
+    ]}
+  >
     <img
       src={cover}
       alt={title}
