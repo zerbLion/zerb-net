@@ -280,6 +280,12 @@
   - 小卡片尺寸/布局不变(`aspect-[950/320]`、文字在下)。`works` 页用同一 `ProjectCard`(plain 变体),自动获得统一 hover。
   - 备注:featured 三个项目(VIVO XR / Dynamic Weather Art / MotionSheet)`.md` 里 `year` 未填,叠层暂不显示年份。
 
+- 2026-06-22 AI 限流升级为可持久化(`app/src/lib/ratelimit.ts`):
+  - 加 **Upstash Redis(REST)** 后端:固定窗口计数(IP+窗口桶,分钟/天/全站三层),用一次 pipeline 往返做 INCR+EXPIRE,**跨所有 serverless 实例共享**,生产环境真正生效。env 兼容 `UPSTASH_REDIS_REST_URL/TOKEN` 与 Vercel KV 的 `KV_REST_API_URL/TOKEN`。
+  - 未配置 Redis → 自动**回退内存版**(原逻辑原样保留);Redis 出错 → **fail-open**(放行,不让限流故障打断问答),全站日上限 + provider 自身配额兜底。
+  - `checkRateLimit` 改为 async,`api/chat.ts` 改 `await`;`.env.example` 补充 Upstash 变量与说明。
+  - **验证**:`npm run build` 通过;dev 实测请求确实流经新 async 限流器(返回 ok 后继续走 provider)。注:Astro **dev 不加载本地 `.env` 私有变量到代码的 `process.env`/动态 `import.meta.env`**,故本地无法用 `.env` 改阈值测 429;429 拒绝路径与原工作版一致,且失败 fail-open,风险低。线上接 Upstash 后即真实跨实例生效。
+
 ## WordPress 静态导出清理
 
 - 根据当前文件状态推断，移除了部分 WordPress feed/API/archive 输出。

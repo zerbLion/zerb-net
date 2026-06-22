@@ -23,7 +23,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
   }
 
   const ip = clientAddress || 'unknown';
-  const limit = checkRateLimit(ip);
+  const limit = await checkRateLimit(ip);
   if (!limit.ok) {
     const msg =
       limit.reason === 'minute'
