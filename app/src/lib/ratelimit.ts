@@ -31,10 +31,13 @@ function num(k: string, d: number): number {
   return Number.isFinite(n) ? n : d;
 }
 function limits() {
+  // Defaults tuned for gemini-2.5-flash free tier (~10 RPM / ~250 RPD). The
+  // site-wide daily cap stays under the free RPD so abuse trips our own 429
+  // rather than Google's hard quota. Override per deployment via env vars.
   return {
-    perMin: num('AI_RATE_LIMIT_PER_MIN', 6),
-    perDay: num('AI_RATE_LIMIT_PER_DAY', 50),
-    globalCap: num('AI_DAILY_GLOBAL_CAP', 1000),
+    perMin: num('AI_RATE_LIMIT_PER_MIN', 5),
+    perDay: num('AI_RATE_LIMIT_PER_DAY', 30),
+    globalCap: num('AI_DAILY_GLOBAL_CAP', 200),
   };
 }
 
