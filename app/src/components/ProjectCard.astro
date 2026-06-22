@@ -6,9 +6,8 @@ interface Props {
   year?: string | number;
   external?: boolean;
   featured?: boolean;
-  tag?: string;
 }
-const { href, title, cover, year, external, featured = false, tag } = Astro.props;
+const { href, title, cover, year, external, featured = false } = Astro.props;
 const isExternal = external ?? href.startsWith('http');
 ---
 
@@ -27,11 +26,6 @@ const isExternal = external ?? href.startsWith('http');
         <img src={cover} alt={title} loading="eager" class="proj-media" />
         <span class="proj-veil" aria-hidden="true" />
         <div class="proj-scrim" aria-hidden="true" />
-        {tag && (
-          <span class="absolute left-4 top-4 z-10 font-display text-[11px] font-extrabold uppercase tracking-[0.15em] text-accent-soft">
-            {tag}
-          </span>
-        )}
         <div class="absolute inset-x-5 bottom-5 z-10 flex items-end justify-between gap-4">
           <div class="min-w-0">
             <h3 class="font-display text-lg font-bold text-paper md:text-2xl">
