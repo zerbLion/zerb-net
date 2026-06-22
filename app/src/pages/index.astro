@@ -65,6 +65,7 @@ const byPillar = (id: string) => all.filter((p) => p.data.pillars.includes(id as
                       title={featured.data.title}
                       cover={featured.data.coverLarge ?? featured.data.cover}
                       year={featured.data.year}
+                      tag={pillar.label}
                     />
                     {rest.length > 0 && (
                       <div class="grid grid-cols-1 gap-x-10 gap-y-16 lg:grid-cols-2">

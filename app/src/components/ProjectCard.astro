@@ -6,8 +6,9 @@ interface Props {
   year?: string | number;
   external?: boolean;
   featured?: boolean;
+  tag?: string;
 }
-const { href, title, cover, year, external, featured = false } = Astro.props;
+const { href, title, cover, year, external, featured = false, tag } = Astro.props;
 const isExternal = external ?? href.startsWith('http');
 ---
 
@@ -17,31 +18,45 @@ const isExternal = external ?? href.startsWith('http');
   class="reveal group block"
   {...isExternal ? { target: '_blank', rel: 'noopener noreferrer' } : {}}
 >
-  <div
-    class:list={[
-      'relative overflow-hidden rounded-xl bg-surface',
-      // Featured banner is full-bleed, so on wide screens it gets tall (~470px).
-      // Use a wider ratio at lg+ so it's a sleeker ~375px banner (width stays
-      // full; object-cover just crops a touch more). Small cards keep 950/320.
-      featured ? 'aspect-[950/320] lg:aspect-[1600/430]' : 'aspect-[950/320]',
-    ]}
-  >
-    <img
-      src={cover}
-      alt={title}
-      loading={featured ? 'eager' : 'lazy'}
-      class="h-full w-full object-cover transition-transform duration-[900ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.04]"
-    />
-    <div
-      class="absolute inset-0 bg-gradient-to-t from-ink/80 via-ink/10 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100"
-    >
-    </div>
-  </div>
-
-  <div class="mt-5 flex items-baseline justify-between gap-4">
-    <h3 class="font-display text-lg font-bold transition-colors duration-300 group-hover:text-accent md:text-2xl">
-      {title}
-    </h3>
-    {year && <span class="shrink-0 text-sm text-mist">{year}</span>}
-  </div>
+  {
+    featured ? (
+      // Featured: title overlaid on a permanent bottom scrim. A bit taller than a
+      // strip on phones so the headline is wrapped in; cinematic banner on desktop.
+      // Covers get a neutral black veil that lifts on hover (no hue — see global.css).
+      <div class="relative aspect-[3/2] overflow-hidden rounded-xl bg-surface lg:aspect-[1600/430]">
+        <img src={cover} alt={title} loading="eager" class="proj-media" />
+        <span class="proj-veil" aria-hidden="true" />
+        <div class="proj-scrim" aria-hidden="true" />
+        {tag && (
+          <span class="absolute left-4 top-4 z-10 font-display text-[11px] font-extrabold uppercase tracking-[0.15em] text-accent-soft">
+            {tag}
+          </span>
+        )}
+        <div class="absolute inset-x-5 bottom-5 z-10 flex items-end justify-between gap-4">
+          <div class="min-w-0">
+            <h3 class="font-display text-2xl font-black leading-none tracking-tight text-paper md:text-4xl">
+              {title}
+            </h3>
+            <span class="mt-2 block h-[3px] w-16 origin-left scale-x-0 bg-accent transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-x-100" />
+          </div>
+          {year && <span class="shrink-0 pb-1 text-sm text-mist">{year}</span>}
+        </div>
+      </div>
+    ) : (
+      // Small card: image with the title below (size unchanged). Same neutral
+      // black veil → reveal on hover.
+      <Fragment>
+        <div class="relative aspect-[950/320] overflow-hidden rounded-xl bg-surface">
+          <img src={cover} alt={title} loading="lazy" class="proj-media" />
+          <span class="proj-veil" aria-hidden="true" />
+        </div>
+        <div class="mt-5 flex items-baseline justify-between gap-4">
+          <h3 class="font-display text-lg font-bold transition-colors duration-300 group-hover:text-accent md:text-2xl">
+            {title}
+          </h3>
+          {year && <span class="shrink-0 text-sm text-mist">{year}</span>}
+        </div>
+      </Fragment>
+    )
+  }
 </a>
