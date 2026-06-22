@@ -23,6 +23,7 @@
 - **国内访问**：`*.vercel.app` 被限速/墙。建议把 `zerb.net`（或子域）绑到 Vercel 项目（Settings → Domains），像 frad.me 那样用自定义域名直连。
 - **AI 限流**：当前是内存版，多 serverless 实例间不共享计数。要严格防刷可接 Vercel KV / Upstash。
 - **媒体高清**：Motion 的 featured（VIVO XR / GLASS）只有 950px，无更大源，全宽横幅略糊；想清晰需用户给 ≥1600px 高清横图。其余 featured 已用高清源（dynamic-weather 用 1920px）。
+- **作品集 banner 尺寸（用户提出，待定）**：每板块 featured 用 `ProjectCard` 的 `aspect-[950/320]`（≈3:1）但满容器宽，宽屏上实际高 ~500–560px，约占半屏，偏大。尤其 VIVO XR / GLASS 这类**白底产品图留白多、与暗色主题反差强**，放大后显得空。可选方案（均未实施）：featured 用更宽比例（如 `aspect-[1600/420]`≈3.8:1，同宽更矮）或加 `max-h`（~60vh）；或针对白底图改深底/紧裁让主体填满画面。
 - **命名统一**：导航按钮/面板是「Ask AI」，首页内联板块标题是「AI Ask」，顺序不一致，待用户决定是否统一。
 - **Code 板块**：目前只有 MotionSheet 一个作品，是否补内容待定。
 - **可选打磨**：详情页正文仍是 set:html 渲染的 WordPress 导出 HTML，可逐页清冗余 class/空块；校准各项目 `summary`/`year`。
