@@ -272,6 +272,14 @@
   - 曾加入「打开时从左淡入归位 + hover 向右轻推」的定向动效,结果触发**间歇性「点两次才关闭」**:动效让按钮/箭头在点击瞬间位移,`mousedown` 与 `mouseup` 落到不同元素,浏览器不触发 `click`。按用户要求回滚动效,关闭键改为**静态 → 字形 + 纯颜色 hover**,单击必关(已验证)。
   - **经验(已写入 AGENTS.md)**:可点击元素(及其可成为事件目标的子节点)上不要加 transform/动画;移动的命中目标会让 mousedown/mouseup 错位、吞掉 click。必须动就给子节点 `pointer-events:none`,或保持命中目标静止。这类时序 race 预览环境无法可靠复现,宁可保守。
 
+- 2026-06-22 作品卡片改版(多轮迭代,最终定稿;备份标签 `pre-card-redesign`):
+  - **featured 大卡高度**:先把桌面满宽 950/320(~470px)收窄到 `lg:aspect-[1600/430]`(~375px,更沉稳);手机端再加高到 `aspect-[3/2]`(3:1 太矮放不下叠字)。
+  - **featured 叠字**:标题/年份压在图上,底部常驻**羽化深色渐变 `.proj-scrim`** 托住文字(白底图也读得清)。标题排版与小卡一致:`font-display text-lg font-bold md:text-2xl`(去掉过重的 font-black 和紧字距)。去掉左上角板块标签(与板块大标题重复,画蛇添足)。
+  - **封面统一处理(中性黑遮罩)**:桌面(鼠标设备)静止盖一层 `#000`/40% 中性黑遮罩,hover 抬起 + 缓放大,让**多列网格调性统一**;**手机/触屏不加整图遮罩**(单列、无 hover,遮罩只会白白压暗作品)——featured 仅靠 scrim 托标题、小卡片全亮文字在下。`.proj-*` 在 global.css,遮罩 gated 到 `@media (hover:hover) and (pointer:fine)`。
+  - **走过的弯路**:先试「灰度 + 橙色 soft-light tint」双色调,混出难看的灰橙被否、整体回滚;改用**纯黑中性遮罩**(无色相、无去饱和)重做。**经验**:要"统一调性"用中性明度(黑遮罩/降亮),别叠色相 tint。
+  - 小卡片尺寸/布局不变(`aspect-[950/320]`、文字在下)。`works` 页用同一 `ProjectCard`(plain 变体),自动获得统一 hover。
+  - 备注:featured 三个项目(VIVO XR / Dynamic Weather Art / MotionSheet)`.md` 里 `year` 未填,叠层暂不显示年份。
+
 ## WordPress 静态导出清理
 
 - 根据当前文件状态推断，移除了部分 WordPress feed/API/archive 输出。

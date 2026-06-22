@@ -23,8 +23,9 @@
 - **国内访问**：`*.vercel.app` 被限速/墙。建议把 `zerb.net`（或子域）绑到 Vercel 项目（Settings → Domains），像 frad.me 那样用自定义域名直连。
 - **AI 限流**：当前是内存版，多 serverless 实例间不共享计数。要严格防刷可接 Vercel KV / Upstash。
 - **媒体高清**：Motion 的 featured（VIVO XR / GLASS）只有 950px，无更大源，全宽横幅略糊；想清晰需用户给 ≥1600px 高清横图。其余 featured 已用高清源（dynamic-weather 用 1920px）。
-- **作品集 banner 尺寸（用户提出，待定）**：每板块 featured 用 `ProjectCard` 的 `aspect-[950/320]`（≈3:1）但满容器宽，宽屏上实际高 ~500–560px，约占半屏，偏大。尤其 VIVO XR / GLASS 这类**白底产品图留白多、与暗色主题反差强**，放大后显得空。可选方案（均未实施）：featured 用更宽比例（如 `aspect-[1600/420]`≈3.8:1，同宽更矮）或加 `max-h`（~60vh）；或针对白底图改深底/紧裁让主体填满画面。
+- **作品集卡片改版（2026-06-22 已完成，详见 DONE.md）**：featured 叠字 + 中性黑遮罩（桌面 hover 揭开 / 手机不加遮罩）+ 响应式高度（手机 3:2 / 桌面 1600/430）。**剩余可选微调**：桌面 featured 高度仍可调（现 ~3.7:1）；featured 三个项目 `.md` 未填 `year`，叠层不显示年份——要显示就补 `year`。
 - **命名统一**：导航按钮/面板是「Ask AI」，首页内联板块标题是「AI Ask」，顺序不一致，待用户决定是否统一。
+- **是否开源（待用户决定）**：当前 GitHub 仓库为 **private**。密钥安全已确认干净（`.env` 从未提交、只有 `.env.example` 占位、无硬编码 key）。若转 public：加 `LICENSE`（代码 MIT、`/media` 与作品内容「All rights reserved」保留），并先把 AI 限流从内存版升级；或保持 private 只对外分享片段。
 - **Code 板块**：目前只有 MotionSheet 一个作品，是否补内容待定。
 - **可选打磨**：详情页正文仍是 set:html 渲染的 WordPress 导出 HTML，可逐页清冗余 class/空块；校准各项目 `summary`/`year`。
 - **R2 自定义域名（可选）**：r2.dev 有速率限制，可换 `media.zerb.net` + Cloudflare CDN，只需改 `.env` 的 `R2_PUBLIC_BASE` 重跑 `npm run media:manifest && npm run media:apply`。
