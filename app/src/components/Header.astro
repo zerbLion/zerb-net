@@ -1,9 +1,10 @@
 ---
-const links = [
+const links: { label: string; href: string; external?: boolean }[] = [
   { label: 'Motion', href: '/#motion' },
   { label: 'Visual', href: '/#visual' },
   { label: 'Code', href: '/#code' },
   { label: 'Resume', href: '/resume/' },
+  { label: 'Blog', href: 'https://zerblion.github.io/zrxl_blog/', external: true },
 ];
 ---
 
@@ -25,7 +26,8 @@ const links = [
         links.map((l) => (
           <a
             href={l.href}
-            data-cursor="Go"
+            data-cursor={l.external ? 'Link' : 'Go'}
+            {...(l.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
             class="px-3 py-3 text-sm font-medium uppercase tracking-wide text-mist transition-colors hover:text-paper"
           >
             {l.label}
@@ -60,7 +62,7 @@ const links = [
 <nav id="mobile-menu" transition:persist="mobile-menu" class="flex flex-col justify-center gap-6 px-8 font-display md:hidden">
   {
     links.map((l) => (
-      <a href={l.href} data-mobile-link class="text-4xl font-black tracking-tight text-paper">
+      <a href={l.href} data-mobile-link {...(l.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})} class="text-4xl font-black tracking-tight text-paper">
         {l.label}
       </a>
     ))
