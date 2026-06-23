@@ -13,7 +13,7 @@ const isExternal = external ?? href.startsWith('http');
 
 <a
   href={href}
-  data-cursor={isExternal ? 'Open' : 'View'}
+  data-cursor={isExternal ? 'Link' : 'View'}
   class="reveal group block"
   {...isExternal ? { target: '_blank', rel: 'noopener noreferrer' } : {}}
 >
