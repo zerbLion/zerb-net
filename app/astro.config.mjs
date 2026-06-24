@@ -5,8 +5,15 @@ import tailwindcss from '@tailwindcss/vite';
 
 import vercel from '@astrojs/vercel';
 
+import sitemap from '@astrojs/sitemap';
+
 // https://astro.build/config
 export default defineConfig({
+  // Canonical origin — used for the sitemap, canonical URLs and absolute OG links.
+  site: 'https://zerb.net',
+
+  integrations: [sitemap()],
+
   vite: {
     plugins: [tailwindcss()],
     // Load the shared repo-root .env (R2 + AI keys) in local dev.

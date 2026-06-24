@@ -13,9 +13,26 @@ interface Props {
 }
 
 const {
-  title = 'ZERB — Motion · Visual · Code',
-  description = 'Portfolio of ZERB: motion design, visual work, and code.',
+  title = 'ZERB LION — Motion · Visual · Code',
+  description = 'ZERB LION (ZerbLion) — a China-based motion designer & visual artist. Motion, visual art, and living interactive interfaces; proficient in After Effects, Cinema 4D, Octane.',
 } = Astro.props;
+
+const SITE = 'https://zerb.net';
+const canonical = new URL(Astro.url.pathname, SITE).href;
+const ogImage = new URL('/media/images/common/brand/cropped-logo_high2.png', SITE).href;
+const person = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: 'ZERB LION',
+  alternateName: ['ZERB', 'ZerbLion', 'Zerb Lion'],
+  url: SITE,
+  jobTitle: 'Motion Designer & Visual Artist',
+  sameAs: [
+    'https://github.com/ZerbLion',
+    'https://x.com/lionzerb',
+    'https://zerblion.github.io/zrxl_blog/',
+  ],
+};
 ---
 
 <!doctype html>
@@ -48,6 +65,19 @@ const {
     </script>
     <title>{title}</title>
     <meta name="description" content={description} />
+    <meta name="author" content="ZERB LION (ZerbLion)" />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="ZERB LION" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    <script type="application/ld+json" set:html={JSON.stringify(person)} />
     <link rel="icon" href="/media/images/common/brand/cropped-%E5%A4%B4%E5%83%8F2-1-32x32.webp" sizes="32x32" />
     <link rel="icon" href="/media/images/common/brand/cropped-%E5%A4%B4%E5%83%8F2-1-192x192.webp" sizes="192x192" />
     <link rel="apple-touch-icon" href="/media/images/common/brand/cropped-%E5%A4%B4%E5%83%8F2-1-192x192.webp" />
