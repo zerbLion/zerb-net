@@ -70,10 +70,9 @@ npm run build          # production build
 - [ ] More work in the Code pillar
 - [ ] Cross-instance AI rate-limiting via Upstash
 
-## 📜 License & use
+## 📜 License — All Rights Reserved
 
-The **code** — the Astro site, components and scripts — is here to read and learn from.
-The **work itself** — every image, video, design and word under `media/`, `app/public/media/` and the project content — is **© ZERB LION, all rights reserved**. Reuse the machinery, not the work.
+This repo is **public for reference, not open source.** Everything — the code **and** the creative work (images, video, text, brand) — is **© 2026 ZERB LION, all rights reserved**. You're welcome to read and learn from it; you may **not** copy, reuse, or republish any part without permission. See [LICENSE](LICENSE).
 
 ---
 
