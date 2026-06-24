@@ -20,12 +20,12 @@
 老的根目录静态站（`index.html`、`project/`、`works/` 等）仍保留未删，但线上已是 `app/` 的 Astro 版。
 
 ### 当前待办 / 待用户决定
-- **国内访问**：`*.vercel.app` 被限速/墙。建议把 `zerb.net`（或子域）绑到 Vercel 项目（Settings → Domains），像 frad.me 那样用自定义域名直连。
+- **国内访问（2026-06-23 已解决）**：`zerb.net` 已绑到 Vercel（详见 DONE.md）。灰云直连时国内手机图片全挂；**改回 Cloudflare 橙云（已代理）+ 缓存后国内可正常访问**，SSL 用 Full/Full(strict)。要更快才需国内 CDN/备案。
 - **AI 限流**：限流器已支持 **Upstash Redis（REST）**做跨实例共享计数（`app/src/lib/ratelimit.ts`），未配置时自动回退内存版、Redis 出错时 fail-open 不影响问答。**激活只差一步**（用户操作）：在 https://upstash.com 建免费 Redis → 把 `UPSTASH_REDIS_REST_URL` / `UPSTASH_REDIS_REST_TOKEN`（或 Vercel KV 的 `KV_REST_API_URL` / `KV_REST_API_TOKEN`）加到 Vercel 环境变量并重新部署。未连前仍是内存版（每个 serverless 实例各自计数）。**2026-06-22 线上实测**：连发 8 次，第 6 次触发 429 → per-min=5 = 代码默认，确认 Vercel **未单独设**这些阈值 env，全站 cap=200 已在线生效、限流在生产确实拦截。阈值这块已 OK；Upstash 仅为跨实例共享，可选。
 - **媒体高清**：Motion 的 featured（VIVO XR / GLASS）只有 950px，无更大源，全宽横幅略糊；想清晰需用户给 ≥1600px 高清横图。其余 featured 已用高清源（dynamic-weather 用 1920px）。
 - **作品集卡片改版（2026-06-22 已完成，详见 DONE.md）**：featured 叠字 + 中性黑遮罩（桌面 hover 揭开 / 手机不加遮罩）+ 响应式高度（手机 3:2 / 桌面 1600/430）。**剩余可选微调**：桌面 featured 高度仍可调（现 ~3.7:1）；featured 三个项目 `.md` 未填 `year`，叠层不显示年份——要显示就补 `year`。
 - **命名统一**：导航按钮/面板是「Ask AI」，首页内联板块标题是「AI Ask」，顺序不一致，待用户决定是否统一。
-- **是否开源（待用户决定）**：当前 GitHub 仓库为 **private**。密钥安全已确认干净（`.env` 从未提交、只有 `.env.example` 占位、无硬编码 key）。若转 public：加 `LICENSE`（代码 MIT、`/media` 与作品内容「All rights reserved」保留），并先把 AI 限流从内存版升级；或保持 private 只对外分享片段。
+- **可见性 / 版权（2026-06-23 已定）**：决定**仓库转 public、但不开源** —— `LICENSE` 全部「All Rights Reserved」（代码 + 作品都保留），`Layout.astro` 埋了不可见署名注释。密钥已确认干净。**转 public 的开关由用户在 GitHub → Settings → Danger Zone → Change visibility 自行操作**（改共享权限属用户动作）。
 - **Code 板块**：目前只有 MotionSheet 一个作品，是否补内容待定。
 - **可选打磨**：详情页正文仍是 set:html 渲染的 WordPress 导出 HTML，可逐页清冗余 class/空块；校准各项目 `summary`/`year`。
 - **R2 自定义域名（可选）**：r2.dev 有速率限制，可换 `media.zerb.net` + Cloudflare CDN，只需改 `.env` 的 `R2_PUBLIC_BASE` 重跑 `npm run media:manifest && npm run media:apply`。

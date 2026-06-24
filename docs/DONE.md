@@ -286,6 +286,22 @@
   - `checkRateLimit` 改为 async,`api/chat.ts` 改 `await`;`.env.example` 补充 Upstash 变量与说明。
   - **验证**:`npm run build` 通过;dev 实测请求确实流经新 async 限流器(返回 ok 后继续走 provider)。注:Astro **dev 不加载本地 `.env` 私有变量到代码的 `process.env`/动态 `import.meta.env`**,故本地无法用 `.env` 改阈值测 429;429 拒绝路径与原工作版一致,且失败 fail-open,风险低。线上接 Upstash 后即真实跨实例生效。
 
+- 2026-06-23 自定义域名上线 `zerb.net`:
+  - 在 Vercel 项目 Domains 加 `zerb.net`(取消 apex→www 重定向,用裸域);Cloudflare DNS 把 `zerb.net A 76.76.21.21`(Vercel)留下、阿里云老站 A `47.242.122.164` 改名 `ali_old` 停车、删掉 `nas` 的 AAAA。
+  - **关键坑**:Vercel A 记录起初是橙云(已代理),Vercel 验证不过、签不出证书 → 改 **灰云(仅DNS)** 后 Vercel 立即验证 + 签 HTTPS。**验证**:`nslookup zerb.net`→`76.76.21.21`,`curl https://zerb.net`→`Server: Vercel` + 标题 `ZERB — Motion · Visual · Code`,证书有效。
+  - **国内访问**:灰云直连 Vercel 时,国内手机**图片全挂**(海外多图请求超时);**改回橙云(已代理)+ Cloudflare 缓存静态资源后,国内可正常访问**(SSL 模式 Full/Full(strict) 即可,别用 Flexible)。根因仍是海外托管,橙云缓存是免费下的最优解;要更快需国内 CDN/备案。
+  - `ali_old.zerb.net` 只是把阿里云 IP 存档,因证书/vhost 是给 zerb.net 配的,直接访问基本打不开(正常,不影响)。
+
+- 2026-06-23 版权 / License / 可见性:
+  - 加 `LICENSE`:**全部「All Rights Reserved」**(代码 + 作品都不开源,仅 public 供参考);README/README.zh-CN 的许可段同步;`Layout.astro` 的 `<head>` 埋了**不可见 HTML 署名注释**(`© ZERB LION · zerb.net`)。
+  - 经验:**Public ≠ 开源**。想"看得到但不让抄",用「All Rights Reserved」+ 公开仓库的 git 时间戳作者证明,不用打水印(拉低观感)。
+  - README 已按 `zrxl_blog` 风格重写(徽章 + emoji 分节 + 中英双版),线上地址改 `zerb.net`。
+
+- 2026-06-23 博客收尾(老博客 → 独立站 `zrxl_blog`):
+  - 作品集 `/blog` 及旧文章 URL **301 重定向**到 `https://zerblion.github.io/zrxl_blog/`(`blog/index.astro`、`blog/[slug].astro` 改 SSR redirect)。
+  - 两篇 2017 老文(和煦暴风 / 静默是永恒的主题)迁入 `zrxl_blog`:`posts/2017-06-06-gentle-gale`、`posts/2017-07-01-silence-is-an-eternal-theme`,**文件夹名 + frontmatter 保留原始日期**;图片拷进各自 `images/`;**中英双语**(`index.md` 英 + `translations:[zh]`,中文 `index.zh.md` 从 `D:\net\net` 备份原稿还原)。该博客用 `posts.json`(`scripts/gen-posts.mjs` 生成)做清单。
+  - 导航 + 页脚都加了 **Blog** 外链;页脚由图标改为文字链接(X / GitHub / Steam / Blog / Email)。
+
 ## WordPress 静态导出清理
 
 - 根据当前文件状态推断，移除了部分 WordPress feed/API/archive 输出。
