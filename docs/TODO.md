@@ -11,7 +11,7 @@
 ## 正在处理
 
 **Astro 重建版已上线。** 6 个 Phase 全部完成并部署到 Vercel：
-- 线上地址：`https://net-website-mu.vercel.app`（Vercel Root Directory = `app`，生产分支 `main`，dev 改完合并到 main）。
+- 线上地址：**`https://zerb.net`**（2026-06-23 已绑定自定义域名；Vercel 项目仍是 `net-website-mu.vercel.app`，Root Directory = `app`，生产分支 `main`，dev 改完合并到 main）。zerb.net 的 DNS 在 Cloudflare：`zerb.net A 76.76.21.21` 设**灰云/仅DNS**(橙云会让 Vercel 验证不过)；阿里云老站 A 记录改名 `ali_old` 停车。
 - 改 `app/` 前**必读 `AGENTS.md`「Astro 重建版工作规则」**（架构 + View Transitions/遮罩/Lenis/光标/预览环境等踩坑总结）。
 - 视频已上传 Cloudflare R2（`zerbnet-media`，公共域名 r2.dev）；图片在 `app/public/media/images`；字体自托管（Montserrat 标题 + Mulish 正文）；AI 问答 `/api/chat` 多 provider（Gemini key 在 Vercel 环境变量）。
 - 站内中文已全部翻成英文（项目正文/博客/标题）。
