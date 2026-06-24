@@ -1,0 +1,46 @@
+ZERB Portfolio License
+Copyright (c) 2026 ZERB LION  ·  https://zerb.net
+
+This project is dual-licensed: the CODE is open under MIT; the CREATIVE WORK is
+All Rights Reserved. Read and reuse the machinery — not the work.
+
+────────────────────────────────────────────────────────────────────────────
+1. THE CODE  —  MIT License
+────────────────────────────────────────────────────────────────────────────
+The source code of this project — the Astro site, components, scripts,
+configuration and build tooling (i.e. everything EXCEPT the creative assets in
+Section 2) — is licensed under the MIT License:
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+────────────────────────────────────────────────────────────────────────────
+2. THE WORK  —  All Rights Reserved
+────────────────────────────────────────────────────────────────────────────
+All creative content is NOT covered by the MIT License above and remains
+© 2026 ZERB LION, All Rights Reserved. This includes, without limitation:
+
+  • every image, photograph, video and graphic under  media/  and
+    app/public/media/  (and any media hosted on Cloudflare R2 for this project);
+  • the portfolio / project descriptions, blog writing and other text content;
+  • the ZERB name, logo and brand marks.
+
+You may READ and LEARN from the code, and REUSE the code under the MIT terms in
+Section 1. You may NOT copy, redistribute, republish, or present the creative
+work as your own, in whole or in part.
+
+To license any creative asset, contact: zcbgood@gmail.com
