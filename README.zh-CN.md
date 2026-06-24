@@ -78,6 +78,6 @@ npm run build          # 生产构建
 
 <div align="center">
 
-由 [**zerbLion**](https://github.com/ZerbLion) 设计、撰写、构建 · [zerb.net](https://zerb.net)
+由 [**zerbLion**](https://github.com/zerbLion) 设计、撰写、构建 · [zerb.net](https://zerb.net)
 
 </div>

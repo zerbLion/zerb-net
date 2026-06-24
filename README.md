@@ -78,6 +78,6 @@ This repo is **public for reference, not open source.** Everything — the code 
 
 <div align="center">
 
-Designed, written and built by [**zerbLion**](https://github.com/ZerbLion) · [zerb.net](https://zerb.net)
+Designed, written and built by [**zerbLion**](https://github.com/zerbLion) · [zerb.net](https://zerb.net)
 
 </div>
