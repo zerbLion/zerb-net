@@ -302,6 +302,15 @@
   - 两篇 2017 老文(和煦暴风 / 静默是永恒的主题)迁入 `zrxl_blog`:`posts/2017-06-06-gentle-gale`、`posts/2017-07-01-silence-is-an-eternal-theme`,**文件夹名 + frontmatter 保留原始日期**;图片拷进各自 `images/`;**中英双语**(`index.md` 英 + `translations:[zh]`,中文 `index.zh.md` 从 `D:\net\net` 备份原稿还原)。该博客用 `posts.json`(`scripts/gen-posts.mjs` 生成)做清单。
   - 导航 + 页脚都加了 **Blog** 外链;页脚由图标改为文字链接(X / GitHub / Steam / Blog / Email)。
 
+- 2026-06-26 品牌换标 + 仓库公开 + 改名:
+  - **新 Logo**:换成 ZERB 的「Z」闪电标。源图 `Vector.png`(白色透明)→ `media/images/common/brand/zerb-logo.png`(顶部 logo)。
+  - **Favicon**:白「Z」合成到 ink(`#050505`)方底,生成 `zerb-favicon-32/180/192.png`,浅/深标签页都清晰;`Layout.astro` 的 icon/apple-touch-icon 指向新文件。
+  - **顶部 logo 定位为「签名感」**:手机端纯白 `h-6`(24px,与展开菜单的白字一致),桌面端灰 `md:h-7`(28px,`md:opacity-65` ≈ 导航 `--color-mist`,hover 提亮)。刻意做小,避免抢 Motion/Visual/Code 主标题。(hero 标题 `transform:none`,从未被压,放大只是错觉。)
+  - **仓库公开前安全审计**:全历史(56 提交)扫 `.env`/密钥前缀/赋值 → 干净;`.gitignore` 已忽略 `.env*`;本地 `.env` 从未提交。四个公开仓库均开启 **Secret scanning + Push protection**。
+  - **仓库改名(统一连字符,主页仓库 `ZerbLion` 不动)**:`net-website→zerb-net`、`zrxl_blog→zero-build-blog`、`nas_monitoring→nas-monitoring`。所有交叉引用已修:本站博客外链/301 指向新 Pages、`zero-build-blog` 的 `app.js`(giscus+取文章)、主页 `update-blog` Action 的 `BLOG_REPO`、各 README。NAS 真实部署路径 `/volume1/docker/nas_monitoring/` 与本地目录 `D:\net\net-website` **保持不变**(那不是仓库名)。
+  - **About 补全**:`zerb-net` 描述 + topics + 网址改 `https://zerb.net`;主页仓库描述/网址/topics 补齐。
+  - 测试:新博客 Pages `zero-build-blog/` 返回 200、旧地址 404;旧仓库 URL 全部重定向;主页 `update-blog` Action 手动触发成功。
+
 ## WordPress 静态导出清理
 
 - 根据当前文件状态推断，移除了部分 WordPress feed/API/archive 输出。
