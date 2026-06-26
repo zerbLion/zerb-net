@@ -1,5 +1,5 @@
 {
-  "name": "net-website-tools",
+  "name": "zerb-net-tools",
   "private": true,
   "type": "module",
   "description": "Local build/migration tooling for the ZERB site (not the Astro app — that lives in app/).",
