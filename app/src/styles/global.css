@@ -91,9 +91,16 @@
 
 /* Reveal-on-scroll baseline (progressive enhancement; visible if JS fails) */
 @layer utilities {
-  /* Initial hidden state; GSAP (or the reduced-motion fallback) reveals these. */
+  /* Initial hidden state; motion.ts adds .is-in to reveal these as they enter the
+     viewport (reduced-motion / no-JS shows them immediately). The transition lives
+     here so the settled state is pure CSS — a reveal can never get stuck mid-animation
+     the way an interrupted JS tween could. */
   .reveal {
     opacity: 0;
+    transform: translateY(28px);
+    transition:
+      opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1),
+      transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
   }
   .reveal.is-in {
     opacity: 1;

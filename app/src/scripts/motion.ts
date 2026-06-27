@@ -8,6 +8,7 @@ let lenis: Lenis | undefined;
 let rafId = 0;
 let bound = false;
 let built = false;
+let revealIO: IntersectionObserver | undefined;
 
 const reduceMotion = () =>
   window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -17,6 +18,8 @@ const finePointer = () =>
 function teardown() {
   cancelAnimationFrame(rafId);
   ScrollTrigger.getAll().forEach((t) => t.kill());
+  revealIO?.disconnect();
+  revealIO = undefined;
   lenis?.destroy();
   lenis = undefined;
 }
@@ -40,22 +43,49 @@ function build() {
   };
   rafId = requestAnimationFrame(raf);
 
-  gsap.utils.toArray<HTMLElement>('.reveal:not(.is-in)').forEach((el) => {
-    gsap.fromTo(
-      el,
-      { opacity: 0, y: 28 },
-      {
-        opacity: 1,
-        y: 0,
-        duration: 0.85,
-        ease: 'power3.out',
-        scrollTrigger: { trigger: el, start: 'top 88%', once: true },
-        onComplete: () => el.classList.add('is-in'),
-      }
-    );
+  // Reveal-on-scroll. Deliberately NOT ScrollTrigger: after an Astro View-Transition
+  // the swapped-in layout isn't settled when build() runs, so ScrollTrigger could
+  // mis-measure every card as below the fold and leave them pinned at opacity:0 — the
+  // works page then looked empty when reached from a homepage "View all work" CTA.
+  // Reveal = add the class; the fade+rise is a pure-CSS transition (see .reveal in
+  // global.css). No JS tween touches opacity, so an interrupted/throttled frame loop
+  // can never leave a card pinned invisible.
+  const reveal = (el: HTMLElement) => el.classList.add('is-in');
+
+  const reveals = gsap.utils.toArray<HTMLElement>('.reveal:not(.is-in)');
+
+  // 1) Reveal whatever is already in view, synchronously. This is the safety net that
+  //    guarantees content can never get stuck invisible: it doesn't depend on
+  //    IntersectionObserver or ScrollTrigger ever firing (both can silently no-op after
+  //    a View-Transition / under Lenis, and IO is also suppressed while the tab is
+  //    hidden). This alone keeps above-the-fold cards from ever blanking out.
+  const inView = (el: HTMLElement) => {
+    const r = el.getBoundingClientRect();
+    return r.height > 0 && r.top < window.innerHeight && r.bottom > 0;
+  };
+  reveals.forEach((el) => {
+    if (inView(el)) reveal(el);
   });
 
-  ScrollTrigger.refresh();
+  // 2) Reveal the rest as they scroll in. IntersectionObserver is immune to the Lenis /
+  //    View-Transition timing that makes ScrollTrigger unreliable here.
+  const rest = reveals.filter((el) => !el.classList.contains('is-in'));
+  if (rest.length && 'IntersectionObserver' in window) {
+    revealIO = new IntersectionObserver(
+      (entries, obs) => {
+        entries.forEach((e) => {
+          if (!e.isIntersecting) return;
+          reveal(e.target as HTMLElement);
+          obs.unobserve(e.target);
+        });
+      },
+      // Fire a touch before fully in view, mirroring the old 'top 88%' feel.
+      { rootMargin: '0px 0px -10% 0px' }
+    );
+    rest.forEach((el) => revealIO!.observe(el));
+  } else {
+    rest.forEach(reveal);
+  }
 }
 
 // ── Hero intro ────────────────────────────────────────────────────────────────
