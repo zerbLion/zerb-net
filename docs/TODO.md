@@ -54,11 +54,12 @@
 
 - 如果后续要把首页头部滚动状态同步逻辑扩展到其它页面，必须先对照当前首页、备份或线上原效果，确认不是新增折叠隐藏交互。
 - 浏览器复查首页头部导航：顶部为 `headroom--top`，滚动后为 `headroom--not-top`，导航栏始终可见可点击。
-- SEO 跟进（2026-07-04 起）：
-  - 用户在 Search Console 确认：资源是否为**域名级**（Domain property）、sitemap `https://zerb.net/sitemap-index.xml` 已提交且状态"成功"。
-  - GSC 里"已发现/已抓取-尚未编入索引"共 15 页属新站正常现象，等谷歌消化；一个月后复查趋势。
-  - 品牌信号：各社交/平台账号统一用 ZERB LION / zerblion 并链接 zerb.net；zero-build-blog 关于页链回 zerb.net。
-  - 填项目详情页正文（thin content 是当前最大短板）。
+- SEO 双线作战计划（2026-07-04 定，目标：`zerblion` 通吃 + 长期抢下 `zerb`，两线共用同一实体/内容/外链）：
+  - **第 0 阶段（本周，用户）**：GSC 确认域名级资源 + sitemap 状态"成功"；GitHub/X/blog 签名统一 `ZERB (zerblion) — zerb.net`。站内技术项（schema/重定向/sitemap）2026-07-04 已完成。
+  - **第 1 阶段（2-6 周，内容冲刺）**：12 个项目详情页填正文（每周 2 篇，200-400 词英文：背景/做了什么/工具/成果，自然提 ZERB 不堆砌）。素材可给 AI 代写。顺手：featured 三项目补 `year`；blog 用 "ZERB" 锚文本链回 zerb.net。
+  - **第 2 阶段（1-3 月，外部权重，攻 zerb 的关键）**：Behance/Dribbble/ArtStation/站酷建档（名字 ZERB、链 zerb.net）；投 Awwwards/CSSDA/siteInspire；每月初看 GSC 查询报告（zerb/zerblion/zerb lion 趋势）。
+  - **检查点**：2 周 → zerblion 第一、索引 ≥13 页；1-2 月 → zerb lion 第一、zerb 进第一页；3-6 月 → zerb 前三。
+  - GSC"已发现/已抓取-尚未编入索引"15 页属新站正常，等消化，月度复查。
 
 ### Astro 重构待办（2026-06-15 起）
 
