@@ -46,7 +46,7 @@ Cloudflare R2                    →  视频托管
 Vercel  (根目录: app/)           →  部署  ·  zerb.net
 ```
 
-仓库根目录还保留着最初的 **WordPress 静态导出** 作参考 —— 线上跑的是 `app/` 里的 Astro 重建版。
+线上跑的是 `app/` 里的 Astro 重建版。根目录原先保留的 **WordPress 静态导出**已于 2026-07-04 移除（git 历史可找回）；现在根目录只剩 R2 媒体工具（`tools/`、`media-manifest.json`）和文档。
 
 ## 🚀 本地运行
 

@@ -11,7 +11,8 @@
 ## 基本原则
 
 - 不要做无关重构。
-- 不要随意删除 WordPress 静态导出目录、旧路由记录和媒体资源。
+- 根目录的 WordPress 静态导出已于 2026-07-04 删除（用户决定；git 历史可找回）。现在根目录只有 `app/`（线上站）、`tools/` + `media-manifest.json`（R2 媒体工具）、`docs/` 和 README/LICENSE。旧 URL 重定向统一维护在 `app/astro.config.mjs` 的 `redirects`。
+- 不要随意删除媒体资源。
 - 不要随意删除已有页面、样式、图片、视频或其他资源。
 - 删除资源前，必须确认没有 HTML/CSS/JS 引用。
 - 批量移动或改写媒体路径后，必须同时检查本地文件存在和浏览器实际加载状态。
@@ -64,45 +65,20 @@
 
 ## 本地预览规则
 
-本项目可以不依赖 WordPress 直接在本地运行。
+本地预览就是 Astro dev server（旧的 `tools/local-server.mjs` 已随 WordPress 导出一起删除）：
 
-常用命令：
-
-```powershell
-cd D:\net\net-website
-node tools/local-server.mjs
-```
-
-访问地址：
-
-```text
-http://localhost:4173/
-```
-
-也可以使用：
-
-```text
-http://127.0.0.1:4173/
-```
-
-如果 `node` 不可用，先使用 `load_workspace_dependencies` 查找 Codex 内置 Node runtime。当前会话中曾使用：
-
-```powershell
-C:\Users\chenchen4.zhao\.cache\codex-runtimes\codex-primary-runtime\dependencies\node\bin\node.exe tools/local-server.mjs
-```
-
-检查本地服务是否运行：
-
-```powershell
-Get-NetTCPConnection -LocalPort 4173 -ErrorAction SilentlyContinue
+```bash
+cd app
+npm install
+npm run dev    # http://localhost:4321
 ```
 
 ## Codex 内置浏览器规则
 
-需要预览页面时，优先使用 Codex in-app Browser 打开：
+需要预览页面时，优先使用内置浏览器打开：
 
 ```text
-http://127.0.0.1:4173/
+http://localhost:4321/
 ```
 
 修改 HTML/CSS/JS 后，刷新 Codex in-app Browser。做视觉检查时，尽量确认关键页面坏图数量为 `0`。

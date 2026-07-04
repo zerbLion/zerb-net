@@ -2,11 +2,10 @@
 
 ## 当前目标
 
-- 保持 `D:\net\net-website` 作为当前可预览、可部署的静态网站工作副本。
-- 保留作品集视觉效果。
-- 继续减少 WordPress static export 带来的冗余，但不要误删媒体资源。
-- 准备后续 GitHub push 和 Vercel deployment。
-- 后续如继续改造，再决定是否进入 Vite/React、Astro 或其他前端重建方案。
+- 维护线上 Astro 站（`app/`，Vercel，zerb.net），保留作品集视觉效果。
+- SEO：目标是品牌词「zerblion / zerb lion」搜索第一（注意"zerb"单词被一位音乐人占据，短期不追）。
+- 内容：逐步补齐 12 个项目详情页正文（现在多数还是 "_Content migration pending_" 占位——这是当前 SEO 最大短板）。
+- 让用户能自助更新内容（加作品 = 加 `app/src/content/projects/*.md` + 图片进 `app/public/media/images/projects/<slug>/` + push main）。
 
 ## 正在处理
 
@@ -55,24 +54,11 @@
 
 - 如果后续要把首页头部滚动状态同步逻辑扩展到其它页面，必须先对照当前首页、备份或线上原效果，确认不是新增折叠隐藏交互。
 - 浏览器复查首页头部导航：顶部为 `headroom--top`，滚动后为 `headroom--not-top`，导航栏始终可见可点击。
-- 用户确认哪些 MP4 files 保留在仓库，哪些改为外链/CDN 托管。MP4 已完成一轮保守压缩，但仍是当前最大体积来源。
-- 手动验证首页和 `works/` 前两个 external portfolio card links：
-  - `https://www.vivo.com/my/products/vivo-vision`
-  - `https://www.jmgo.com/luna`
-- 安装或暴露 Git 后检查：
-
-```powershell
-git status --short --branch
-git diff --stat
-git log --oneline -5
-```
-
-- 准备 GitHub push。
-- 准备 Vercel deployment。
-- 部署前检查 `redirects.json`、`vercel.json`、`robots.txt` 和 `sitemap.xml`。
-- 部署前再次用浏览器检查首页、`works/`、`blog/`、`resume/` 和关键 `project/` 页面，确认图片和视频仍能加载。
-- 决定继续静态清理，还是进入前端重建阶段。（已决定：进入 Astro 重建。）
-- 如果进入前端重建，确认使用 Vite/React、Astro 或其他方案。（已定：Astro 6 + Tailwind v4 + @astrojs/vercel。）
+- SEO 跟进（2026-07-04 起）：
+  - 用户在 Search Console 确认：资源是否为**域名级**（Domain property）、sitemap `https://zerb.net/sitemap-index.xml` 已提交且状态"成功"。
+  - GSC 里"已发现/已抓取-尚未编入索引"共 15 页属新站正常现象，等谷歌消化；一个月后复查趋势。
+  - 品牌信号：各社交/平台账号统一用 ZERB LION / zerblion 并链接 zerb.net；zero-build-blog 关于页链回 zerb.net。
+  - 填项目详情页正文（thin content 是当前最大短板）。
 
 ### Astro 重构待办（2026-06-15 起）
 

@@ -46,7 +46,7 @@ Cloudflare R2                    →  video hosting
 Vercel  (root: app/)             →  deploy  ·  zerb.net
 ```
 
-The repo also keeps the original **WordPress static export** at the root for reference — the live site is the Astro rebuild in `app/`.
+The live site is the Astro rebuild in `app/`. The original WordPress static export that used to sit at the repo root was removed on 2026-07-04 (still recoverable from git history); the root now only keeps the R2 media tooling (`tools/`, `media-manifest.json`) and docs.
 
 ## 🚀 Run it locally
 

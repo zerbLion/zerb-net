@@ -321,3 +321,12 @@
 ## 文档维护
 
 - 2026-06-08 已更新 `README.md`、`AGENTS.md`、`docs/TODO.md`、`docs/DONE.md`，记录当前项目状态、首页头部动效修复边界和后续 agent 操作注意事项。
+
+## 2026-07-04 SEO 修正与根目录清理
+
+- **Search Console 邮件诊断**：三类"未编入索引"原因确认——"自动重定向"= /blog/* 301 到 zero-build-blog（故意）；"备用网页（有规范标记）"= vercel.app 域名 canonical 指向 zerb.net（正确行为）；"404" = 旧 WordPress URL 缺重定向（本轮已补）。"已发现/已抓取-尚未编入索引"15 页属新站正常。
+- **sitemap 修正**：`@astrojs/sitemap` 加 filter 排除 `/blog/`（此前 sitemap 里列着一个 301 页面，是 GSC 报"重定向"的来源之一）。
+- **WebSite 结构化数据**：`Layout.astro` 新增 WebSite JSON-LD（name "ZERB LION"，alternateName zerbLion/zerblion/Zerb Lion），影响谷歌 SERP 站点名显示。品牌词定为 zerblion/ZERB LION（"zerb"被一位音乐人占据）。
+- **旧 URL 重定向迁移**：根目录 `vercel.json` 因 Vercel Root Directory=app 早已不生效，其中 8 条中文 slug、2 条 2017 博客 permalink、2 条 portfolio 翻页此前在线上是 404。已全部迁入 `app/astro.config.mjs` redirects（2017 permalink 直指 zero-build-blog，避免重定向链）。构建产物 `.vercel/output/config.json` 验证 23 条重定向路由全部生成。
+- **根目录 WordPress 静态导出删除**（用户决定）：`index.html`、`404.html`、`assets/`、`blog/`、`project/`、`works/`、`resume/`、`media/`（旧图片副本，线上用的是 `app/public/media/`）、`robots.txt`、`sitemap.xml`、`redirects.json`、`vercel.json`、`reports/`，以及一次性迁移工具 `tools/local-server.mjs`、`extract-pages.mjs`、`extract-project-content.mjs`、`i18n-en.mjs`。保留：`tools/` 三个 R2 媒体脚本 + `lib/`、`optimize-media.mjs`、`media-manifest.json`、根 `package.json`。git 历史可全量找回。
+- 线上验证：`robots.txt` 200（Cloudflare 托管版，搜索放行、AI 爬虫禁抓）、`sitemap-index.xml` 200。

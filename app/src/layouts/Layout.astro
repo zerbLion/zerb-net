@@ -33,6 +33,15 @@ const person = {
     'https://zerblion.github.io/zero-build-blog/',
   ],
 };
+// WebSite schema — tells Google the site name to show in search results.
+// Brand target is "ZERB LION" / "zerblion" (plain "zerb" belongs to a musician).
+const website = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'ZERB LION',
+  alternateName: ['zerbLion', 'zerblion', 'Zerb Lion'],
+  url: SITE,
+};
 ---
 
 <!doctype html>
@@ -78,6 +87,7 @@ const person = {
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
     <script type="application/ld+json" set:html={JSON.stringify(person)} />
+    <script type="application/ld+json" set:html={JSON.stringify(website)} />
     <link rel="icon" href="/media/images/common/brand/zerb-favicon-32.png" sizes="32x32" />
     <link rel="icon" href="/media/images/common/brand/zerb-favicon-192.png" sizes="192x192" />
     <link rel="apple-touch-icon" href="/media/images/common/brand/zerb-favicon-180.png" />
