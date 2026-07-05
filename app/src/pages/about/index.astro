@@ -1,16 +1,19 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import Footer from '../../components/Footer.astro';
-import resumeHtml from '../../migrated/resume.html?raw';
+import aboutHtml from '../../migrated/about.html?raw';
 ---
 
-<Layout title="Resume — ZERB" description="Resume of ZERB.">
+<Layout
+  title="About — ZERB"
+  description="About ZERB (Zerb Lion) — a China-based motion designer & visual artist. 10+ years building OS-level motion systems for vivo and JMGO across motion, visual art, and code."
+>
 
   <main class="pt-36 md:pt-44">
     <section class="px-6 md:px-10">
       <div class="mx-auto max-w-3xl">
-        <h1 class="font-display text-6xl font-black md:text-7xl">Resume</h1>
-        <article class="entry-content mt-12 pb-24" set:html={resumeHtml} />
+        <h1 class="font-display text-6xl font-black md:text-7xl">About</h1>
+        <article class="entry-content mt-12 pb-24" set:html={aboutHtml} />
       </div>
     </section>
   </main>
@@ -21,6 +24,7 @@ import resumeHtml from '../../migrated/resume.html?raw';
 <style is:global>
   .entry-content { font-size: 1.05rem; line-height: 1.9; color: #d4d4d8; }
   .entry-content > * { margin-block: 1.2rem; }
+  .entry-content .lead { font-size: 1.35rem; line-height: 1.7; color: var(--color-paper); }
   .entry-content h2, .entry-content h3 {
     font-family: var(--font-display);
     color: var(--color-paper);
@@ -32,4 +36,18 @@ import resumeHtml from '../../migrated/resume.html?raw';
   .entry-content ul { padding-left: 1.2rem; list-style: disc; }
   .entry-content li { margin-block: 0.4rem; }
   .entry-content img, .entry-content video { width: 100%; height: auto; border-radius: 14px; }
+  .entry-content .contact-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 2rem;
+    font-size: 0.95rem;
+  }
+  .entry-content .contact-list strong {
+    text-transform: uppercase;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    color: #a1a1aa;
+    margin-right: 0.5rem;
+  }
+  .entry-content hr { border: 0; border-top: 1px solid #ffffff1a; }
 </style>

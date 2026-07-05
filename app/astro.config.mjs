@@ -25,7 +25,9 @@ export default defineConfig({
   // Legacy URL redirects migrated from the old static site (redirects.json /
   // vercel.json) so old WordPress links keep working after cutover.
   redirects: {
-    '/resume-2/': '/resume/',
+    // /resume/ was renamed to /about/ (2026-07-05).
+    '/resume/': '/about/',
+    '/resume-2/': '/about/',
     '/project/': '/works/',
     '/project/page/2/': '/works/',
     '/project/page/3/': '/works/',

@@ -331,3 +331,10 @@
 - **根目录 WordPress 静态导出删除**（用户决定）：`index.html`、`404.html`、`assets/`、`blog/`、`project/`、`works/`、`resume/`、`media/`（旧图片副本，线上用的是 `app/public/media/`）、`robots.txt`、`sitemap.xml`、`redirects.json`、`vercel.json`、`reports/`，以及一次性迁移工具 `tools/local-server.mjs`、`extract-pages.mjs`、`extract-project-content.mjs`、`i18n-en.mjs`。保留：`tools/` 三个 R2 媒体脚本 + `lib/`、`optimize-media.mjs`、`media-manifest.json`、根 `package.json`。git 历史可全量找回。
 - 线上验证：`robots.txt` 200（Cloudflare 托管版，搜索放行、AI 爬虫禁抓）、`sitemap-index.xml` 200。
 - **重定向规则修补（同日跟进）**：线上验证发现 Astro 生成的重定向正则 `^/old$` 既不匹配带尾斜杠的旧链接、也不匹配中文 slug 的百分号编码路径（Vercel 按编码后的路径匹配）。新增 `app/patch-vercel-redirects.mjs` 构建后处理（挂在 `npm run build`），把 23 条重定向改写为「非 ASCII 百分号编码 + 尾斜杠可选（`/?$`）」，含防自环保护。
+
+## 2026-07-05 resume 页改版为 about
+
+- **/resume/ → /about/**：路由 `app/src/pages/resume/` 改为 `about/`，导航按钮 Resume→About，标题 `About — ZERB`。旧地址 301 重定向 `/resume/`、`/resume-2/` 均指向 `/about/`（astro.config.mjs）。
+- **内容从简历升级为品牌 About 页**：`app/src/migrated/about.html` 顶部新增两段品牌自我介绍（以 "ZERB (Zerb Lion) is a China-based motion designer..." 开头，服务实体 SEO / 抢 "zerb" 词），保留全部履历（vivo MR 眼镜 / JMGO 旗舰 OS / 中国移动 / 格兰仕）、技能、认证；清掉了 WordPress 导出的乱码内联 <style> 和破损 <li>。联系方式改为 Email + Behance(@zerb) + GitHub(@zerbLion)。
+- **AI 知识库同步**：`knowledge.ts` 引用 resume.html→about.html，system prompt 中 "resume" 措辞改为 "background / about"。
+- 本地构建 + 预览验证：/about/ 200、h1=About、导航显示 About、sitemap 含 /about/ 不含 /resume/、24 条重定向含 resume→about。
