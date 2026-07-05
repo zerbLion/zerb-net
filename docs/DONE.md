@@ -321,6 +321,7 @@
 ## 文档维护
 
 - 2026-06-08 已更新 `README.md`、`AGENTS.md`、`docs/TODO.md`、`docs/DONE.md`，记录当前项目状态、首页头部动效修复边界和后续 agent 操作注意事项。
+- 2026-07-05 清理 `docs/TODO.md` 陈旧内容：删除已全部完成的「Astro 重构待办（Phase 1-5）」整段（完成记录见本文件「Astro 重构」节）；删除引用已删除的老根目录静态站、`D:\net` 路径、`reports/`、`tools/local-server.mjs`（4173 端口）的已知问题与「下一步」流程，改为 `cd app && npm run dev`（4321 端口）+ `npm run build` + R2 媒体脚本的现代流程；移除已解决的待办（「AI Ask」命名已统一、仓库已于 2026-06-26 转 public、作品集卡片改版、国内访问、旧 headroom 动效复查）；文档结构清单不再在 TODO 重复（以 `AGENTS.md` 为准）。仍有效的保留：Upstash 限流激活、媒体高清源、项目 `year` 未填、Code 板块、project-bodies 冗余 class 清理、R2 自定义域名、SEO 双线计划。
 
 ## 2026-07-04 SEO 修正与根目录清理
 
