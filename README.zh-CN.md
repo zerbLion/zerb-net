@@ -33,7 +33,7 @@
 - 🤖 **Ask AI** —— 侧边滑入的助手,从多 provider 端点流式输出(Gemini → OpenAI → Claude),知识库由项目内容编译而来。带限流与配额保护。
 - 🖼 **图片优先的网格** —— 每板块 featured 优先;封面静止时盖一层中性遮罩,桌面 hover 复色、触屏默认全亮。
 - 🎞 **视频托管在 R2** —— 大体积媒体放 Cloudflare R2(免流量费),不进 Git。
-- 🔤 **字体自托管** —— Montserrat(标题)+ Mulish(正文),预加载,无字体跳变,不用被墙的 Google Fonts。
+- 🔤 **字体自托管** —— Montserrat(标题)+ Mulish(正文),预加载,无字体跳变,不发第三方 Google Fonts 请求。
 - ⚡ **Astro + View Transitions** —— 静态般快;导航间保留 Header / 光标 / AI 面板。
 
 ## 🧭 技术栈
@@ -65,7 +65,7 @@ npm run build          # 生产构建
 
 ## 🗺 路线图
 
-- [ ] 媒体在国内的稳定加速(CDN / 镜像)
+- [ ] 媒体的全球稳定加速(CDN / 镜像)
 - [ ] Motion 板块的高清封面
 - [ ] Code 板块补更多作品
 - [ ] 用 Upstash 做跨实例的 AI 限流

@@ -338,3 +338,10 @@
 - **内容从简历升级为品牌 About 页**：`app/src/migrated/about.html` 顶部新增两段品牌自我介绍（以 "ZERB (Zerb Lion) is a China-based motion designer..." 开头，服务实体 SEO / 抢 "zerb" 词），保留全部履历（vivo MR 眼镜 / JMGO 旗舰 OS / 中国移动 / 格兰仕）、技能、认证；清掉了 WordPress 导出的乱码内联 <style> 和破损 <li>。联系方式改为 Email + Behance(@zerb) + GitHub(@zerbLion)。
 - **AI 知识库同步**：`knowledge.ts` 引用 resume.html→about.html，system prompt 中 "resume" 措辞改为 "background / about"。
 - 本地构建 + 预览验证：/about/ 200、h1=About、导航显示 About、sitemap 含 /about/ 不含 /resume/、24 条重定向含 resume→about。
+
+## 2026-07-05 About 页调整（品牌/邮箱/隐私）
+
+- **邮箱统一对外用 `zerblion@gmail.com`**：替换全站 5 处旧 `zcbgood@gmail.com`（Footer、AskAI 提示、chat.ts 限流/报错文案、knowledge.ts AI 知识库 CONTACT）。
+- **About 开头改为 `ZERB (ZERB LION)`**（原 `Zerb Lion`）。
+- **移除对外的 China 地域信息**（用户不想公开所在地）：About 正文、首页 meta description、about 页 meta description 去掉 "China-based"；README/README.zh-CN 的"被墙 Google Fonts""国内加速"改成中性表述（"third-party Google Fonts""global media delivery"）。保留 "China Mobile" 项目名（客户名，非个人地域）。
+- **拓宽 dev/coding 定位**（原表述偏前端、太局限）：About 正文的 Code 段与 Skills 的 Development 项改为 full-stack web（TypeScript/Astro/React、serverless API、AI 集成）+ 实时引擎脚本（Unity C#/DOTween、UE Blueprints）；Person schema jobTitle 加 "Developer"；本站自身（含内置 AI 助手）作为 dev 能力实例点出。

@@ -33,7 +33,7 @@ Instead of a stiff nav-and-short-pages layout, it's one long, scroll-driven page
 - 🤖 **Ask AI** — a slide-in assistant that streams from a multi-provider endpoint (Gemini → OpenAI → Claude), grounded in a knowledge base compiled from the project content. Rate-limited and quota-guarded.
 - 🖼 **Image-forward grid** — featured-first pillar sections; covers rest under a neutral veil and resolve to full colour on hover (desktop), stay bright on touch.
 - 🎞 **R2-hosted video** — heavy media lives on Cloudflare R2 (free egress), kept out of Git.
-- 🔤 **Self-hosted fonts** — Montserrat (display) + Mulish (body), preloaded, no FOUT, no China-blocked Google Fonts.
+- 🔤 **Self-hosted fonts** — Montserrat (display) + Mulish (body), preloaded, no FOUT, no third-party Google Fonts requests.
 - ⚡ **Astro + View Transitions** — static-fast pages, with the header / cursor / AI panel persisted across navigations.
 
 ## 🧭 Stack
@@ -65,7 +65,7 @@ npm run build          # production build
 
 ## 🗺 Roadmap
 
-- [ ] Reliable mainland-China delivery for media (CDN / mirror)
+- [ ] Reliable global media delivery (CDN / mirror)
 - [ ] Hi-res covers for the Motion pillar
 - [ ] More work in the Code pillar
 - [ ] Cross-instance AI rate-limiting via Upstash
