@@ -7,4 +7,4 @@ coverLarge: "/media/images/projects/dynamic-weather-art/10.webp"
 order: 3
 ---
 
-_Content migration pending (Phase 1)._
+_Page body lives in `src/project-bodies/dynamic-weather-art.html`._

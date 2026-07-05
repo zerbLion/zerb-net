@@ -17,8 +17,11 @@ const projects = defineCollection({
     role: z.string().optional(),
     // Display ordering on listing pages; lower = earlier.
     order: z.number().default(100),
-    // External link (e.g. product page) instead of a detail page.
+    // External link (e.g. product page). The project still gets a light case
+    // page; this powers the "View the product →" CTA on it.
     externalUrl: z.string().url().optional(),
+    // Label for the external CTA button.
+    externalLabel: z.string().default('View the product'),
     draft: z.boolean().default(false),
   }),
 });

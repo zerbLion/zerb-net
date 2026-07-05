@@ -6,4 +6,4 @@ cover: "/media/images/projects/time-garden/321.jpg"
 order: 6
 ---
 
-_Content migration pending (Phase 1)._
+_Page body lives in `src/project-bodies/time-garden.html`._

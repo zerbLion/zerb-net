@@ -1,10 +1,10 @@
 ---
 title: "VIVO XR"
-summary: "XR concept work for VIVO."
+summary: "Motion design lead for vivo Vision MR smart glasses — from concept incubation to mass-production launch."
 pillars: ["motion"]
 cover: "/media/images/projects/vivo-xr/GLASS.jpg"
 order: 1
 externalUrl: "https://www.vivo.com/my/products/vivo-vision"
 ---
 
-_Content migration pending (Phase 1)._
+_Page body lives in `src/project-bodies/vivo-xr.html`._

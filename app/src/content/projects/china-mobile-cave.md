@@ -6,4 +6,4 @@ cover: "/media/images/projects/china-mobile-cave/BLUE.jpg"
 order: 4
 ---
 
-_Content migration pending (Phase 1)._
+_Page body lives in `src/project-bodies/china-mobile-cave.html`._

@@ -6,4 +6,4 @@ cover: "/media/images/projects/3d-ui-exploration/BALCK.jpg"
 order: 8
 ---
 
-_Content migration pending (Phase 1)._
+_Page body lives in `src/project-bodies/3d-ui-exploration.html`._

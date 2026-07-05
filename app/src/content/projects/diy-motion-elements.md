@@ -6,4 +6,4 @@ cover: "/media/images/projects/diy-motion-elements/yasuo-950x320.webp"
 order: 7
 ---
 
-_Content migration pending (Phase 1)._
+_Page body lives in `src/project-bodies/diy-motion-elements.html`._

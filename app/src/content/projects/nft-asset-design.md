@@ -6,4 +6,4 @@ cover: "/media/images/projects/nft-asset-design/nft-cover-918x320.webp"
 order: 10
 ---
 
-_Content migration pending (Phase 1)._
+_Page body lives in `src/project-bodies/nft-asset-design.html`._

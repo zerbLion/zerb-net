@@ -8,8 +8,9 @@ const all = (await getCollection('projects'))
   .filter((p) => !p.data.draft)
   .sort((a, b) => a.data.order - b.data.order);
 
-const hrefFor = (p: (typeof all)[number]) =>
-  p.data.externalUrl ?? `/project/${p.id}/`;
+// Cards always go to the internal case page; external product links live
+// there as a CTA button.
+const hrefFor = (p: (typeof all)[number]) => `/project/${p.id}/`;
 
 const filters = ['all', 'motion', 'visual', 'code'] as const;
 ---

@@ -6,4 +6,4 @@ cover: "/media/images/projects/wallpaper-universal-design/6543-950x320.webp"
 order: 9
 ---
 
-_Content migration pending (Phase 1)._
+_Page body lives in `src/project-bodies/wallpaper-universal-design.html`._

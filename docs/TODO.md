@@ -4,7 +4,7 @@
 
 - 维护线上 Astro 站（`app/`，Vercel，zerb.net），保留作品集视觉效果。
 - SEO：目标是品牌词「zerblion / zerb lion」搜索第一（注意"zerb"单词被一位音乐人占据，短期不追）。
-- 内容：逐步补齐 12 个项目详情页正文（现在多数还是 "_Content migration pending_" 占位——这是当前 SEO 最大短板）。
+- 内容：12 个项目详情页正文已全部补齐（2026-07-05，每页 100-180 词起步 + 站内互链）；后续可再加深个别页或由用户补充一手细节。
 - 让用户能自助更新内容（加作品 = 加 `app/src/content/projects/*.md` + 图片进 `app/public/media/images/projects/<slug>/` + push main）。
 
 ## 正在处理

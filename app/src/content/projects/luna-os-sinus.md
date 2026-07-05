@@ -1,10 +1,10 @@
 ---
 title: "LUNA OS Sinus"
-summary: "Visual exploration for LUNA OS."
+summary: "Motion design lead for JMGO LUNA OS — flagship O1 from R&D to market launch."
 pillars: ["motion"]
 cover: "/media/images/projects/luna-os-sinus/jm.jpg"
 order: 2
 externalUrl: "https://www.jmgo.com/luna"
 ---
 
-_Content migration pending (Phase 1)._
+_Page body lives in `src/project-bodies/luna-os-sinus.html`._

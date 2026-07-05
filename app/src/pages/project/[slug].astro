@@ -11,8 +11,10 @@ const bodies = import.meta.glob('../../project-bodies/*.html', {
 }) as Record<string, string>;
 
 export async function getStaticPaths() {
+  // External-link projects get a light case page too (public info + CTA),
+  // so their story is indexable on zerb.net instead of only on the client's site.
   const all = (await getCollection('projects'))
-    .filter((p) => !p.data.draft && !p.data.externalUrl)
+    .filter((p) => !p.data.draft)
     .sort((a, b) => a.data.order - b.data.order);
 
   return all.map((entry, i) => ({
@@ -26,7 +28,7 @@ export async function getStaticPaths() {
 }
 
 const { entry, prev, next } = Astro.props;
-const { title, summary, cover, year, role, pillars } = entry.data;
+const { title, summary, cover, year, role, pillars, externalUrl, externalLabel } = entry.data;
 
 const bodyKey = Object.keys(bodies).find((k) => k.endsWith(`/${entry.id}.html`));
 const body = bodyKey ? bodies[bodyKey] : '';
@@ -50,6 +52,17 @@ const body = bodyKey ? bodies[bodyKey] : '';
           </div>
         </div>
         {summary && <p class="mt-6 max-w-2xl text-lg text-mist">{summary}</p>}
+        {externalUrl && (
+          <a
+            href={externalUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            data-cursor="Open"
+            class="mt-8 inline-flex items-center gap-2 rounded-full border border-accent px-6 py-3 font-display text-sm font-bold uppercase tracking-wide text-accent transition-colors hover:bg-accent hover:text-ink"
+          >
+            {externalLabel} <span aria-hidden="true">→</span>
+          </a>
+        )}
         <div class="mt-10 overflow-hidden rounded-2xl">
           <img src={cover} alt={title} class="w-full object-cover" />
         </div>

@@ -5,6 +5,7 @@ pillars: ["code"]
 cover: "/media/images/projects/zerb-cc-cd/cover.svg"
 order: 70
 externalUrl: "https://zerb.cc.cd"
+externalLabel: "Open the tool"
 ---
 
-_External tool._
+_Page body lives in `src/project-bodies/zerb-cc-cd.html`._

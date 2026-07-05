@@ -17,7 +17,7 @@ export async function buildSystemPrompt(): Promise<string> {
 
   const projectLines = projects
     .map((p) => {
-      const url = p.data.externalUrl ?? `/project/${p.id}/`;
+      const url = `/project/${p.id}/`;
       const pillars = p.data.pillars.join(', ');
       return `- ${p.data.title} [${pillars}]${p.data.year ? ` (${p.data.year})` : ''}: ${p.data.summary} → ${url}`;
     })

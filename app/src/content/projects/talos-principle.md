@@ -6,4 +6,4 @@ cover: "/media/images/projects/talos-principle/yasuo--950x320.webp"
 order: 11
 ---
 
-_Content migration pending (Phase 1)._
+_Page body lives in `src/project-bodies/talos-principle.html`._

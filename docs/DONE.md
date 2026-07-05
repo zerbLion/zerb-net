@@ -346,3 +346,10 @@
 - **移除对外的 China 地域信息**（用户不想公开所在地）：About 正文、首页 meta description、about 页 meta description 去掉 "China-based"；README/README.zh-CN 的"被墙 Google Fonts""国内加速"改成中性表述（"third-party Google Fonts""global media delivery"）。保留 "China Mobile" 项目名（客户名，非个人地域）。
 - **拓宽 dev/coding 定位**（原表述偏前端、太局限）：About 正文的 Code 段与 Skills 的 Development 项改为 full-stack web（TypeScript/Astro/React、serverless API、AI 集成）+ 实时引擎脚本（Unity C#/DOTween、UE Blueprints）；Person schema jobTitle 加 "Developer"；本站自身（含内置 AI 助手）作为 dev 能力实例点出。
 - **Vercel Web Analytics 接入（2026-07-05）**：`app` 安装 `@vercel/analytics`，`Layout.astro` head 加 `<Analytics />`（Astro 专用组件，View Transitions 下自动跟踪路由切换）。前提：用户已在 Vercel 后台启用 Web Analytics。数据在 Vercel → 项目 → Analytics 标签查看。
+
+## 2026-07-05 内容冲刺：12 个项目页全部有正文 + 外链项目转轻案例页
+
+- **外链项目转"轻案例页"**（用户拍板）：`[slug].astro` 不再排除 `externalUrl` 项目——vivo XR / LUNA OS Sinus / MotionSheet 现在有自己的详情页（可被谷歌索引），页头带醒目的外链 CTA 按钮（schema 新增 `externalLabel`，默认 "View the product"，MotionSheet 为 "Open the tool"）。首页/works 卡片一律指向站内页（`hrefFor` 简化），`knowledge.ts` 同步。内容只用 About 已公开的信息，vivo 页明确注明 NDA、页面刻意从简。
+- **9 个薄页扩写**：vivo-xr（175词，新写）、luna-os-sinus（176词，新写，含 3 个站内互链）、zerb-cc-cd/MotionSheet（139词，新写）、talos-principle（99词）、3d-ui-exploration（144词，链 luna-os-sinus）、diy-motion-elements、dynamic-weather-art（链 luna-os-sinus）、time-garden、wallpaper-universal-design、china-mobile-cave（补两个月工期/C4D+UE4 收尾段）。luna-os-ar-theme 和 nft-asset-design 原本已够厚未动。所有原有图片/视频/外部链接一律保留。
+- **md 清理**：12 个 `_Content migration pending_` 占位符（不渲染、易误导）换成指向 `src/project-bodies/<slug>.html` 的注释；vivo-xr / luna-os-sinus 的 summary（= meta description）升级为具体的角色+成果描述。
+- 构建验证：12 个项目页全部生成、sitemap 15 URL、works 页无外链卡片、两种 CTA 文案正确。
