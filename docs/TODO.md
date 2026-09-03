@@ -3,9 +3,47 @@
 ## 当前目标
 
 - 维护线上 Astro 站（`app/`，Vercel，zerb.net），保留作品集视觉效果。
-- SEO：目标是品牌词「zerblion / zerb lion」搜索第一（注意"zerb"单词被一位音乐人占据，短期不追）。
+- SEO：**原目标（zerblion 第一）被 2026-09-03 的更名决定取代**，见下方「品牌更名」段；更名完成前维持现状。
 - 内容：12 个项目详情页正文已全部补齐（2026-07-05，每页 100-180 词起步 + 站内互链）；后续可再加深个别页或由用户补充一手细节。
 - 让用户能自助更新内容（加作品 = 加 `app/src/content/projects/*.md` + 图片进 `app/public/media/images/projects/<slug>/` + push main）。
+
+## 品牌更名：zerb → zezr（2026-09-03 用户定）
+
+用户拍板：**用 `zezr` 把 `zerb` 换掉**。此前的评估（zezr 无元音、`/zr/` 不是英语合法音节尾、迁移成本高）已提出、用户知情后仍决定换，**不再重开**。
+
+### 前提：先拿下 `zezr.com`
+- `zezr.com` 在拍卖（用户告知）。**没拿下之前，站内一个字都不改**——其余全部依赖它。
+- 拍卖设死上限，别追价。四字母 .com 是商品类，很容易上头。
+- 拿下当天顺手注册（2026-09-03 RDAP 实测全部可注册）：`zezr.net`、`zezr.dev`、`zezrlion.com`。
+  `zezr.ai` 按用途审计定（此前否决过 `zerb.ai`，同一逻辑）。
+
+### 命名三层
+| 层 | 定为 | 备注 |
+|---|---|---|
+| 域名 | `zezr.com` | 主域名；`zerb.net` **不放弃**，续 3-5 年，做 301 |
+| 全称 / handle | `zezrLion` | GitHub `zezrLion` 空着（实测）。`zezr` 被 2014 年注册、2016 年后无活动的死号占着，可试 GitHub support 的闲置名回收，别指望 |
+| 读音 | **自己定，写在站上** | 建议 `/ˈzɛzər/`（"zezzer"）：短 e 跟 zerb 更接近，且避开 `/ˈziːzər/` 和 geezer（老头）押韵 |
+
+### 迁移顺序（严格按序，前一步没完不动下一步）
+1. **域名**：拍下 `zezr.com` + 注册上面那几个
+2. **GitHub**：Settings → 用户名 `zerbLion` → `zezrLion`。
+   - GitHub 会给旧名下的仓库 URL 和 git remote 做重定向，但 **`zerblion.github.io` 的 Pages 站不重定向**——`zero-build-blog` 的地址会断，要在那边同步改。
+   - 改完**立刻用旧名 `zerbLion` 注册一个占位账号**，否则被人捡走后重定向随之失效。
+   - 站内所有 `github.com/zerbLion/...` 硬链接改成新名，不依赖重定向。
+3. **站内（本仓库）**：`zerb` 出现 205 处 / 29 文件（2026-09-03 统计，排除 node_modules/dist/.vercel/.astro）。分三类处理：
+   - 域名类：`zerb.net` → `zezr.com`（`astro.config` 的 `site`、sitemap、canonical、`og:url`、Person schema 的 `url`）
+   - 品牌类：`ZERB` / `zerbLion` / `Zerb Lion` → `ZEZR` / `zezrLion` / `Zezr Lion`；README 中英双版；LICENSE 署名（**版权人写真名还是艺名由用户定**）
+   - **不动**：`astro.config` `redirects` 里的旧 WordPress 路径、git 历史、`zerb-net` 仓库名（改不改单独定）
+   - Vercel：加域名 `zezr.com` 设 primary，`zerb.net` 配 301 → `zezr.com`
+4. **站外**：Behance / Steam `id/zerblion` / X `lionzerb` / Dribbble（如已建）改 handle 与简介链接；Person schema `sameAs` 同步；`zerb.cc.cd` 是产品站域名，单独决定
+5. **makerlion 仓库**：`AGENTS.md` 里"标是 zerbLion 的 Z"改成 zezrLion。**Z 标本身不动**——zezr 有两个 z，标更名正言顺
+6. **GSC**：新增 `zezr.com` 资源，用 **Change of Address（地址更改）** 从 `zerb.net` 迁移——Google 官方的域名迁移通道，能带走大部分权重；`zerb.net` 的 sitemap 保留一段时间
+
+### 用户看重的、这次换名真正能拿到的
+- **全平台 handle 统一**：现在 X `lionzerb`、Steam `zerblion`、GitHub `zerbLion` 三种写法，因为 zerb 到处被占。zezr 的 .com/.net/.io/.dev/.ai/.cc + GitHub `zezrLion` 全空，四字母能空到这个程度极罕见。
+- **身份控制**：搜 zerb 出来 DJ；换后搜出来的每一条都是自己。
+- **读音唯一**：zerb 好读但控制不了别人怎么读；zezr 在站上写一行音标，从此只有一种读法。
+- **时机**：站上线 3 个月、205 处。两年后是 2000 处，要换只有现在。
 
 ## 正在处理
 
@@ -32,7 +70,7 @@
 
 ## 未完成事项
 
-- SEO 双线作战计划（2026-07-04 定，目标：`zerblion` 通吃 + 长期抢下 `zerb`，两线共用同一实体/内容/外链）：
+- SEO 双线作战计划（2026-07-04 定，目标：`zerblion` 通吃 + 长期抢下 `zerb`，两线共用同一实体/内容/外链）——**⚠️ 已被 2026-09-03 更名决定取代，下列仅存档；更名落地后按 zezr 重写**：
   - **第 0 阶段（用户）**：GSC 确认域名级资源 + sitemap 状态"成功"；GitHub/X/blog 签名统一 `ZERB (zerblion) — zerb.net`。站内技术项（schema/重定向/sitemap）2026-07-04 已完成。
   - **第 1 阶段（内容冲刺）**：12 个项目详情页正文已于 2026-07-05 全部补齐；剩余顺手项：项目 `.md` 补 `year`；blog 用 "ZERB" 锚文本链回 zerb.net；个别页可继续加深。
   - **第 2 阶段（1-3 月，外部权重，攻 zerb 的关键）**：Behance/Dribbble/ArtStation/站酷建档（名字 ZERB、链 zerb.net）；投 Awwwards/CSSDA/siteInspire；每月初看 GSC 查询报告（zerb/zerblion/zerb lion 趋势）。
