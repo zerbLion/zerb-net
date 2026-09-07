@@ -7,19 +7,29 @@
 - 内容：12 个项目详情页正文已全部补齐（2026-07-05，每页 100-180 词起步 + 站内互链）；后续可再加深个别页或由用户补充一手细节。
 - 让用户能自助更新内容（加作品 = 加 `app/src/content/projects/*.md` + 图片进 `app/public/media/images/projects/<slug>/` + push main）。
 
-## 品牌更名：zerb → zezr（2026-09-03 用户定）
+## 品牌更名：zerb → zosc（2026-09-07 改定；原定 zezr 已作废）
 
-用户拍板：**用 `zezr` 把 `zerb` 换掉**。此前的评估（zezr 无元音、`/zr/` 不是英语合法音节尾、迁移成本高）已提出、用户知情后仍决定换，**不再重开**。
+用户拍板：**用 `zosc` 把 `zerb` 换掉**。此前的评估（zezr 无元音、`/zr/` 不是英语合法音节尾、迁移成本高）已提出、用户知情后仍决定换，**不再重开**。
 
-### 前提：先拿下 `zezr.com`
-- `zezr.com` 在拍卖（用户告知）。**没拿下之前，站内一个字都不改**——其余全部依赖它。
+### 变更记录
+- 2026-09-03 定 `zosc`；**2026-09-07 作废**——`zosc.com` 拍卖期间被原主续费撤拍（RDAP last-changed 2026-09-04），短期不会再出现。
+- 2026-09-07 改定 **`zosc`**，全称 **`zoscLion`**，读 **"ZOSK"** /zɒsk/（`-sc` 在英语里读 /sk/，同 disc/misc）。
+
+### 前提：先拿下 `zosc.com`
+- `zosc.com` 在**阿里云/万网过期竞价**（2026-09-07 现价 ¥300，剩 2 天）。**没拿下之前，站内一个字都不改。**
+  RDAP 实测：2006-08-04 注册、2026-08-04 过期、NS 已换成 `EXPIRENS3/4.HICHINA.COM`（万网过期域名专用 NS）。
+  **为什么便宜**：`zosc` 含元音 O → 是「四杂」不是「四声母」，而万网竞价的人群压倒性在找四声母，摆错了人群。不是坑，是市场错配。
 - 拍卖设死上限，别追价。四字母 .com 是商品类，很容易上头。
-  **2026-09-03 定稿：上限 $250（≈¥1680，按平台 6.72 汇率；到时按当天汇率微调）。**
+  **上限 ¥1680（≈$250）——沿用 2026-09-03 定的数，换域名不改数，因为档次没变。**
+  ⚠️ **截止前两天不许重新推导上限**（当时是无时间压力下算的，临场只会往上改）。
   当天从 $150 → $300 → $250 改过三次，$250 是用户自己报的区间上沿，**这是最后一次改，25 号锁死**。
   这个数按"输在 $251 心里过不过得去"定的，不是按域名行情——因为没有退路（见下）。
   打法：**最后 24 小时内**（截止 2026-09-25 23:00 PRC，避开最后几分钟的防狙击延时）
   一次性把 ¥1680 填进代理出价框（那个框就是代理出价），之后**不再动**。
-  成交价 = 对手上限 + $1，不是 $250；被超即答案。
+  成交价 = 对手上限 + 一档；被超即答案。
+  **万网打法**：先确认平台有无「代理出价/自动出价」——有就填 ¥1680 关页面；没有则必须在截止时刻在场。
+  国内平台普遍有**延时规则**（最后几分钟有出价就延长），狙击无效。
+  **两个不挡上线的坑**：拍到后通常 60 天不能转出阿里云（但 NS 可立刻改 Cloudflare）；万网域名需实名（WHOIS 隐藏，不外泄）。
   **被超 = 更名搁置，维持 `zerb.net` 现状，不用其他后缀。**
 
   **行情核查（2026-09-04）**：低档 LLLL.com 批发价 **$150–$250**；实测参照——2025-12 NamePros 上
@@ -35,27 +45,27 @@
 ### 命名三层
 | 层 | 定为 | 备注 |
 |---|---|---|
-| 域名 | `zezr.com` | **只要 .com**，其他后缀不注册。`zerb.net` 续着做 301 是为了保住已有外链和收藏，不是买后缀——两回事 |
-| 全称 / handle | `zezrLion` | GitHub `zezrLion` 空着（实测）。`zezr` 被 2014 年注册、2016 年后无活动的死号占着，可试 GitHub support 的闲置名回收，别指望 |
-| 读音 | **自己定，写在站上** | 建议 `/ˈzɛzər/`（"zezzer"）：短 e 跟 zerb 更接近，且避开 `/ˈziːzər/` 和 geezer（老头）押韵 |
+| 域名 | `zosc.com` | **只要 .com**，其他后缀不注册。`zerb.net` 续着做 301 是为了保住已有外链和收藏，不是买后缀——两回事 |
+| 全称 / handle | `zoscLion` | GitHub `zoscLion` 空着（实测）。`zosc` 被一个**活号**占着（11 个 fork、0 star，2026-06 仍在推送）——要不回来，不用试 |
+| 读音 | **"ZOSK"** /zɒsk/ | `-sc` 在英语里读 /sk/（disc、misc），老外能念。代价：听到会拼成 Z-O-S-K，口头给域名要拼一次 |
 
 ### 迁移顺序（严格按序，前一步没完不动下一步）
-1. **域名**：拍下 `zezr.com` + 注册上面那几个
-2. **GitHub**：Settings → 用户名 `zerbLion` → `zezrLion`。
+1. **域名**：拍下 `zosc.com` + 注册上面那几个
+2. **GitHub**：Settings → 用户名 `zerbLion` → `zoscLion`。
    - GitHub 会给旧名下的仓库 URL 和 git remote 做重定向，但 **`zerblion.github.io` 的 Pages 站不重定向**——`zero-build-blog` 的地址会断，要在那边同步改。
    - 改完**立刻用旧名 `zerbLion` 注册一个占位账号**，否则被人捡走后重定向随之失效。
    - 站内所有 `github.com/zerbLion/...` 硬链接改成新名，不依赖重定向。
 3. **站内（本仓库）**：`zerb` 出现 205 处 / 29 文件（2026-09-03 统计，排除 node_modules/dist/.vercel/.astro）。分三类处理：
-   - 域名类：`zerb.net` → `zezr.com`（`astro.config` 的 `site`、sitemap、canonical、`og:url`、Person schema 的 `url`）
-   - 品牌类：`ZERB` / `zerbLion` / `Zerb Lion` → `ZEZR` / `zezrLion` / `Zezr Lion`；README 中英双版；LICENSE 署名（**版权人写真名还是艺名由用户定**）
+   - 域名类：`zerb.net` → `zosc.com`（`astro.config` 的 `site`、sitemap、canonical、`og:url`、Person schema 的 `url`）
+   - 品牌类：`ZERB` / `zerbLion` / `Zerb Lion` → `ZEZR` / `zoscLion` / `Zezr Lion`；README 中英双版；LICENSE 署名（**版权人写真名还是艺名由用户定**）
    - **不动**：`astro.config` `redirects` 里的旧 WordPress 路径、git 历史、`zerb-net` 仓库名（改不改单独定）
-   - Vercel：加域名 `zezr.com` 设 primary，`zerb.net` 配 301 → `zezr.com`
+   - Vercel：加域名 `zosc.com` 设 primary，`zerb.net` 配 301 → `zosc.com`
 4. **站外**：Behance / Steam `id/zerblion` / X `lionzerb` / Dribbble（如已建）改 handle 与简介链接；Person schema `sameAs` 同步；`zerb.cc.cd` 是产品站域名，单独决定
-5. **makerlion 仓库**：`AGENTS.md` 里"标是 zerbLion 的 Z"改成 zezrLion。**Z 标本身不动**——zezr 有两个 z，标更名正言顺
-6. **GSC**：新增 `zezr.com` 资源，用 **Change of Address（地址更改）** 从 `zerb.net` 迁移——Google 官方的域名迁移通道，能带走大部分权重；`zerb.net` 的 sitemap 保留一段时间
+5. **makerlion 仓库**：`AGENTS.md` 里"标是 zerbLion 的 Z"改成 zoscLion。**Z 标本身不动**——zezr 有两个 z，标更名正言顺
+6. **GSC**：新增 `zosc.com` 资源，用 **Change of Address（地址更改）** 从 `zerb.net` 迁移——Google 官方的域名迁移通道，能带走大部分权重；`zerb.net` 的 sitemap 保留一段时间
 
 ### 用户看重的、这次换名真正能拿到的
-- **全平台 handle 统一**：现在 X `lionzerb`、Steam `zerblion`、GitHub `zerbLion` 三种写法，因为 zerb 到处被占。zezr 的 .com/.net/.io/.dev/.ai/.cc + GitHub `zezrLion` 全空，四字母能空到这个程度极罕见。
+- **全平台 handle 统一**：现在 X `lionzerb`、Steam `zerblion`、GitHub `zerbLion` 三种写法，因为 zerb 到处被占。zezr 的 .com/.net/.io/.dev/.ai/.cc + GitHub `zoscLion` 全空，四字母能空到这个程度极罕见。
 - **身份控制**：搜 zerb 出来 DJ；换后搜出来的每一条都是自己。
 - **读音唯一**：zerb 好读但控制不了别人怎么读；zezr 在站上写一行音标，从此只有一种读法。
 - **时机**：站上线 3 个月、205 处。两年后是 2000 处，要换只有现在。
