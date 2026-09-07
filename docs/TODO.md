@@ -93,12 +93,14 @@
    - 品牌类：`ZERB` / `zerbLion` / `Zerb Lion` → `ZEZR` / `zoscLion` / `Zezr Lion`；README 中英双版；LICENSE 署名（**版权人写真名还是艺名由用户定**）
    - **不动**：`astro.config` `redirects` 里的旧 WordPress 路径、git 历史、`zerb-net` 仓库名（改不改单独定）
    - Vercel：加域名 `zosc.com` 设 primary，`zerb.net` 配 301 → `zosc.com`
-4. **站外**：Behance / Steam `id/zerblion` / X `lionzerb` / Dribbble（如已建）改 handle 与简介链接；Person schema `sameAs` 同步；`zerb.cc.cd` 是产品站域名，单独决定
+4. **站外**：Behance(`/zerb`) / Steam(`id/zerblion`) / X(`zerbLion`) / Dribbble（如已建）改 handle 与简介链接；Person schema `sameAs` 同步；`zerb.cc.cd` 是产品站域名，单独决定
 5. **makerlion 仓库**：`AGENTS.md` 里"标是 zerbLion 的 Z"改成 zoscLion。**Z 标本身不动**——zezr 有两个 z，标更名正言顺
 6. **GSC**：新增 `zosc.com` 资源，用 **Change of Address（地址更改）** 从 `zerb.net` 迁移——Google 官方的域名迁移通道，能带走大部分权重；`zerb.net` 的 sitemap 保留一段时间
 
 ### 用户看重的、这次换名真正能拿到的
-- **全平台 handle 统一**：现在 X `lionzerb`、Steam `zerblion`、GitHub `zerbLion` 三种写法，因为 zerb 到处被占。zezr 的 .com/.net/.io/.dev/.ai/.cc + GitHub `zoscLion` 全空，四字母能空到这个程度极罕见。
+- ~~全平台 handle 统一~~ **此项收益不成立（2026-09-07 实测更正）**：X 的真实 handle 是 `zerbLion` 不是 `lionzerb`（站上链错了，已修），
+  即 GitHub/Steam/X **早就统一在 zerbLion**。且裸四字母在成熟平台一律拿不到（zerb/zezr/zosc 的 GitHub、Steam、X 全被占），
+  换名后同样只能是 `zoscLion`——**换与不换，handle 结果一样**。zezr 的 .com/.net/.io/.dev/.ai/.cc + GitHub `zoscLion` 全空，四字母能空到这个程度极罕见。
 - **身份控制**：搜 zerb 出来 DJ；换后搜出来的每一条都是自己。
 - **读音唯一**：zerb 好读但控制不了别人怎么读；zezr 在站上写一行音标，从此只有一种读法。
 - **时机**：站上线 3 个月、205 处。两年后是 2000 处，要换只有现在。
