@@ -9,6 +9,7 @@
 - 在独立的 `preview/zosc-logo-motion` 分支新增 `app/src/pages/preview/zosc-intro.astro`。这是不进入生产 `main` 的独立预览页；线上首页、导航、原有 Hero 动效与品牌信息均未改动。
 - 字标动效按“三个 C → 第一个补成 O → 第二个收缩并长成 S → Z 最后入场 → OSC 双拍脉冲”的顺序制作，带重播按钮和减少动效时的静态字标。
 - 本地 `npm run build` 通过；真实 Chromium 中检查桌面和 390px 手机最终画面，预览页返回 200、字标完整、手机无横向溢出。
+- 已推送预览分支并由 Vercel 成功部署到 Preview 环境（需项目账号登录）。核对远端 `main` 仍为 `44e022e`，且 `https://zerb.net/preview/zosc-intro/` 返回 404，预览页没有进入生产站。
 
 ## 网站结构
 
