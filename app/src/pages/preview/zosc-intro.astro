@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow, noarchive" />
+    <meta name="theme-color" content="#080808" />
+    <title>ZOSC — Logo Motion Study</title>
+    <link rel="preload" href="/fonts/montserrat-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/mulish-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <script is:inline>
+      document.documentElement.classList.add('motion-js');
+      // The finished wordmark is the fallback if the animation bundle fails.
+      setTimeout(() => document.documentElement.classList.remove('motion-js'), 5000);
+    </script>
+    <style>
+      @font-face {
+        font-family: Montserrat;
+        src: url('/fonts/montserrat-latin.woff2') format('woff2');
+        font-style: normal;
+        font-weight: 100 900;
+        font-display: block;
+      }
+      @font-face {
+        font-family: Mulish;
+        src: url('/fonts/mulish-latin.woff2') format('woff2');
+        font-style: normal;
+        font-weight: 100 900;
+        font-display: swap;
+      }
+      :root {
+        color-scheme: dark;
+        --ink: #080808;
+        --paper: #f4f1eb;
+        --muted: #888786;
+        --line: #34312f;
+        --accent: #e7503a;
+      }
+      * { box-sizing: border-box; }
+      html, body { min-height: 100%; margin: 0; }
+      body {
+        background: var(--ink);
+        color: var(--paper);
+        font-family: Mulish, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+      button { font: inherit; }
+      button:focus-visible { outline: 2px solid var(--accent); outline-offset: 5px; }
+      .stage {
+        min-height: 100svh;
+        padding: clamp(14px, 2.3vw, 32px);
+        background:
+          radial-gradient(ellipse 55% 48% at 50% 48%, rgba(231, 80, 58, .085), transparent 72%),
+          var(--ink);
+      }
+      .frame {
+        position: relative;
+        display: grid;
+        grid-template-rows: auto 1fr auto;
+        min-height: calc(100svh - 2 * clamp(14px, 2.3vw, 32px));
+        border: 1px solid var(--line);
+        overflow: hidden;
+      }
+      .frame::before, .frame::after {
+        content: '';
+        position: absolute;
+        width: 5px;
+        height: 5px;
+        border: 1px solid var(--accent);
+        pointer-events: none;
+      }
+      .frame::before { top: -1px; left: -1px; }
+      .frame::after { right: -1px; bottom: -1px; }
+      .topline, .bottomline {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        padding: clamp(18px, 2.5vw, 38px);
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: .18em;
+        text-transform: uppercase;
+      }
+      .topline { color: var(--muted); }
+      .brand { color: var(--paper); font-family: Montserrat, sans-serif; font-weight: 800; letter-spacing: -.06em; font-size: 18px; }
+      .topline .index { white-space: nowrap; }
+      .content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        padding: 0 clamp(18px, 5vw, 70px) 28px;
+      }
+      .eyebrow {
+        margin: 0 0 clamp(34px, 6vh, 72px);
+        color: var(--muted);
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: .34em;
+        text-align: center;
+        text-transform: uppercase;
+      }
+      .wordmark {
+        display: block;
+        width: min(100%, 1100px);
+        height: auto;
+        overflow: visible;
+      }
+      .wordmark path {
+        fill: none;
+        stroke: var(--paper);
+        stroke-width: 19;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        vector-effect: non-scaling-stroke;
+      }
+      .wordmark #z { stroke: var(--accent); }
+      .wordmark #s-seed { opacity: 0; }
+      .motion-js .wordmark path { opacity: 0; }
+      .phase {
+        display: flex;
+        align-items: center;
+        gap: 13px;
+        min-height: 16px;
+        margin-top: clamp(36px, 7vh, 80px);
+        color: var(--muted);
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: .2em;
+        text-transform: uppercase;
+      }
+      .phase i {
+        display: block;
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background: var(--accent);
+        box-shadow: 0 0 16px rgba(231, 80, 58, .7);
+      }
+      .bottomline {
+        border-top: 1px solid var(--line);
+        color: var(--muted);
+        letter-spacing: .12em;
+      }
+      .bottomline p { margin: 0; }
+      .replay {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        min-width: 102px;
+        min-height: 38px;
+        padding: 0 14px;
+        border: 1px solid #69605b;
+        border-radius: 0;
+        background: transparent;
+        color: var(--paper);
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: .17em;
+        text-transform: uppercase;
+        cursor: pointer;
+        transition: background-color .2s ease, border-color .2s ease;
+      }
+      .replay:hover { border-color: var(--accent); background: rgba(231, 80, 58, .12); }
+      .replay span { font-size: 17px; line-height: 1; }
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+      }
+      @media (max-width: 640px) {
+        .frame { min-height: calc(100svh - 28px); }
+        .topline, .bottomline { padding: 18px; }
+        .topline .index { max-width: 150px; white-space: normal; text-align: right; line-height: 1.5; }
+        .wordmark path { stroke-width: 13; }
+        .bottomline p { max-width: 150px; line-height: 1.55; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .replay { display: none; }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="stage">
+      <div class="frame">
+        <header class="topline">
+          <span class="brand" aria-hidden="true">z.</span>
+          <span class="index">ZOSC / IDENTITY MOTION STUDY 01</span>
+        </header>
+
+        <section class="content" aria-labelledby="study-title">
+          <p class="eyebrow">One shape, four letters</p>
+          <h1 id="study-title" class="sr-only">ZOSC logo motion study</h1>
+          <svg class="wordmark" viewBox="0 0 800 175" role="img" aria-label="ZOSC" xmlns="http://www.w3.org/2000/svg">
+            <g id="osc">
+              <g transform="translate(218 19)">
+                <path id="o-open" d="M 93 22 C 71 5 44 8 25 25 C 1 48 3 84 25 106 C 44 124 73 127 94 109" />
+                <path id="o-close" d="M 94 109 C 123 87 123 44 93 22" />
+              </g>
+              <g transform="translate(397 19)">
+                <path id="s-seed" d="M 93 22 C 71 5 44 8 25 25 C 1 48 3 84 25 106 C 44 124 73 127 94 109" />
+                <path id="s-top" d="M 98 25 C 80 9 45 4 25 22 C 5 39 13 57 51 65" />
+                <path id="s-bottom" d="M 51 65 C 95 74 111 85 96 105 C 78 127 39 124 18 105" />
+              </g>
+              <g transform="translate(576 19)">
+                <path id="c-final" d="M 93 22 C 71 5 44 8 25 25 C 1 48 3 84 25 106 C 44 124 73 127 94 109" />
+              </g>
+            </g>
+            <path id="z" d="M 91 42 H 179 L 91 132 H 179" />
+          </svg>
+          <div class="phase" aria-live="polite"><i aria-hidden="true"></i><span id="phase-label">ZOSC / MOTION STUDY</span></div>
+        </section>
+
+        <footer class="bottomline">
+          <p>Three C forms. One evolving identity.</p>
+          <button class="replay" id="replay" type="button" aria-label="Replay logo animation">Replay <span aria-hidden="true">↻</span></button>
+        </footer>
+      </div>
+    </main>
+    <script>
+      import gsap from 'gsap';
+
+      const $ = (id: string) => document.getElementById(id) as unknown as SVGPathElement;
+      const z = $('z');
+      const oOpen = $('o-open');
+      const oClose = $('o-close');
+      const sSeed = $('s-seed');
+      const sTop = $('s-top');
+      const sBottom = $('s-bottom');
+      const c = $('c-final');
+      const osc = document.getElementById('osc') as unknown as SVGGElement;
+      const label = document.getElementById('phase-label')!;
+      const paths = [z, oOpen, oClose, sSeed, sTop, sBottom, c];
+      const finalPaths = [z, oOpen, oClose, sTop, sBottom, c];
+      let timeline: gsap.core.Timeline | undefined;
+
+      function prepare(path: SVGPathElement) {
+        const length = path.getTotalLength() + 2;
+        gsap.set(path, { strokeDasharray: length, strokeDashoffset: length, opacity: 1 });
+      }
+
+      function showFinal() {
+        timeline?.kill();
+        gsap.set(paths, { clearProps: 'all' });
+        gsap.set(osc, { clearProps: 'all' });
+        document.documentElement.classList.remove('motion-js');
+        label.textContent = 'ZOSC / FINAL FORM';
+      }
+
+      function play() {
+        timeline?.kill();
+        document.documentElement.classList.add('motion-js');
+        gsap.set(paths, { clearProps: 'all' });
+        gsap.set(osc, { clearProps: 'all' });
+        paths.forEach(prepare);
+        gsap.set([z, oClose, sTop, sBottom], { opacity: 0 });
+        gsap.set(z, { y: -14 });
+        label.textContent = 'THREE C FORMS';
+
+        timeline = gsap.timeline({
+          defaults: { ease: 'power2.inOut' },
+          onComplete: showFinal,
+        });
+
+        timeline
+          .to([oOpen, sSeed, c], { strokeDashoffset: 0, duration: .58, stagger: .1 }, .08)
+          .call(() => { label.textContent = 'C BECOMES O'; }, undefined, .98)
+          .set(oClose, { opacity: 1, stroke: '#e7503a' }, 1.02)
+          .to(oClose, { strokeDashoffset: 0, duration: .5 }, 1.02)
+          .to(oClose, { stroke: '#f4f1eb', duration: .28 }, 1.52)
+          .call(() => { label.textContent = 'C CONTRACTS INTO S'; }, undefined, 1.32)
+          .to(sSeed, { scale: .38, rotation: -25, opacity: 0, transformOrigin: '50% 50%', duration: .34, ease: 'power3.in' }, 1.42)
+          .set([sTop, sBottom], { opacity: 1 }, 1.65)
+          .to(sTop, { strokeDashoffset: 0, duration: .35 }, 1.65)
+          .to(sBottom, { strokeDashoffset: 0, duration: .4 }, 1.83)
+          .call(() => { label.textContent = 'Z ARRIVES'; }, undefined, 2.2)
+          .set(z, { opacity: 1 }, 2.23)
+          .to(z, { strokeDashoffset: 0, y: 0, duration: .54, ease: 'power3.out' }, 2.23)
+          .call(() => { label.textContent = 'ONE PULSE / ONE IDENTITY'; }, undefined, 2.9)
+          .to(osc, { scaleX: 1.065, scaleY: .94, transformOrigin: '50% 50%', duration: .105, ease: 'power2.out' }, 2.9)
+          .to(osc, { scaleX: 1, scaleY: 1, duration: .19, ease: 'power2.out' }, 3.005)
+          .to(osc, { scaleX: 1.035, scaleY: .965, duration: .09, ease: 'power2.out' }, 3.28)
+          .to(osc, { scaleX: 1, scaleY: 1, duration: .24, ease: 'elastic.out(1, .6)' }, 3.37);
+      }
+
+      document.getElementById('replay')?.addEventListener('click', () => {
+        if (!matchMedia('(prefers-reduced-motion: reduce)').matches) play();
+      });
+      try {
+        if (matchMedia('(prefers-reduced-motion: reduce)').matches) showFinal();
+        else play();
+      } catch (error) {
+        console.error('ZOSC preview animation failed:', error);
+        showFinal();
+      }
+    </script>
+  </body>
+</html>
