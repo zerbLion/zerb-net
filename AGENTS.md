@@ -11,6 +11,7 @@
 ## 基本原则
 
 - 不要做无关重构。
+- ZOSC 字标动效实验只在 `preview/zosc-logo-motion` 分支和独立预览页制作、部署到 Preview；用户明确禁止污染线上页面，未经明确授权不得合并或推送到生产 `main`。
 - 根目录的 WordPress 静态导出已于 2026-07-04 删除（用户决定；git 历史可找回）。现在根目录只有 `app/`（线上站）、`tools/` + `media-manifest.json`（R2 媒体工具）、`docs/` 和 README/LICENSE。旧 URL 重定向统一维护在 `app/astro.config.mjs` 的 `redirects`。
 - 不要随意删除媒体资源。
 - 不要随意删除已有页面、样式、图片、视频或其他资源。

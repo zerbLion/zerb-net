@@ -3,7 +3,7 @@
 ## 当前目标
 
 - 维护线上 Astro 站（`app/`，Vercel，zerb.net），保留作品集视觉效果。
-- **ZOSC 字标动效预览（2026-09-22）**：原型只在 `preview/zosc-logo-motion` 分支的 `/preview/zosc-intro/` 独立页，已部署到 Vercel Preview（项目账号登录可看）；生产 `main` 与 `zerb.net` 首页不改。待用户看预览后确认字母变形、心跳节奏，以及是否将首页的 `Motion / Visual / Code` 大标题改为更宽泛的品牌表达；确认前不做生产迁移。
+- **ZOSC 字标动效预览（2026-09-23）**：用户否定第一版，授权自由重做。第二版为厚重小写 `zosc.`：橙色圆点起势、四字母展开、圆点落到句尾；取消逐步解释字幕。仍只在 `preview/zosc-logo-motion` 分支的 `/preview/zosc-intro/` 独立页，待用户评审字形与节奏。预览部署需 Vercel 项目账号登录，禁止进入生产 `main` 与 `zerb.net` 首页。
 - SEO：**原目标（zerblion 第一）被 2026-09-03 的更名决定取代**，见下方「品牌更名」段；更名完成前维持现状。
 - 内容：12 个项目详情页正文已全部补齐（2026-07-05，每页 100-180 词起步 + 站内互链）；后续可再加深个别页或由用户补充一手细节。
 - 让用户能自助更新内容（加作品 = 加 `app/src/content/projects/*.md` + 图片进 `app/public/media/images/projects/<slug>/` + push main）。
